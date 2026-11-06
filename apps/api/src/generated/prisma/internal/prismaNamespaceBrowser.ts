@@ -57,7 +57,9 @@ export const ModelName = {
   MenuItem: 'MenuItem',
   HeroSlide: 'HeroSlide',
   Media: 'Media',
-  FooterSettings: 'FooterSettings'
+  FooterSettings: 'FooterSettings',
+  Section: 'Section',
+  SectionItem: 'SectionItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -191,6 +193,47 @@ export const FooterSettingsScalarFieldEnum = {
 } as const
 
 export type FooterSettingsScalarFieldEnum = (typeof FooterSettingsScalarFieldEnum)[keyof typeof FooterSettingsScalarFieldEnum]
+
+
+export const SectionScalarFieldEnum = {
+  id: 'id',
+  pageId: 'pageId',
+  type: 'type',
+  title: 'title',
+  subtitle: 'subtitle',
+  body: 'body',
+  backgroundColor: 'backgroundColor',
+  backgroundImage: 'backgroundImage',
+  textColor: 'textColor',
+  buttonText: 'buttonText',
+  buttonHref: 'buttonHref',
+  columns: 'columns',
+  order: 'order',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SectionScalarFieldEnum = (typeof SectionScalarFieldEnum)[keyof typeof SectionScalarFieldEnum]
+
+
+export const SectionItemScalarFieldEnum = {
+  id: 'id',
+  sectionId: 'sectionId',
+  title: 'title',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  icon: 'icon',
+  buttonText: 'buttonText',
+  buttonHref: 'buttonHref',
+  backgroundColor: 'backgroundColor',
+  order: 'order',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SectionItemScalarFieldEnum = (typeof SectionItemScalarFieldEnum)[keyof typeof SectionItemScalarFieldEnum]
 
 
 export const SortOrder = {

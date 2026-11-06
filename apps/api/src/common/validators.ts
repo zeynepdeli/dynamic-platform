@@ -57,3 +57,9 @@ export function IsImageUrl(validationOptions?: ValidationOptions) {
     validationOptions,
   );
 }
+
+/** Tema renkleri için tek format: #RRGGBB (ör. #1a2b3c) */
+export const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
+
+export const HEX_COLOR_MESSAGE =
+  'Renk #RRGGBB formatında olmalıdır (ör. #1a2b3c).';

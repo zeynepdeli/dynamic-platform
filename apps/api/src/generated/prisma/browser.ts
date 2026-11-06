@@ -52,3 +52,13 @@ export type Media = Prisma.MediaModel
  * 
  */
 export type FooterSettings = Prisma.FooterSettingsModel
+/**
+ * Model Section
+ * 
+ */
+export type Section = Prisma.SectionModel
+/**
+ * Model SectionItem
+ * 
+ */
+export type SectionItem = Prisma.SectionItemModel

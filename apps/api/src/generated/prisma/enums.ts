@@ -23,3 +23,13 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const SectionType = {
+  CARDS: 'CARDS',
+  TEXT: 'TEXT',
+  IMAGE_TEXT: 'IMAGE_TEXT',
+  CTA: 'CTA'
+} as const
+
+export type SectionType = (typeof SectionType)[keyof typeof SectionType]

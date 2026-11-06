@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-
 import { SiteSettingsService } from '../site-settings/site-settings.service.js';
 import { MenuItemsService } from '../menu-items/menu-items.service.js';
 import { HeroSlidesService } from '../hero-slides/hero-slides.service.js';
 import { FooterSettingsService } from '../footer-settings/footer-settings.service.js';
+import { SectionsService } from '../sections/sections.service.js';
 
 @Injectable()
 export class SiteBootstrapService {
@@ -12,21 +12,25 @@ export class SiteBootstrapService {
     private readonly menuItemsService: MenuItemsService,
     private readonly heroSlidesService: HeroSlidesService,
     private readonly footerSettingsService: FooterSettingsService,
+    private readonly sectionsService: SectionsService,
   ) {}
 
   async getBootstrap() {
-    const [settings, menuItems, heroSlides, footer] = await Promise.all([
-      this.siteSettingsService.getSettings(),
-      this.menuItemsService.findPublic(),
-      this.heroSlidesService.findPublic(),
-      this.footerSettingsService.findPublic(),
-    ]);
+    const [settings, menuItems, heroSlides, footer, homeSections] =
+      await Promise.all([
+        this.siteSettingsService.getSettings(),
+        this.menuItemsService.findPublic(),
+        this.heroSlidesService.findPublic(),
+        this.footerSettingsService.findPublic(),
+        this.sectionsService.findPublicHome(),
+      ]);
 
     return {
       settings,
       menuItems,
       heroSlides,
       footer,
+      homeSections,
     };
   }
 }

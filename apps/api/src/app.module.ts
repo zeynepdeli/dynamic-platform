@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-
 import { PrismaModule } from './prisma/prisma.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PagesModule } from './pages/pages.module.js';
@@ -13,6 +12,7 @@ import { MediaModule } from './media/media.module.js';
 import { FooterSettingsModule } from './footer-settings/footer-settings.module.js';
 import { SiteBootstrapModule } from './site-bootstrap/site-bootstrap.module.js';
 import { validateEnv } from './config/env.validation.js';
+import { SectionsModule } from './sections/sections.module.js';
 
 @Module({
   imports: [
@@ -42,6 +42,7 @@ import { validateEnv } from './config/env.validation.js';
     MediaModule,
     FooterSettingsModule,
     SiteBootstrapModule,
+    SectionsModule,
   ],
   providers: [
     {

@@ -54,7 +54,8 @@ model Page {
   seoDescription String?
   seoKeywords    String?
   ogImageUrl     String?
-  noIndex        Boolean @default(false)
+  noIndex        Boolean   @default(false)
+  sections       Section[]
 }
 
 enum UserRole {
@@ -145,4 +146,69 @@ model FooterSettings {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum SectionType {
+  CARDS // Kart ızgarası (hizmetler, ürünler vb.)
+  TEXT // Başlık + düz metin
+  IMAGE_TEXT // Yanda görsel, yanda metin
+  CTA // Çağrı alanı (başlık + buton)
+}
+
+model Section {
+  id String @id @default(uuid())
+
+  // null = ana sayfa bölümü
+  pageId String?
+  page   Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  type     SectionType @default(CARDS)
+  title    String?
+  subtitle String?
+  body     String? // Düz metin (HTML DEĞİL)
+
+  backgroundColor String? // #RRGGBB
+  backgroundImage String? // /media/... veya https://...
+  textColor       String? // #RRGGBB
+
+  buttonText String?
+  buttonHref String?
+
+  // Kart ızgarası kaç sütun olsun (masaüstü)
+  columns Int @default(3)
+
+  order  Int     @default(0)
+  active Boolean @default(true)
+
+  items SectionItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageId, active, order])
+}
+
+model SectionItem {
+  id String @id @default(uuid())
+
+  sectionId String
+  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String?
+  imageUrl    String?
+  icon        String? // İkon adı (ör. "truck"), serbest SVG DEĞİL
+
+  buttonText String?
+  buttonHref String?
+
+  backgroundColor String? // Karta özel renk (#RRGGBB), boşsa bölüm/tema rengi
+
+  order  Int     @default(0)
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sectionId, active, order])
 }

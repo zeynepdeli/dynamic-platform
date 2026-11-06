@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-
 import { SiteSettingsModule } from '../site-settings/site-settings.module.js';
 import { MenuItemsModule } from '../menu-items/menu-items.module.js';
 import { HeroSlidesModule } from '../hero-slides/hero-slides.module.js';
 import { FooterSettingsModule } from '../footer-settings/footer-settings.module.js';
-
 import { SiteBootstrapController } from './site-bootstrap.controller.js';
 import { SiteBootstrapService } from './site-bootstrap.service.js';
+import { SectionsModule } from '../sections/sections.module.js';
 
 @Module({
   imports: [
@@ -14,6 +13,7 @@ import { SiteBootstrapService } from './site-bootstrap.service.js';
     MenuItemsModule,
     HeroSlidesModule,
     FooterSettingsModule,
+    SectionsModule,
   ],
   controllers: [SiteBootstrapController],
   providers: [SiteBootstrapService],
