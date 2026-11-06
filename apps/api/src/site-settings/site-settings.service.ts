@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { UpdateSiteSettingsDto } from './dto/update-site-settings.dto.js';
 
@@ -22,16 +22,24 @@ export class SiteSettingsService {
 
   // ADMIN: Site ayarlarını güncelle
   async updateSettings(data: UpdateSiteSettingsDto) {
-    return this.prisma.siteSettings.upsert({
-      where: {
-        id: 'main',
-      },
-      update: data,
-      create: {
-        ...data,
-        id: 'main',
-        siteName: data.siteName ?? 'Yeni Web Sitesi',
-      },
+    const current = await this.getSettings();
+
+    // Güncelleme sonrası oluşacak durumu kontrol et
+    const nextType = data.backgroundType ?? current.backgroundType;
+    const nextImage =
+      data.backgroundImage !== undefined
+        ? data.backgroundImage
+        : current.backgroundImage;
+
+    if (nextType === 'IMAGE' && !nextImage) {
+      throw new BadRequestException(
+        'Görsel arka plan seçildiğinde arka plan görseli zorunludur.',
+      );
+    }
+
+    return this.prisma.siteSettings.update({
+      where: { id: 'main' },
+      data,
     });
   }
 }

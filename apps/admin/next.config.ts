@@ -24,8 +24,8 @@ const securityHeaders = [
     value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
   },
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-      // Admin paneli arama motorlarında indekslenmesin
-      { key: "X-Robots-Tag", value: "noindex, nofollow" },
+  // Admin paneli arama motorlarında indekslenmesin
+  { key: "X-Robots-Tag", value: "noindex, nofollow" },
   ...(isProduction
     ? [
         {
@@ -38,6 +38,13 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  experimental: {
+    serverActions: {
+      // Varsayılan 1 MB. Görsel yükleme için API sınırının (5 MB)
+      // biraz üstü; daha büyük istekler sunucuya hiç ulaşmaz.
+      bodySizeLimit: "6mb",
+    },
+  },
   turbopack: {
     rules: {
       "*.css": {

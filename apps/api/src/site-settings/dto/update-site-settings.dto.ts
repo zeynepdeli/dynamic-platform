@@ -1,65 +1,75 @@
 import {
   IsEnum,
-  IsHexColor,
-  IsOptional,
   IsString,
+  Matches,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
-import { IsImageUrl } from '../../common/validators.js';
 
+import {
+  HEX_COLOR_MESSAGE,
+  HEX_COLOR_REGEX,
+  IsImageUrl,
+} from '../../common/validators.js';
 import { BackgroundType } from '../../generated/prisma/enums.js';
 
+// Zorunlu alan: gönderilmeyebilir ama null OLAMAZ
+const sent = (_: object, value: unknown) => value !== undefined;
+// Opsiyonel alan: null gönderilirse temizlenir
+const notNull = (_: object, value: unknown) => value != null;
+
 export class UpdateSiteSettingsDto {
-  // Genel site bilgileri
-  @IsOptional()
+  // ───── Genel ─────
+  @ValidateIf(sent)
   @IsString()
   @MaxLength(150)
+  @Matches(/\S/, { message: 'Site adı boş olamaz.' })
   siteName?: string;
 
-  @IsOptional()
+  @ValidateIf(notNull)
   @IsString()
   @MaxLength(500)
-  description?: string;
+  description?: string | null;
 
-  // Marka görselleri
-  @IsOptional()
+  // ───── Marka görselleri ─────
+  @ValidateIf(notNull)
   @IsImageUrl()
-  logoUrl?: string;
+  logoUrl?: string | null;
 
-  @IsOptional()
+  @ValidateIf(notNull)
   @IsImageUrl()
-  faviconUrl?: string;
+  faviconUrl?: string | null;
 
-  // Tema renkleri
-  @IsOptional()
-  @IsHexColor()
+  // ───── Tema renkleri ─────
+  @ValidateIf(sent)
+  @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })
   primaryColor?: string;
 
-  @IsOptional()
-  @IsHexColor()
+  @ValidateIf(sent)
+  @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })
   secondaryColor?: string;
 
-  // Arka plan ayarları
-  @IsOptional()
-  @IsEnum(BackgroundType)
+  // ───── Arka plan ─────
+  @ValidateIf(sent)
+  @IsEnum(BackgroundType, { message: 'Geçersiz arka plan tipi.' })
   backgroundType?: BackgroundType;
 
-  @IsOptional()
-  @IsHexColor()
+  @ValidateIf(sent)
+  @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })
   backgroundColor?: string;
 
-  @IsOptional()
+  @ValidateIf(notNull)
   @IsImageUrl()
-  backgroundImage?: string;
+  backgroundImage?: string | null;
 
-  // SEO ayarları
-  @IsOptional()
+  // ───── SEO ─────
+  @ValidateIf(notNull)
   @IsString()
   @MaxLength(150)
-  metaTitle?: string;
+  metaTitle?: string | null;
 
-  @IsOptional()
+  @ValidateIf(notNull)
   @IsString()
   @MaxLength(300)
-  metaDescription?: string;
+  metaDescription?: string | null;
 }
