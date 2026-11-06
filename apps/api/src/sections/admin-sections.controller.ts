@@ -20,6 +20,7 @@ import { CreateSectionDto } from './dto/create-section.dto.js';
 import { UpdateSectionDto } from './dto/update-section.dto.js';
 import { CreateSectionItemDto } from './dto/create-section-item.dto.js';
 import { UpdateSectionItemDto } from './dto/update-section-item.dto.js';
+import { ReorderItemsDto, ReorderSectionsDto } from './dto/reorder.dto.js';
 
 // Tüm uçlar: geçerli JWT + ADMIN rolü zorunlu (sınıf seviyesinde)
 @Controller('admin/sections')
@@ -47,6 +48,13 @@ export class AdminSectionsController {
     return this.sectionsService.create(dto);
   }
 
+  // DİKKAT: 'reorder', ':id' rotasından ÖNCE tanımlanmalı.
+  // Aksi halde "reorder" kelimesi :id sanılır ve UUID hatası alınır.
+  @Patch('reorder')
+  reorder(@Body() dto: ReorderSectionsDto) {
+    return this.sectionsService.reorderSections(dto.pageId ?? null, dto.ids);
+  }
+
   @Patch(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -68,6 +76,15 @@ export class AdminSectionsController {
     @Body() dto: CreateSectionItemDto,
   ) {
     return this.sectionsService.createItem(sectionId, dto);
+  }
+
+  // DİKKAT: ':itemId' rotasından ÖNCE
+  @Patch(':sectionId/items/reorder')
+  reorderItems(
+    @Param('sectionId', new ParseUUIDPipe()) sectionId: string,
+    @Body() dto: ReorderItemsDto,
+  ) {
+    return this.sectionsService.reorderItems(sectionId, dto.ids);
   }
 
   @Patch(':sectionId/items/:itemId')

@@ -35,3 +35,20 @@ export function emptyToNull(value: string | undefined): string | null {
   const trimmed = value?.trim() ?? "";
   return trimmed === "" ? null : trimmed;
 }
+
+/** Boş bırakılabilen renk ("" = temizle) */
+export const optionalHexColorSchema = z.union([hexColorSchema, z.literal("")]);
+
+// API'deki INTERNAL_PATH_REGEX ile aynı (açık yönlendirme koruması)
+export const INTERNAL_PATH_REGEX =
+  /^\/(?![/\\])[^\s\\\x00-\x1f\x7f?#]*(?:\?[^\s\\\x00-\x1f\x7f#]*)?(?:#[^\s\\\x00-\x1f\x7f]*)?$/;
+
+/** Site içi bağlantı ("" = bağlantı yok) */
+export const internalPathSchema = z
+  .string()
+  .trim()
+  .max(500)
+  .refine(
+    (value) => value === "" || INTERNAL_PATH_REGEX.test(value),
+    "Bağlantı / ile başlayan site içi bir adres olmalıdır (ör. /iletisim).",
+  );

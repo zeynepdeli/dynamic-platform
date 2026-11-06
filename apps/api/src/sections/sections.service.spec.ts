@@ -1,22 +1,25 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, type TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { SectionsService } from '../sections/sections.service.js';
 
+import { PrismaService } from '../prisma/prisma.service.js';
+import { SectionsService } from './sections.service.js';
 
 describe('SectionsService', () => {
   let service: SectionsService;
 
   const prisma = {
+    $transaction: vi.fn(),
     page: { findFirst: vi.fn() },
     section: {
       findUnique: vi.fn(),
       findMany: vi.fn(),
       count: vi.fn(),
       create: vi.fn(),
+      update: vi.fn(),
     },
     sectionItem: {
       findFirst: vi.fn(),
+      findMany: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
     },
@@ -112,6 +115,51 @@ describe('SectionsService', () => {
       expect(args.select.pageId).toBeUndefined();
       expect(args.select.createdAt).toBeUndefined();
       expect(args.select.items.where).toEqual({ active: true });
+    });
+  });
+
+  describe('sıralama', () => {
+    it('başka sayfanın bölümü listeye eklenirse reddeder', async () => {
+      prisma.section.findMany.mockResolvedValue([{ id: 'a' }, { id: 'b' }]);
+
+      await expect(
+        service.reorderSections(null, ['a', 'yabanci-bolum']),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(prisma.$transaction).not.toHaveBeenCalled();
+    });
+
+    it('eksik liste gönderilirse reddeder', async () => {
+      prisma.section.findMany.mockResolvedValue([{ id: 'a' }, { id: 'b' }]);
+
+      await expect(service.reorderSections(null, ['a'])).rejects.toBeInstanceOf(
+        BadRequestException,
+      );
+    });
+
+    it('doğru listeyle sırayı index olarak yazar', async () => {
+      prisma.section.findMany.mockResolvedValue([{ id: 'a' }, { id: 'b' }]);
+      prisma.$transaction.mockResolvedValue([]);
+
+      await service.reorderSections(null, ['b', 'a']);
+
+      expect(prisma.section.update).toHaveBeenNthCalledWith(1, {
+        where: { id: 'b' },
+        data: { order: 0 },
+      });
+      expect(prisma.section.update).toHaveBeenNthCalledWith(2, {
+        where: { id: 'a' },
+        data: { order: 1 },
+      });
+    });
+
+    it('kart sıralamasına başka bölümün kartı eklenemez', async () => {
+      prisma.section.findUnique.mockResolvedValue({ id: 'section-A' });
+      prisma.sectionItem.findMany.mockResolvedValue([{ id: 'item-1' }]);
+
+      await expect(
+        service.reorderItems('section-A', ['item-of-B']),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(prisma.$transaction).not.toHaveBeenCalled();
     });
   });
 });

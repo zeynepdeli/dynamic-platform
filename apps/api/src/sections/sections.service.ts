@@ -211,7 +211,71 @@ export class SectionsService {
     return this.prisma.sectionItem.delete({ where: { id: itemId } });
   }
 
+  // ───────────── ADMIN: SIRALAMA ─────────────
+
+  // ids dizisindeki sıra = yeni sıra. Liste, o sayfadaki bölümlerin
+  // TAMAMI olmalı: başka sayfanın bölümü araya sokulamaz (IDOR).
+  async reorderSections(pageId: string | null, ids: string[]) {
+    const existing = await this.prisma.section.findMany({
+      where: { pageId },
+      select: { id: true },
+    });
+
+    this.assertSameIds(
+      existing.map((section) => section.id),
+      ids,
+    );
+
+    // Hepsi ya güncellenir ya hiçbiri (transaction)
+    await this.prisma.$transaction(
+      ids.map((id, index) =>
+        this.prisma.section.update({
+          where: { id },
+          data: { order: index },
+        }),
+      ),
+    );
+
+    return this.findAllForAdmin(pageId);
+  }
+
+  async reorderItems(sectionId: string, ids: string[]) {
+    await this.ensureSectionExists(sectionId);
+
+    const existing = await this.prisma.sectionItem.findMany({
+      where: { sectionId },
+      select: { id: true },
+    });
+
+    this.assertSameIds(
+      existing.map((item) => item.id),
+      ids,
+    );
+
+    await this.prisma.$transaction(
+      ids.map((id, index) =>
+        this.prisma.sectionItem.update({
+          where: { id },
+          data: { order: index },
+        }),
+      ),
+    );
+
+    return this.findOneForAdmin(sectionId);
+  }
+
   // ───────────── YARDIMCILAR ─────────────
+
+  // Gönderilen liste, mevcut kayıtlarla birebir aynı küme olmalı
+  private assertSameIds(existingIds: string[], ids: string[]) {
+    const existing = new Set(existingIds);
+
+    if (ids.length !== existing.size || !ids.every((id) => existing.has(id))) {
+      throw new BadRequestException(
+        'Sıralama listesi güncel değil. Sayfayı yenileyip tekrar deneyin.',
+      );
+    }
+  }
 
   private async ensurePageExists(pageId: string) {
     const page = await this.prisma.page.findFirst({
