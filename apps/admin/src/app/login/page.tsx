@@ -1,0 +1,146 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { LockKeyhole, ArrowRight, LoaderCircle } from "lucide-react";
+import { loginAdmin } from "@/app/actions";
+
+export default function LoginPage() {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (loading) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const result = await loginAdmin(email.trim(), password);
+
+      if (!result.success) {
+        setError(result.error ?? "Giriş yapılamadı.");
+        return;
+      }
+
+      router.replace("/dashboard");
+      router.refresh();
+    } catch {
+      setError("Bir hata oluştu. Lütfen tekrar deneyin.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-5 py-12">
+      <div className="w-full max-w-md">
+        <div className="mb-9 text-center">
+          <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
+            <LockKeyhole size={25} strokeWidth={1.7} />
+          </div>
+
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+            Command Center
+          </h1>
+
+          <p className="mt-3 text-sm text-muted">
+            Yönetim merkezine hoş geldiniz.
+          </p>
+        </div>
+
+        <div className="rounded-3xl border border-border bg-surface p-7 shadow-xl shadow-primary/5 sm:p-9">
+          <div className="mb-7">
+            <h2 className="text-xl font-semibold text-foreground">
+              Yönetici Girişi
+            </h2>
+
+            <p className="mt-2 text-sm text-muted">
+              Devam etmek için hesabınıza giriş yapın.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium text-foreground"
+              >
+                E-posta adresi
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                autoComplete="username"
+                required
+                maxLength={254}
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="admin@example.com"
+                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/15"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-foreground"
+              >
+                Şifre
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="Şifrenizi girin"
+                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/15"
+              />
+            </div>
+
+            {error && (
+              <p
+                role="alert"
+                className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+              >
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+            >
+              {loading ? (
+                <>
+                  <LoaderCircle size={18} className="animate-spin" />
+                  Giriş yapılıyor...
+                </>
+              ) : (
+                <>
+                  Giriş Yap
+                  <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+
+        <p className="mt-7 text-center text-xs text-muted">
+          Dynamic Platform · Secure Administration
+        </p>
+      </div>
+    </main>
+  );
+}

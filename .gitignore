@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/
+coverage/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Operating system
+.DS_Store
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+
+# Local files
+*.pem
+*.key
+# VS Code Local History extension (contains old .env copies!)
+.history/
+
+# TypeScript incremental build info
+*.tsbuildinfo
