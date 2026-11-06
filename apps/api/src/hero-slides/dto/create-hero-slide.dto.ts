@@ -3,12 +3,16 @@ import {
   IsInt,
   IsOptional,
   IsString,
-  IsUrl,
   Matches,
   Max,
   MaxLength,
   Min,
 } from 'class-validator';
+import {
+  INTERNAL_PATH_MESSAGE,
+  INTERNAL_PATH_REGEX,
+  IsImageUrl,
+} from '../../common/validators.js';
 
 export class CreateHeroSlideDto {
   @IsString()
@@ -29,21 +33,11 @@ export class CreateHeroSlideDto {
   description?: string;
 
   @IsOptional()
-  @IsUrl({
-    protocols: ['https'],
-    require_protocol: true,
-    require_tld: false,
-  })
-  @MaxLength(2048)
+  @IsImageUrl()
   imageUrl?: string;
 
   @IsOptional()
-  @IsUrl({
-    protocols: ['https'],
-    require_protocol: true,
-    require_tld: false,
-  })
-  @MaxLength(2048)
+  @IsImageUrl()
   mobileImageUrl?: string;
 
   @IsOptional()
@@ -54,8 +48,8 @@ export class CreateHeroSlideDto {
   @IsOptional()
   @IsString()
   @MaxLength(500)
-  @Matches(/^\/(?!\/)[^\s?#]*(?:\?[^#\s]*)?(?:#[^\s]*)?$/, {
-    message: 'Buton bağlantısı / ile başlayan site içi bir adres olmalıdır.',
+  @Matches(INTERNAL_PATH_REGEX, {
+    message: INTERNAL_PATH_MESSAGE,
   })
   buttonHref?: string;
 

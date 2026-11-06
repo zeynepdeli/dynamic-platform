@@ -10,6 +10,10 @@ import {
   Min,
   ValidateIf,
 } from 'class-validator';
+import {
+  INTERNAL_PATH_MESSAGE,
+  INTERNAL_PATH_REGEX,
+} from '../../common/validators.js';
 
 export class UpdateMenuItemDto {
   @IsOptional()
@@ -23,8 +27,8 @@ export class UpdateMenuItemDto {
   @IsOptional()
   @IsString()
   @MaxLength(500)
-  @Matches(/^\/(?!\/)[^\s?#]*(?:\?[^#\s]*)?(?:#[^\s]*)?$/, {
-    message: 'Bağlantı / ile başlayan site içi bir adres olmalıdır.',
+  @Matches(INTERNAL_PATH_REGEX, {
+    message: INTERNAL_PATH_MESSAGE,
   })
   href?: string;
 

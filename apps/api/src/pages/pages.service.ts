@@ -13,17 +13,53 @@ import { UpdatePageDto } from './dto/update-page.dto.js';
 export class PagesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // Yayındaki ve silinmemiş sayfalar
+  // Ziyaretçiye dönen alanlar. deletedAt/published gibi iç alanlar
+  // ve liste görünümünde gereksiz olan content dışarıda bırakılır.
+  private readonly publicListSelect = {
+    id: true,
+    title: true,
+    slug: true,
+    seoTitle: true,
+    seoDescription: true,
+    ogImageUrl: true,
+    noIndex: true,
+    updatedAt: true,
+  } as const;
+
+  // PUBLIC: Yayındaki ve silinmemiş sayfalar
   async findAll() {
     return this.prisma.page.findMany({
       where: {
         published: true,
         deletedAt: null,
       },
+      select: this.publicListSelect,
       orderBy: {
         createdAt: 'desc',
       },
     });
+  }
+
+  // PUBLIC: Slug ile yayındaki tek sayfa
+  async findPublishedBySlug(slug: string) {
+    const page = await this.prisma.page.findFirst({
+      where: {
+        slug,
+        published: true,
+        deletedAt: null,
+      },
+      select: {
+        ...this.publicListSelect,
+        content: true,
+        seoKeywords: true,
+      },
+    });
+
+    if (!page) {
+      throw new NotFoundException('Sayfa bulunamadı.');
+    }
+
+    return page;
   }
 
   // ADMIN: Tüm aktif sayfalar

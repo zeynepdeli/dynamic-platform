@@ -70,7 +70,7 @@ export async function loginAdmin(
     cookieStore.set("admin_session", data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "strict",
       path: "/",
       maxAge: data.expiresIn,
     });
