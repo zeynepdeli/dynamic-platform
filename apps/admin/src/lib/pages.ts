@@ -27,7 +27,7 @@ export async function getAdminPages(): Promise<Page[]> {
   let response: Response;
 
   try {
-    response = await fetch(`${apiUrl.replace(/\/$/, "")}/pages/admin`, {
+    response = await fetch(`${apiUrl.replace(/\/$/, "")}/admin/pages`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export async function getAdminPages(): Promise<Page[]> {
     console.error("Sayfa API hatası:", {
       status: response.status,
       statusText: response.statusText,
-      endpoint: "/pages/admin",
+      endpoint: "/admin/pages",
     });
 
     throw new Error(
@@ -82,7 +82,7 @@ export async function getAdminPageById(id: string) {
   }
 
   const response = await fetch(
-    `${apiUrl.replace(/\/$/, "")}/pages/admin/${encodeURIComponent(id)}`,
+    `${apiUrl.replace(/\/$/, "")}/admin/pages/${encodeURIComponent(id)}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -118,7 +118,7 @@ export async function getDeletedPages(): Promise<Page[]> {
   let response: Response;
 
   try {
-    response = await fetch(`${apiUrl.replace(/\/$/, "")}/pages/admin/deleted`, {
+    response = await fetch(`${apiUrl.replace(/\/$/, "")}/admin/pages/trash`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ export async function getDeletedPages(): Promise<Page[]> {
     console.error("Çöp kutusu API hatası:", {
       status: response.status,
       statusText: response.statusText,
-      endpoint: "/pages/admin/deleted",
+      endpoint: "/admin/pages/trash",
     });
 
     throw new Error(

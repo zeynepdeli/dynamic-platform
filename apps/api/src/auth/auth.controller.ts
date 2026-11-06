@@ -1,7 +1,16 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import type { Request } from 'express';
 
-import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { Throttle } from '@nestjs/throttler';
 
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
@@ -19,8 +28,10 @@ export class AuthController {
     };
   }
 
+  // ThrottlerGuard app.module'de global olarak tanımlı. Burada ayrıca
+  // @UseGuards(ThrottlerGuard) eklemek her denemeyi İKİ kez saydırır.
   @Post('login')
-  @UseGuards(ThrottlerGuard)
+  @HttpCode(HttpStatus.OK)
   @Throttle({
     default: {
       limit: 5,

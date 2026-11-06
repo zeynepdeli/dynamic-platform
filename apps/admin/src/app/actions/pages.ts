@@ -95,7 +95,7 @@ export async function createPageAction(
   }
 
   try {
-    const response = await fetch(`${apiUrl}/pages`, {
+    const response = await fetch(`${apiUrl}/admin/pages`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -163,7 +163,7 @@ export async function updatePageAction(
   }
 
   try {
-    const response = await fetch(`${apiUrl}/pages/${encodeURIComponent(id)}`, {
+    const response = await fetch(`${apiUrl}/admin/pages/${encodeURIComponent(id)}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -273,7 +273,7 @@ export async function deletePageAction(
   }
 
   try {
-    const response = await fetch(`${apiUrl}/pages/${encodeURIComponent(id)}`, {
+    const response = await fetch(`${apiUrl}/admin/pages/${encodeURIComponent(id)}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -342,7 +342,7 @@ export async function restorePageAction(id: string): Promise<PageActionResult> {
 
   try {
     const response = await fetch(
-      `${apiUrl}/pages/${encodeURIComponent(id)}/restore`,
+      `${apiUrl}/admin/pages/${encodeURIComponent(id)}/restore`,
       {
         method: "PATCH",
         headers: {

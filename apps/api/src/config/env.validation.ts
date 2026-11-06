@@ -18,6 +18,9 @@ const envSchema = z
     JWT_SECRET: z.string().min(64, 'JWT_SECRET en az 64 karakter olmalıdır'),
 
     FRONTEND_URL: z.string().url('FRONTEND_URL geçerli bir URL olmalıdır'),
+
+    // API önünde kaç adet güvenilir proxy var (0 = yok).
+    TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
   })
   .superRefine((env, ctx) => {
     if (

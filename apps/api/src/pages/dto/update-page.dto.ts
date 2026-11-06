@@ -2,11 +2,11 @@ import {
   IsBoolean,
   IsNotEmpty,
   IsString,
-  IsUrl,
   Matches,
   MaxLength,
   ValidateIf,
 } from 'class-validator';
+import { IsImageUrl } from '../../common/validators.js';
 
 export class UpdatePageDto {
   @ValidateIf((_, value) => value !== undefined)
@@ -52,12 +52,7 @@ export class UpdatePageDto {
   seoKeywords?: string | null;
 
   @ValidateIf((_, value) => value !== undefined && value !== null)
-  @IsUrl({
-    protocols: ['https'],
-    require_protocol: true,
-    require_tld: true,
-  })
-  @MaxLength(500)
+  @IsImageUrl()
   ogImageUrl?: string | null;
 
   @ValidateIf((_, value) => value !== undefined)

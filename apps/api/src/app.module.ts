@@ -12,11 +12,16 @@ import { HeroSlidesModule } from './hero-slides/hero-slides.module.js';
 import { MediaModule } from './media/media.module.js';
 import { FooterSettingsModule } from './footer-settings/footer-settings.module.js';
 import { SiteBootstrapModule } from './site-bootstrap/site-bootstrap.module.js';
+import { validateEnv } from './config/env.validation.js';
 
 @Module({
   imports: [
+    // Ortam değişkenleri uygulama açılırken Zod ile doğrulanır.
+    // Eksik/zayıf JWT_SECRET vb. durumda uygulama hiç başlamaz.
     ConfigModule.forRoot({
       isGlobal: true,
+      cache: true,
+      validate: validateEnv,
     }),
 
     // Global istek sınırlama

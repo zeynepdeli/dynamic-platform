@@ -3,10 +3,10 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUrl,
   Matches,
   MaxLength,
 } from 'class-validator';
+import { IsImageUrl } from '../../common/validators.js';
 
 export class CreatePageDto {
   @IsString()
@@ -50,12 +50,7 @@ export class CreatePageDto {
   seoKeywords?: string | null;
 
   @IsOptional()
-  @IsUrl({
-    protocols: ['https'],
-    require_protocol: true,
-    require_tld: true,
-  })
-  @MaxLength(500)
+  @IsImageUrl()
   ogImageUrl?: string | null;
 
   @IsOptional()

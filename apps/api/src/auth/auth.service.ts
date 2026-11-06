@@ -17,6 +17,18 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  // Kullanıcı bulunamadığında da Argon2 doğrulaması yapabilmek için
+  // kullanılan sahte hash. Böylece "kayıtlı / kayıtsız e-posta" yanıt
+  // süreleri birbirine yakın olur (OWASP A07 - user enumeration).
+  private dummyHashPromise?: Promise<string>;
+
+  private getDummyHash(): Promise<string> {
+    this.dummyHashPromise ??= this.hashPassword(
+      'dummy-password-for-timing-safety',
+    );
+    return this.dummyHashPromise;
+  }
+
   // Parolayı Argon2id ile güvenli şekilde hash'ler.
   async hashPassword(password: string): Promise<string> {
     return argon2.hash(password, {
@@ -81,6 +93,8 @@ export class AuthService {
     const user = await this.findUserByEmail(email);
 
     if (!user) {
+      // Süre farkı oluşmaması için yine de bir doğrulama çalıştır.
+      await this.verifyPassword(await this.getDummyHash(), dto.password);
       throw new UnauthorizedException('E-posta veya parola hatalı.');
     }
 

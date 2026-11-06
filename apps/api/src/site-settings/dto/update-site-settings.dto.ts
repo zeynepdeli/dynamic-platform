@@ -3,9 +3,9 @@ import {
   IsHexColor,
   IsOptional,
   IsString,
-  IsUrl,
   MaxLength,
 } from 'class-validator';
+import { IsImageUrl } from '../../common/validators.js';
 
 import { BackgroundType } from '../../generated/prisma/enums.js';
 
@@ -23,21 +23,11 @@ export class UpdateSiteSettingsDto {
 
   // Marka görselleri
   @IsOptional()
-  @IsUrl({
-    protocols: ['https'],
-    require_protocol: true,
-    require_tld: false,
-  })
-  @MaxLength(2048)
+  @IsImageUrl()
   logoUrl?: string;
 
   @IsOptional()
-  @IsUrl({
-    protocols: ['https'],
-    require_protocol: true,
-    require_tld: false,
-  })
-  @MaxLength(2048)
+  @IsImageUrl()
   faviconUrl?: string;
 
   // Tema renkleri
@@ -59,12 +49,7 @@ export class UpdateSiteSettingsDto {
   backgroundColor?: string;
 
   @IsOptional()
-  @IsUrl({
-    protocols: ['https'],
-    require_protocol: true,
-    require_tld: false,
-  })
-  @MaxLength(2048)
+  @IsImageUrl()
   backgroundImage?: string;
 
   // SEO ayarları
