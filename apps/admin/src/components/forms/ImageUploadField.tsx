@@ -112,10 +112,11 @@ export function ImageUploadField<T extends FieldValues>({
               )}
             </FieldLabel>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <div className="@container">
+            <div className="flex flex-col gap-4 @md:flex-row @md:items-start">
               {/* Önizleme */}
               <div
-                className={`relative flex w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-surface-muted sm:w-48 ${previewClassName}`}
+                className={`relative flex w-full max-w-60 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-surface-muted @md:w-48 ${previewClassName}`}
               >
                 {uploading ? (
                   <Loader2 className="size-6 animate-spin text-muted-foreground" />
@@ -208,6 +209,7 @@ export function ImageUploadField<T extends FieldValues>({
                   <FieldDescription>{description}</FieldDescription>
                 )}
               </div>
+            </div>
             </div>
           </Field>
         );

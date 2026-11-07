@@ -83,7 +83,7 @@ export function ItemForm({
   const canSubmit = !isSubmitting && (mode === "create" || isDirty);
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="space-y-5">
+    <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-5">
       <FormField name="title" label={titleLabel} register={register} error={errors.title} required />
 
       {descriptionLabel && (
@@ -102,7 +102,7 @@ export function ItemForm({
       )}
 
       {(iconLabel || colorLabel) && (
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 @xl:grid-cols-2">
           {iconLabel && (
             <FormField
               name="icon"
@@ -126,7 +126,7 @@ export function ItemForm({
       )}
 
       {(buttonTextLabel || buttonHrefLabel) && (
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 @xl:grid-cols-2">
           {buttonTextLabel && (
             <FormField
               name="buttonText"

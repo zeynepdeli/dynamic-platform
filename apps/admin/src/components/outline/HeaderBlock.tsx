@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { CheckCircle2, Loader2, Palette, Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,15 +12,18 @@ import { ImageUploadField } from "@/components/forms/ImageUploadField";
 
 import { updateBrandingAction } from "@/app/actions/appearance";
 
-type Branding = { siteName: string; logoUrl: string };
+export type Branding = { siteName: string; logoUrl: string };
 
 /** Header bloğu: site adı + logo (menü ağacı yanına ayrıca verilir) */
 export function HeaderBrandingForm({
   initialValues,
   mediaBaseUrl,
+  onValuesChange,
 }: {
   initialValues: Branding;
   mediaBaseUrl: string;
+  /** Canlı önizleme */
+  onValuesChange?: (values: Branding) => void;
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -33,6 +36,11 @@ export function HeaderBrandingForm({
     reset,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<Branding>({ defaultValues: initialValues });
+
+  const liveValues = useWatch({ control });
+  useEffect(() => {
+    onValuesChange?.(liveValues as Branding);
+  }, [liveValues, onValuesChange]);
 
   async function submit(values: Branding) {
     setError(null);
@@ -48,7 +56,7 @@ export function HeaderBrandingForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="space-y-5">
+    <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-5">
       <FormField
         name="siteName"
         label="Site Adı"

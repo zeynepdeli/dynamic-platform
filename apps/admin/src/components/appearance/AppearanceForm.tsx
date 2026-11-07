@@ -115,7 +115,7 @@ export function AppearanceForm({
             control={control}
             mediaBaseUrl={mediaBaseUrl}
             description="Kare görsel önerilir (ör. 512×512)."
-            previewClassName="aspect-square sm:w-24"
+            previewClassName="aspect-square @md:w-24"
           />
         </section>
 
