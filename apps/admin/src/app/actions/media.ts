@@ -70,7 +70,8 @@ export async function uploadImageAction(
   }
 }
 
-const MEDIA_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const MEDIA_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function deleteMediaAction(
   id: string,
@@ -86,4 +87,48 @@ export async function deleteMediaAction(
     "Görsel silinemedi.",
     "/media",
   );
+}
+
+export type PickerMedia = { id: string; url: string; name: string };
+
+// Görsel seçici için kütüphane listesi (yalnızca gösterim için gerekli alanlar)
+export async function listMediaForPickerAction(): Promise<
+  { success: true; files: PickerMedia[] } | { success: false; error: string }
+> {
+  try {
+    const response = await adminFetch("/admin/media");
+    if (!response.ok) {
+      return {
+        success: false,
+        error: apiErrorMessage(response.status, "Medya listelenemedi."),
+      };
+    }
+    const data: unknown = await response.json();
+    const files = (Array.isArray(data) ? data : [])
+      .filter(
+        (m): m is { id: string; url: string; originalName?: unknown } =>
+          !!m &&
+          typeof m === "object" &&
+          typeof (m as { id?: unknown }).id === "string" &&
+          typeof (m as { url?: unknown }).url === "string" &&
+          MEDIA_URL_REGEX.test((m as { url: string }).url),
+      )
+      .map((m) => ({
+        id: m.id,
+        url: m.url,
+        name:
+          typeof m.originalName === "string"
+            ? m.originalName.slice(0, 120)
+            : "",
+      }));
+    return { success: true, files };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof ApiError
+          ? error.message
+          : "Beklenmeyen bir hata oluştu.",
+    };
+  }
 }

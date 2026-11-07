@@ -70,7 +70,7 @@ export default async function PageEditor({ params }: PageEditorProps) {
                 )}
               </h1>
               <p className="text-sm text-muted-foreground">
-                Yukarıdan düzenlemek istediğiniz bölümü seçin. Web görünümünü alttaki önizlemeden açabilirsiniz.
+                Sayfanın tüm alanları aşağıda. Üstteki çubukla bölümler arasında geçebilir, web görünümünü en alttan açabilirsiniz.
               </p>
             </div>
           </div>

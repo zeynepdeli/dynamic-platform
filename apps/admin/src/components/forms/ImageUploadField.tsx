@@ -7,7 +7,7 @@ import {
   type FieldPath,
   type FieldValues,
 } from "react-hook-form";
-import { ImageIcon, Link2, Loader2, Trash2, Upload } from "lucide-react";
+import { ImageIcon, Loader2, Trash2, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { MediaPickerDialog } from "@/components/media/MediaPickerDialog";
 
 import { uploadImageAction } from "@/app/actions/media";
 import { imageUrlSchema } from "@/lib/validations/common";
@@ -29,7 +30,7 @@ type ImageUploadFieldProps<T extends FieldValues> = {
   mediaBaseUrl: string;
   description?: string;
   required?: boolean;
-  /** Önizleme kutusunun oranı (logo için geniş, favicon için kare) */
+  /** @deprecated Önizleme artık sabit yükseklikte; geriye dönük uyumluluk için */
   previewClassName?: string;
 };
 
@@ -49,13 +50,11 @@ export function ImageUploadField<T extends FieldValues>({
   mediaBaseUrl,
   description = "JPG, PNG veya WEBP — en fazla 5 MB.",
   required = false,
-  previewClassName = "aspect-video",
 }: ImageUploadFieldProps<T>) {
   const inputId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [showUrlInput, setShowUrlInput] = useState(false);
 
   return (
     <Controller
@@ -112,105 +111,97 @@ export function ImageUploadField<T extends FieldValues>({
               )}
             </FieldLabel>
 
-            <div className="@container">
-            <div className="flex flex-col gap-4 @md:flex-row @md:items-start">
-              {/* Önizleme */}
-              <div
-                className={`relative flex w-full max-w-60 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-surface-muted @md:w-48 ${previewClassName}`}
+            {/* Adres + SEÇ + yükle */}
+            <div className="flex gap-2">
+              <Input
+                ref={field.ref}
+                id={inputId}
+                name={field.name}
+                value={value}
+                onChange={(event) => {
+                  setUploadError(null);
+                  field.onChange(event.target.value);
+                }}
+                onBlur={field.onBlur}
+                placeholder="/media/... veya https://..."
+                spellCheck={false}
+                autoComplete="off"
+                className="h-10 min-w-0 flex-1"
+                aria-invalid={!!errorMessage}
+              />
+              <MediaPickerDialog
+                mediaBaseUrl={mediaBaseUrl}
+                current={value}
+                disabled={uploading}
+                onPick={(url) => {
+                  setUploadError(null);
+                  field.onChange(url);
+                }}
+              />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={IMAGE_ACCEPT}
+                className="sr-only"
+                tabIndex={-1}
+                aria-label={`${label} için dosya yükle`}
+                onChange={handleFileChange}
+                disabled={uploading}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="h-10 shrink-0 gap-2 px-3"
+                disabled={uploading}
+                title="Bilgisayardan yükle"
+                aria-label="Bilgisayardan yükle"
+                onClick={() => fileInputRef.current?.click()}
               >
-                {uploading ? (
-                  <Loader2 className="size-6 animate-spin text-muted-foreground" />
-                ) : previewSrc ? (
-                  // eslint-disable-next-line @next/next/no-img-element
+                <Upload className="size-4" />
+              </Button>
+            </div>
+
+            {/* Büyük önizleme */}
+            <div
+              className={`group relative flex h-28 items-center justify-center overflow-hidden rounded-xl border border-border bg-surface-muted p-2`}
+            >
+              {uploading ? (
+                <Loader2 className="size-6 animate-spin text-muted-foreground" />
+              ) : previewSrc ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={previewSrc}
                     alt={`${label} önizlemesi`}
                     referrerPolicy="no-referrer"
-                    className="size-full object-contain"
+                    className="max-h-full max-w-full object-contain"
                   />
-                ) : (
-                  <ImageIcon className="size-6 text-muted-foreground" />
-                )}
-              </div>
-
-              {/* İşlemler */}
-              <div className="flex min-w-0 flex-1 flex-col gap-2">
-                <input
-                  ref={fileInputRef}
-                  id={inputId}
-                  type="file"
-                  accept={IMAGE_ACCEPT}
-                  className="sr-only"
-                  onChange={handleFileChange}
-                  disabled={uploading}
-                />
-
-                <div className="flex flex-wrap gap-2">
-                  <Button
+                  <button
                     type="button"
-                    variant="outline"
-                    className="gap-2"
-                    disabled={uploading}
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <Upload className="size-4" />
-                    {value ? "Değiştir" : "Görsel Yükle"}
-                  </Button>
-
-                  {value && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="gap-2 text-destructive"
-                      disabled={uploading}
-                      onClick={() => {
-                        setUploadError(null);
-                        field.onChange("");
-                      }}
-                    >
-                      <Trash2 className="size-4" />
-                      Kaldır
-                    </Button>
-                  )}
-
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    className="gap-2"
-                    aria-expanded={showUrlInput}
-                    onClick={() => setShowUrlInput((open) => !open)}
-                  >
-                    <Link2 className="size-4" />
-                    URL ile
-                  </Button>
-                </div>
-
-                {showUrlInput && (
-                  <Input
-                    ref={field.ref}
-                    name={field.name}
-                    value={value}
-                    onChange={(event) => {
+                    onClick={() => {
                       setUploadError(null);
-                      field.onChange(event.target.value);
+                      field.onChange("");
                     }}
-                    onBlur={field.onBlur}
-                    placeholder="https://..."
-                    spellCheck={false}
-                    autoComplete="off"
-                    aria-label={`${label} adresi`}
-                    aria-invalid={!!errorMessage}
-                  />
-                )}
+                    aria-label={`${label} görselini kaldır`}
+                    title="Kaldır"
+                    className="absolute right-2 top-2 rounded-lg bg-white/90 p-1.5 text-destructive shadow-sm transition hover:bg-white"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </>
+              ) : (
+                <span className="flex flex-col items-center gap-1 text-xs text-muted-foreground">
+                  <ImageIcon className="size-5" />
+                  Görsel seçilmedi
+                </span>
+              )}
+            </div>
 
-                {errorMessage ? (
-                  <FieldErrorMessage>{errorMessage}</FieldErrorMessage>
-                ) : (
-                  <FieldDescription>{description}</FieldDescription>
-                )}
-              </div>
-            </div>
-            </div>
+            {errorMessage ? (
+              <FieldErrorMessage>{errorMessage}</FieldErrorMessage>
+            ) : (
+              <FieldDescription>{description}</FieldDescription>
+            )}
           </Field>
         );
       }}

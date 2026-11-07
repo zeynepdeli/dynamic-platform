@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowDown,
@@ -11,7 +17,6 @@ import {
   Link2,
   Lock,
   MonitorSmartphone,
-  MousePointerClick,
   PaintBucket,
   Plus,
 } from "lucide-react";
@@ -107,10 +112,10 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   // Kaydedilmemiş canlı değerler (yalnızca seçili blok için)
   const [brandingDraft, setBrandingDraft] = useState<Branding | null>(null);
   const [footerDraft, setFooterDraft] = useState<FooterFormValues | null>(null);
-  const [sectionDraft, setSectionDraft] = useState<{
-    id: string;
-    values: SectionFormValues;
-  } | null>(null);
+  const [sectionDrafts, setSectionDrafts] = useState<
+    Record<string, SectionFormValues>
+  >({});
+  const [showNew, setShowNew] = useState(false);
   const [backgroundDraft, setBackgroundDraft] =
     useState<BackgroundValues | null>(null);
   const [slideDraft, setSlideDraft] = useState<{
@@ -119,18 +124,37 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   } | null>(null);
   const [heroIndex, setHeroIndex] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
-  const panelRef = useRef<HTMLDivElement>(null);
 
+  // Tüm bloklar alt alta: seçmek = o karta kaydırmak
   const select = useCallback((next: Selection) => {
-    // Başka bloğa geçince kaydedilmemiş önizleme değerleri bırakılır
-    setBrandingDraft(null);
-    setFooterDraft(null);
-    setSectionDraft(null);
-    setBackgroundDraft(null);
-    setSlideDraft(null);
-    setError(null);
     setSelected(next);
+    if (next === "new") setShowNew(true);
+    requestAnimationFrame(() =>
+      document
+        .getElementById(blockDomId(next))
+        ?.scrollIntoView({ behavior: "smooth", block: "start" }),
+    );
   }, []);
+
+  // Kaydırdıkça üst çubukta görünen bloğu işaretle
+  useEffect(() => {
+    const els = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-block]"),
+    );
+    if (els.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const first = visible[0]?.target as HTMLElement | undefined;
+        if (first?.dataset.block) setSelected(first.dataset.block as Selection);
+      },
+      { rootMargin: "-150px 0px -55% 0px" },
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [sections.length, showNew]);
 
   const branding = brandingDraft ?? props.branding;
   const footer = footerDraft ?? props.footer;
@@ -157,17 +181,6 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     Math.max(previewSlides.length - 1, 0),
   );
 
-  const selectedSection = selected.startsWith("s:")
-    ? sections.find((s) => s.id === selected.slice(2))
-    : undefined;
-
-  const onSectionChange = useCallback(
-    (values: SectionFormValues) => {
-      if (selectedSection) setSectionDraft({ id: selectedSection.id, values });
-    },
-    [selectedSection],
-  );
-
   const ids = useMemo(() => sections.map((s) => s.id), [sections]);
 
   function run(action: () => Promise<{ success: boolean; error?: string }>) {
@@ -185,7 +198,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     "(Başlıksız bölüm)";
 
   // ───────────── Sağ panel ─────────────
-  function renderPanel() {
+  function renderPanel(selected: Selection) {
     if (selected === "header") {
       return (
         <Panel title="Header" hint="Logo, site adı ve menü" shared>
@@ -231,7 +244,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     if (selected === "background") {
       return (
         <Panel
-          title="Sayfa Arka Planı"
+          title="Genel Görsel Ayarları"
           hint={
             isHome
               ? "Ana sayfaya özel renk ve fotoğraf"
@@ -276,12 +289,12 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
           <SectionForm
             mode="create"
             mediaBaseUrl={theme.mediaBaseUrl}
-            onCancel={() => select(firstSelection())}
+            onCancel={() => setShowNew(false)}
             onSubmit={async (values) => {
               const result = await createSectionAction(pageId, values);
               if (!result.success) return result.error;
               router.refresh();
-              select(firstSelection());
+              setShowNew(false);
               return null;
             }}
           />
@@ -289,6 +302,9 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
       );
     }
 
+    const selectedSection = selected.startsWith("s:")
+      ? sections.find((s) => s.id === selected.slice(2))
+      : undefined;
     if (selectedSection) {
       const template = selectedSection.key
         ? templateByKey[selectedSection.key]
@@ -321,7 +337,12 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
               fields={template?.fields}
               initialValues={selectedSection.formValues}
               mediaBaseUrl={theme.mediaBaseUrl}
-              onValuesChange={onSectionChange}
+              onValuesChange={(values) =>
+                setSectionDrafts((d) => ({
+                  ...d,
+                  [selectedSection.id]: values,
+                }))
+              }
               onSubmit={async (values) => {
                 const result = await updateSectionAction(
                   selectedSection.id,
@@ -348,12 +369,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
       );
     }
 
-    return (
-      <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-        <MousePointerClick className="size-6" />
-        Düzenlemek için yukarıdan bir bölüm seçin.
-      </div>
-    );
+    return null;
   }
 
   // Bölüm işlemleri (form başlığında ve önizlemede ortak)
@@ -432,13 +448,6 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   // Önizlemeden seçilince formun başına kaydır
   function selectAndScroll(next: Selection) {
     select(next);
-    requestAnimationFrame(() =>
-      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-    );
-  }
-
-  function firstSelection(): Selection {
-    return isHome ? "hero" : "page";
   }
 
   // ───────────── Yerleşim: üstte bölüm seçici, ortada form, altta önizleme ─────────────
@@ -568,9 +577,40 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
         </div>
       )}
 
-      {/* Form (ana alan) */}
-      <div ref={panelRef} className="scroll-mt-36">
-        {renderPanel()}
+      {/* Tüm bloklar alt alta (sayfadaki sırayla) */}
+      <div className="space-y-6">
+        {(["background", ...navItems.map((i) => i.id)] as Selection[]).map(
+          (id) => (
+            <div
+              key={id}
+              id={blockDomId(id)}
+              data-block={id}
+              className="scroll-mt-36"
+            >
+              {renderPanel(id)}
+            </div>
+          ),
+        )}
+
+        {props.allowExtraSections &&
+          (showNew ? (
+            <div
+              id={blockDomId("new")}
+              data-block="new"
+              className="scroll-mt-36"
+            >
+              {renderPanel("new")}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => select("new")}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border p-6 text-sm font-semibold text-[#346872] transition hover:border-[#346872] hover:bg-card"
+            >
+              <Plus className="size-4" />
+              Yeni bölüm ekle
+            </button>
+          ))}
       </div>
 
       {/* Web önizlemesi (isteğe bağlı) */}
@@ -689,10 +729,9 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                     ? templateByKey[section.key]
                     : undefined;
                   const locked = template?.locked ?? false;
-                  const values =
-                    sectionDraft?.id === section.id
-                      ? sectionDraft.values
-                      : section.formValues;
+                  const values = sectionDrafts[section.id]
+                    ? sectionDrafts[section.id]
+                    : section.formValues;
                   const title = sectionTitle(section);
 
                   return (
@@ -771,6 +810,10 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   );
 }
 
+function blockDomId(id: string) {
+  return `blok-${id.replace(/[^a-zA-Z0-9-]/g, "-")}`;
+}
+
 function Panel({
   title,
   hint,
@@ -791,10 +834,7 @@ function Panel({
     <section className="rounded-2xl border border-border bg-card shadow-sm">
       <header className="flex flex-wrap items-start gap-3 border-b border-border p-5 sm:px-8">
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            Düzenleniyor
-          </p>
-          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-xl font-semibold">
+          <h2 className="flex flex-wrap items-center gap-2 text-xl font-semibold">
             {title}
             {locked && (
               <Lock

@@ -54,16 +54,27 @@ export function HeaderBrandingForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-5">
-      <FormField
-        name="siteName"
-        label="Site Adı"
-        description="Logo yoksa header'da bu yazı görünür."
-        register={register}
-        error={errors.siteName}
-        required
-      />
-      <ImageUploadField name="logoUrl" label="Logo" control={control} mediaBaseUrl={mediaBaseUrl} />
+    <form
+      onSubmit={handleSubmit(submit)}
+      noValidate
+      className="@container space-y-5"
+    >
+      <div className="grid items-start gap-5 @xl:grid-cols-2">
+        <FormField
+          name="siteName"
+          label="Site Adı"
+          description="Logo yoksa header'da bu yazı görünür."
+          register={register}
+          error={errors.siteName}
+          required
+        />
+        <ImageUploadField
+          name="logoUrl"
+          label="Logo"
+          control={control}
+          mediaBaseUrl={mediaBaseUrl}
+        />
+      </div>
 
       {error && (
         <p role="alert" className="text-sm text-destructive">
@@ -73,7 +84,10 @@ export function HeaderBrandingForm({
 
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
         {saved && !isDirty && (
-          <span role="status" className="mr-auto flex items-center gap-1.5 text-sm text-emerald-700">
+          <span
+            role="status"
+            className="mr-auto flex items-center gap-1.5 text-sm text-emerald-700"
+          >
             <CheckCircle2 className="size-4" />
             Kaydedildi
           </span>
@@ -85,8 +99,16 @@ export function HeaderBrandingForm({
           <Palette className="size-4" />
           Renkler ve arka plan
         </Link>
-        <Button type="submit" disabled={isSubmitting || !isDirty} className="min-h-10 gap-2 px-5">
-          {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+        <Button
+          type="submit"
+          disabled={isSubmitting || !isDirty}
+          className="min-h-10 gap-2 px-5"
+        >
+          {isSubmitting ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Save className="size-4" />
+          )}
           {isSubmitting ? "Kaydediliyor..." : "Kaydet"}
         </Button>
       </div>
