@@ -10,7 +10,10 @@ import { Button } from "@/components/ui/button";
 import { ColorField } from "@/components/forms/ColorField";
 import { ImageUploadField } from "@/components/forms/ImageUploadField";
 
-import { updatePageBackgroundAction, type BackgroundValues } from "@/app/actions/background";
+import {
+  updatePageBackgroundAction,
+  type BackgroundValues,
+} from "@/app/actions/background";
 
 /** Sayfaya özel arka plan: renk ve/veya fotoğraf (boş = sitenin genel arka planı) */
 export function BackgroundForm({
@@ -51,21 +54,32 @@ export function BackgroundForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-5">
+    <form
+      onSubmit={handleSubmit(submit)}
+      noValidate
+      className="@container space-y-5"
+    >
       <p className="rounded-lg bg-surface-muted px-3 py-2 text-xs leading-5 text-muted-foreground">
-        Boş bırakırsanız sitenin genel arka planı (Renkler &amp; Logo) kullanılır.
-        Fotoğraf seçerseniz renk, fotoğraf yüklenirken görünür.
+        Boş bırakırsanız sitenin genel arka planı (Renkler &amp; Logo)
+        kullanılır. Fotoğraf seçerseniz renk, fotoğraf yüklenirken görünür.
       </p>
 
-      <ColorField allowEmpty name="backgroundColor" label="Arka Plan Rengi" control={control} />
+      <div className="grid items-start gap-5 @xl:grid-cols-2">
+        <ColorField
+          allowEmpty
+          name="backgroundColor"
+          label="Arka Plan Rengi"
+          control={control}
+        />
 
-      <ImageUploadField
-        name="backgroundImage"
-        label="Arka Plan Fotoğrafı"
-        control={control}
-        mediaBaseUrl={mediaBaseUrl}
-        description="Geniş görsel önerilir (ör. 1920×1080) — en fazla 5 MB."
-      />
+        <ImageUploadField
+          name="backgroundImage"
+          label="Arka Plan Fotoğrafı"
+          control={control}
+          mediaBaseUrl={mediaBaseUrl}
+          description="Geniş görsel önerilir (ör. 1920×1080) — en fazla 5 MB."
+        />
+      </div>
 
       {error && (
         <p role="alert" className="text-sm text-destructive">
@@ -75,13 +89,24 @@ export function BackgroundForm({
 
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
         {saved && !isDirty && (
-          <span role="status" className="mr-auto flex items-center gap-1.5 text-sm text-emerald-700">
+          <span
+            role="status"
+            className="mr-auto flex items-center gap-1.5 text-sm text-emerald-700"
+          >
             <CheckCircle2 className="size-4" />
             Kaydedildi
           </span>
         )}
-        <Button type="submit" disabled={isSubmitting || !isDirty} className="min-h-10 gap-2 px-5">
-          {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+        <Button
+          type="submit"
+          disabled={isSubmitting || !isDirty}
+          className="min-h-10 gap-2 px-5"
+        >
+          {isSubmitting ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Save className="size-4" />
+          )}
           {isSubmitting ? "Kaydediliyor..." : "Kaydet"}
         </Button>
       </div>

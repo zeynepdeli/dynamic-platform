@@ -69,9 +69,19 @@ export function HeroSlideForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-5">
+    <form
+      onSubmit={handleSubmit(submit)}
+      noValidate
+      className="@container space-y-5"
+    >
       <div className="grid gap-5 @xl:grid-cols-2">
-        <FormField name="title" label="Başlık" register={register} error={errors.title} required />
+        <FormField
+          name="title"
+          label="Başlık"
+          register={register}
+          error={errors.title}
+          required
+        />
         <FormField
           name="subtitle"
           label="Üst Başlık"
@@ -90,22 +100,24 @@ export function HeroSlideForm({
         error={errors.description}
       />
 
-      <ImageUploadField
-        name="imageUrl"
-        label="Arka Plan Fotoğrafı"
-        control={control}
-        mediaBaseUrl={mediaBaseUrl}
-        description="Geniş görsel önerilir (ör. 1920×800) — en fazla 5 MB."
-      />
+      <div className="grid items-start gap-5 @xl:grid-cols-2">
+        <ImageUploadField
+          name="imageUrl"
+          label="Arka Plan Fotoğrafı"
+          control={control}
+          mediaBaseUrl={mediaBaseUrl}
+          description="Geniş görsel önerilir (ör. 1920×800) — en fazla 5 MB."
+        />
 
-      <ImageUploadField
-        name="mobileImageUrl"
-        label="Mobil Fotoğraf (isteğe bağlı)"
-        control={control}
-        mediaBaseUrl={mediaBaseUrl}
-        description="Boşsa masaüstü fotoğrafı kullanılır."
-        previewClassName="aspect-[3/4] @md:w-32"
-      />
+        <ImageUploadField
+          name="mobileImageUrl"
+          label="Mobil Fotoğraf (isteğe bağlı)"
+          control={control}
+          mediaBaseUrl={mediaBaseUrl}
+          description="Boşsa masaüstü fotoğrafı kullanılır."
+          previewClassName="aspect-[3/4] @md:w-32"
+        />
+      </div>
 
       <div className="grid gap-5 @xl:grid-cols-2">
         <FormField
@@ -133,14 +145,20 @@ export function HeroSlideForm({
       />
 
       {submitError && (
-        <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+        <div
+          role="alert"
+          className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive"
+        >
           {submitError}
         </div>
       )}
 
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
         {saved && !isDirty && (
-          <span role="status" className="mr-auto flex items-center gap-1.5 text-sm text-emerald-700">
+          <span
+            role="status"
+            className="mr-auto flex items-center gap-1.5 text-sm text-emerald-700"
+          >
             <CheckCircle2 className="size-4" />
             Kaydedildi
           </span>
@@ -155,7 +173,11 @@ export function HeroSlideForm({
           disabled={isSubmitting || (mode === "edit" && !isDirty)}
           className="min-h-10 gap-2 px-5"
         >
-          {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+          {isSubmitting ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Save className="size-4" />
+          )}
           {isSubmitting ? "Kaydediliyor..." : submitLabel}
         </Button>
       </div>
