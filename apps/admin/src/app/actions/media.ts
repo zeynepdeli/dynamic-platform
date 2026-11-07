@@ -1,6 +1,7 @@
 "use server";
 
 import { ApiError, adminFetch, apiErrorMessage } from "@/lib/api";
+import { sendToApi } from "@/lib/admin/send";
 import { validateImageFile } from "@/lib/validations/media";
 
 type UploadResult =
@@ -67,4 +68,22 @@ export async function uploadImageAction(
           : "Beklenmeyen bir hata oluştu.",
     };
   }
+}
+
+const MEDIA_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function deleteMediaAction(
+  id: string,
+): Promise<{ success: true } | { success: false; error: string }> {
+  if (typeof id !== "string" || !MEDIA_ID.test(id)) {
+    return { success: false, error: "Geçersiz medya." };
+  }
+
+  return sendToApi(
+    `/admin/media/${id}`,
+    "DELETE",
+    undefined,
+    "Görsel silinemedi.",
+    "/media",
+  );
 }

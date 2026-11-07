@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { ApiError, adminFetch, apiErrorMessage } from "@/lib/api";
+import { ApiError, adminFetch, readApiError } from "@/lib/api";
 import { emptyToNull } from "@/lib/validations/common";
 import {
   sectionItemSchema,
@@ -42,7 +42,7 @@ async function send(
     if (!response.ok) {
       return {
         success: false,
-        error: apiErrorMessage(response.status, fallback),
+        error: await readApiError(response, fallback),
       };
     }
 
