@@ -39,6 +39,7 @@ export type SectionSumAggregateOutputType = {
 export type SectionMinAggregateOutputType = {
   id: string | null
   pageId: string | null
+  key: string | null
   type: $Enums.SectionType | null
   title: string | null
   subtitle: string | null
@@ -58,6 +59,7 @@ export type SectionMinAggregateOutputType = {
 export type SectionMaxAggregateOutputType = {
   id: string | null
   pageId: string | null
+  key: string | null
   type: $Enums.SectionType | null
   title: string | null
   subtitle: string | null
@@ -77,6 +79,7 @@ export type SectionMaxAggregateOutputType = {
 export type SectionCountAggregateOutputType = {
   id: number
   pageId: number
+  key: number
   type: number
   title: number
   subtitle: number
@@ -108,6 +111,7 @@ export type SectionSumAggregateInputType = {
 export type SectionMinAggregateInputType = {
   id?: true
   pageId?: true
+  key?: true
   type?: true
   title?: true
   subtitle?: true
@@ -127,6 +131,7 @@ export type SectionMinAggregateInputType = {
 export type SectionMaxAggregateInputType = {
   id?: true
   pageId?: true
+  key?: true
   type?: true
   title?: true
   subtitle?: true
@@ -146,6 +151,7 @@ export type SectionMaxAggregateInputType = {
 export type SectionCountAggregateInputType = {
   id?: true
   pageId?: true
+  key?: true
   type?: true
   title?: true
   subtitle?: true
@@ -252,6 +258,7 @@ export type SectionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type SectionGroupByOutputType = {
   id: string
   pageId: string | null
+  key: string | null
   type: $Enums.SectionType
   title: string | null
   subtitle: string | null
@@ -294,6 +301,7 @@ export type SectionWhereInput = {
   NOT?: Prisma.SectionWhereInput | Prisma.SectionWhereInput[]
   id?: Prisma.StringFilter<"Section"> | string
   pageId?: Prisma.StringNullableFilter<"Section"> | string | null
+  key?: Prisma.StringNullableFilter<"Section"> | string | null
   type?: Prisma.EnumSectionTypeFilter<"Section"> | $Enums.SectionType
   title?: Prisma.StringNullableFilter<"Section"> | string | null
   subtitle?: Prisma.StringNullableFilter<"Section"> | string | null
@@ -315,6 +323,7 @@ export type SectionWhereInput = {
 export type SectionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  key?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -335,10 +344,12 @@ export type SectionOrderByWithRelationInput = {
 
 export type SectionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  pageId_key?: Prisma.SectionPageIdKeyCompoundUniqueInput
   AND?: Prisma.SectionWhereInput | Prisma.SectionWhereInput[]
   OR?: Prisma.SectionWhereInput[]
   NOT?: Prisma.SectionWhereInput | Prisma.SectionWhereInput[]
   pageId?: Prisma.StringNullableFilter<"Section"> | string | null
+  key?: Prisma.StringNullableFilter<"Section"> | string | null
   type?: Prisma.EnumSectionTypeFilter<"Section"> | $Enums.SectionType
   title?: Prisma.StringNullableFilter<"Section"> | string | null
   subtitle?: Prisma.StringNullableFilter<"Section"> | string | null
@@ -355,11 +366,12 @@ export type SectionWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Section"> | Date | string
   page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
   items?: Prisma.SectionItemListRelationFilter
-}, "id">
+}, "id" | "pageId_key">
 
 export type SectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  key?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -387,6 +399,7 @@ export type SectionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SectionScalarWhereWithAggregatesInput | Prisma.SectionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Section"> | string
   pageId?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
+  key?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
   type?: Prisma.EnumSectionTypeWithAggregatesFilter<"Section"> | $Enums.SectionType
   title?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
   subtitle?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
@@ -405,6 +418,7 @@ export type SectionScalarWhereWithAggregatesInput = {
 
 export type SectionCreateInput = {
   id?: string
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -426,6 +440,7 @@ export type SectionCreateInput = {
 export type SectionUncheckedCreateInput = {
   id?: string
   pageId?: string | null
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -445,6 +460,7 @@ export type SectionUncheckedCreateInput = {
 
 export type SectionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -466,6 +482,7 @@ export type SectionUpdateInput = {
 export type SectionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   pageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -486,6 +503,7 @@ export type SectionUncheckedUpdateInput = {
 export type SectionCreateManyInput = {
   id?: string
   pageId?: string | null
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -504,6 +522,7 @@ export type SectionCreateManyInput = {
 
 export type SectionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -523,6 +542,7 @@ export type SectionUpdateManyMutationInput = {
 export type SectionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   pageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -549,9 +569,15 @@ export type SectionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type SectionPageIdKeyCompoundUniqueInput = {
+  pageId: string
+  key: string
+}
+
 export type SectionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  key?: Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
@@ -576,6 +602,7 @@ export type SectionAvgOrderByAggregateInput = {
 export type SectionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  key?: Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
@@ -595,6 +622,7 @@ export type SectionMaxOrderByAggregateInput = {
 export type SectionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  key?: Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
@@ -683,6 +711,7 @@ export type SectionUpdateOneRequiredWithoutItemsNestedInput = {
 
 export type SectionCreateWithoutPageInput = {
   id?: string
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -702,6 +731,7 @@ export type SectionCreateWithoutPageInput = {
 
 export type SectionUncheckedCreateWithoutPageInput = {
   id?: string
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -751,6 +781,7 @@ export type SectionScalarWhereInput = {
   NOT?: Prisma.SectionScalarWhereInput | Prisma.SectionScalarWhereInput[]
   id?: Prisma.StringFilter<"Section"> | string
   pageId?: Prisma.StringNullableFilter<"Section"> | string | null
+  key?: Prisma.StringNullableFilter<"Section"> | string | null
   type?: Prisma.EnumSectionTypeFilter<"Section"> | $Enums.SectionType
   title?: Prisma.StringNullableFilter<"Section"> | string | null
   subtitle?: Prisma.StringNullableFilter<"Section"> | string | null
@@ -769,6 +800,7 @@ export type SectionScalarWhereInput = {
 
 export type SectionCreateWithoutItemsInput = {
   id?: string
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -789,6 +821,7 @@ export type SectionCreateWithoutItemsInput = {
 export type SectionUncheckedCreateWithoutItemsInput = {
   id?: string
   pageId?: string | null
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -823,6 +856,7 @@ export type SectionUpdateToOneWithWhereWithoutItemsInput = {
 
 export type SectionUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -843,6 +877,7 @@ export type SectionUpdateWithoutItemsInput = {
 export type SectionUncheckedUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   pageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -861,6 +896,7 @@ export type SectionUncheckedUpdateWithoutItemsInput = {
 
 export type SectionCreateManyPageInput = {
   id?: string
+  key?: string | null
   type?: $Enums.SectionType
   title?: string | null
   subtitle?: string | null
@@ -879,6 +915,7 @@ export type SectionCreateManyPageInput = {
 
 export type SectionUpdateWithoutPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -898,6 +935,7 @@ export type SectionUpdateWithoutPageInput = {
 
 export type SectionUncheckedUpdateWithoutPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -917,6 +955,7 @@ export type SectionUncheckedUpdateWithoutPageInput = {
 
 export type SectionUncheckedUpdateManyWithoutPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -967,6 +1006,7 @@ export type SectionCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.E
 export type SectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
+  key?: boolean
   type?: boolean
   title?: boolean
   subtitle?: boolean
@@ -989,6 +1029,7 @@ export type SectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type SectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
+  key?: boolean
   type?: boolean
   title?: boolean
   subtitle?: boolean
@@ -1009,6 +1050,7 @@ export type SectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type SectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
+  key?: boolean
   type?: boolean
   title?: boolean
   subtitle?: boolean
@@ -1029,6 +1071,7 @@ export type SectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type SectionSelectScalar = {
   id?: boolean
   pageId?: boolean
+  key?: boolean
   type?: boolean
   title?: boolean
   subtitle?: boolean
@@ -1045,7 +1088,7 @@ export type SectionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "title" | "subtitle" | "body" | "backgroundColor" | "backgroundImage" | "textColor" | "buttonText" | "buttonHref" | "columns" | "order" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["section"]>
+export type SectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "key" | "type" | "title" | "subtitle" | "body" | "backgroundColor" | "backgroundImage" | "textColor" | "buttonText" | "buttonHref" | "columns" | "order" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["section"]>
 export type SectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.Section$pageArgs<ExtArgs>
   items?: boolean | Prisma.Section$itemsArgs<ExtArgs>
@@ -1067,6 +1110,7 @@ export type $SectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     pageId: string | null
+    key: string | null
     type: $Enums.SectionType
     title: string | null
     subtitle: string | null
@@ -1508,6 +1552,7 @@ export interface Prisma__SectionClient<T, Null = never, ExtArgs extends runtime.
 export interface SectionFieldRefs {
   readonly id: Prisma.FieldRef<"Section", 'String'>
   readonly pageId: Prisma.FieldRef<"Section", 'String'>
+  readonly key: Prisma.FieldRef<"Section", 'String'>
   readonly type: Prisma.FieldRef<"Section", 'SectionType'>
   readonly title: Prisma.FieldRef<"Section", 'String'>
   readonly subtitle: Prisma.FieldRef<"Section", 'String'>

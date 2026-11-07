@@ -46,7 +46,8 @@ async function send(
       };
     }
 
-    revalidatePath("/sections");
+    // Sayfa düzenleme ekranlarının hepsi (/pages/...) yenilensin
+    revalidatePath("/pages", "layout");
     return { success: true };
   } catch (error) {
     return {
@@ -61,6 +62,7 @@ async function send(
 
 function sectionPayload(v: SectionFormValues) {
   return {
+    key: emptyToNull(v.key),
     type: v.type,
     title: emptyToNull(v.title),
     subtitle: emptyToNull(v.subtitle),

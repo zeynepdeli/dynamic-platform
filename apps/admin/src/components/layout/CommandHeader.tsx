@@ -12,7 +12,6 @@ import {
   Files,
   Images,
   LayoutDashboard,
-  LayoutGrid,
   ListTree,
   LogOut,
   Menu,
@@ -40,11 +39,6 @@ const navigation = [
     label: "Menüler",
     href: "/menu",
     icon: ListTree,
-  },
-  {
-    label: "Bölümler",
-    href: "/sections",
-    icon: LayoutGrid,
   },
   {
     label: "Slider",

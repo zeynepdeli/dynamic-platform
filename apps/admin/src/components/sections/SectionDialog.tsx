@@ -12,7 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { SectionForm } from "@/components/sections/SectionForm";
+import {
+  SectionForm,
+  type SectionLock,
+} from "@/components/sections/SectionForm";
 
 import {
   createSectionAction,
@@ -31,6 +34,7 @@ type SectionDialogProps =
       sectionId: string;
       initialValues: SectionFormValues;
       mediaBaseUrl: string;
+      lock?: SectionLock | null;
     };
 
 export function SectionDialog(props: SectionDialogProps) {
@@ -85,7 +89,9 @@ export function SectionDialog(props: SectionDialogProps) {
         <DialogContent className="max-h-[92dvh] overflow-y-auto sm:max-w-3xl! p-6 sm:p-8">
           <DialogHeader>
             <DialogTitle className="text-xl">
-              {props.mode === "create" ? "Yeni Bölüm" : "Bölümü Düzenle"}
+              {props.mode === "create"
+                ? "Yeni Bölüm"
+                : (props.lock?.label ?? "Bölümü Düzenle")}
             </DialogTitle>
             <DialogDescription>
               Bölümün tipini, içeriğini ve görünümünü ayarlayın.
@@ -95,6 +101,7 @@ export function SectionDialog(props: SectionDialogProps) {
           <SectionForm
             key={formKey}
             mode={props.mode}
+            lock={props.mode === "edit" ? props.lock : null}
             initialValues={
               props.mode === "edit" ? props.initialValues : undefined
             }

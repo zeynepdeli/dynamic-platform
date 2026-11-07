@@ -63,3 +63,9 @@ export const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
 export const HEX_COLOR_MESSAGE =
   'Renk #RRGGBB formatında olmalıdır (ör. #1a2b3c).';
+
+/** Bölüm anahtarı: küçük harf, rakam ve tire (ör. "vizyon", "hizmetler-2") */
+export const SECTION_KEY_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export const SECTION_KEY_MESSAGE =
+  'Anahtar yalnızca küçük harf, rakam ve tire içerebilir (ör. vizyon).';

@@ -20,8 +20,15 @@ import {
   type SectionFormValues,
 } from "@/lib/validations/section.schema";
 
+export type SectionLock = {
+  /** Şablondaki isim (ör. "Vizyonumuz") */
+  label: string;
+};
+
 type SectionFormProps = {
   mode: "create" | "edit";
+  /** Şablona bağlı kilitli bölüm: tip ve anahtar değiştirilemez */
+  lock?: SectionLock | null;
   initialValues?: SectionFormValues;
   mediaBaseUrl: string;
   onSubmit: (values: SectionFormValues) => Promise<string | null>;
@@ -32,6 +39,7 @@ const COLUMN_OPTIONS = [1, 2, 3, 4] as const;
 
 export function SectionForm({
   mode,
+  lock = null,
   initialValues,
   mediaBaseUrl,
   onSubmit,
@@ -64,8 +72,18 @@ export function SectionForm({
 
   return (
     <form onSubmit={handleSubmit(submit)} noValidate className="space-y-6">
-      {/* Bölüm tipi */}
-      <div className="space-y-2">
+      {lock && (
+        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm">
+          <p className="font-semibold text-primary">{lock.label}</p>
+          <p className="mt-1 text-muted-foreground">
+            Bu bölüm site tasarımına bağlıdır. İçeriğini düzenleyebilirsiniz;
+            tipi değiştirilemez.
+          </p>
+        </div>
+      )}
+
+      {/* Bölüm tipi (kilitli bölümlerde gizli) */}
+      <div className={lock ? "hidden" : "space-y-2"}>
         <p className="text-sm font-medium">Bölüm Tipi</p>
         <div
           role="radiogroup"
@@ -192,6 +210,18 @@ export function SectionForm({
           error={errors.buttonHref}
         />
       </div>
+
+      {/* Geliştirici alanı: frontend bölümü bu anahtarla bulur */}
+      {!lock && (
+        <FormField
+          name="key"
+          label="Anahtar (geliştirici için, isteğe bağlı)"
+          placeholder="ör. hizmetler"
+          description="Özel tasarımlı sayfalarda bölümü bulmak için kullanılır."
+          register={register}
+          error={errors.key}
+        />
+      )}
 
       <FormSwitch
         name="active"

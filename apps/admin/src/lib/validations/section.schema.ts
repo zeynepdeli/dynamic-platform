@@ -26,8 +26,19 @@ const buttonPairError = {
   message: "Buton metni ve bağlantısı birlikte doldurulmalıdır.",
 };
 
+// Bölüm anahtarı (geliştirici için): "vizyon", "hizmetler"
+export const SECTION_KEY_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export const sectionSchema = z
   .object({
+    key: z
+      .string()
+      .trim()
+      .max(50)
+      .refine(
+        (value) => value === "" || SECTION_KEY_REGEX.test(value),
+        "Anahtar yalnızca küçük harf, rakam ve tire içerebilir (ör. vizyon).",
+      ),
     type: z.enum(SECTION_TYPES),
     title: z.string().trim().max(200),
     subtitle: z.string().trim().max(300),
@@ -45,6 +56,7 @@ export const sectionSchema = z
 export type SectionFormValues = z.infer<typeof sectionSchema>;
 
 export const sectionDefaultValues: SectionFormValues = {
+  key: "",
   type: "CARDS",
   title: "",
   subtitle: "",

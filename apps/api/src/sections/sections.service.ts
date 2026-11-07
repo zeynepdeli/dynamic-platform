@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -29,6 +30,7 @@ const publicItemSelect = {
 
 const publicSectionSelect = {
   id: true,
+  key: true,
   type: true,
   title: true,
   subtitle: true,
@@ -121,32 +123,45 @@ export class SectionsService {
       );
     }
 
-    return this.prisma.section.create({
-      data: {
-        pageId,
-        type: dto.type,
-        title: dto.title,
-        subtitle: dto.subtitle,
-        body: dto.body,
-        backgroundColor: dto.backgroundColor,
-        backgroundImage: dto.backgroundImage,
-        textColor: dto.textColor,
-        buttonText: dto.buttonText,
-        buttonHref: dto.buttonHref,
-        columns: dto.columns ?? 3,
-        order: dto.order ?? count, // varsayılan: en sona ekle
-        active: dto.active ?? true,
-      },
-    });
+    if (dto.key) {
+      await this.ensureKeyAvailable(pageId, dto.key);
+    }
+
+    return this.prisma.section
+      .create({
+        data: {
+          pageId,
+          key: dto.key,
+          type: dto.type,
+          title: dto.title,
+          subtitle: dto.subtitle,
+          body: dto.body,
+          backgroundColor: dto.backgroundColor,
+          backgroundImage: dto.backgroundImage,
+          textColor: dto.textColor,
+          buttonText: dto.buttonText,
+          buttonHref: dto.buttonHref,
+          columns: dto.columns ?? 3,
+          order: dto.order ?? count, // varsayılan: en sona ekle
+          active: dto.active ?? true,
+        },
+      })
+      .catch((error: unknown) => this.rethrowKeyConflict(error));
   }
 
   async update(id: string, dto: UpdateSectionDto) {
-    await this.ensureSectionExists(id);
+    const section = await this.ensureSectionExists(id);
 
-    return this.prisma.section.update({
-      where: { id },
-      data: dto,
-    });
+    if (dto.key) {
+      await this.ensureKeyAvailable(section.pageId, dto.key, id);
+    }
+
+    return this.prisma.section
+      .update({
+        where: { id },
+        data: dto,
+      })
+      .catch((error: unknown) => this.rethrowKeyConflict(error));
   }
 
   // Kartlar onDelete: Cascade ile birlikte silinir
@@ -291,11 +306,53 @@ export class SectionsService {
   private async ensureSectionExists(id: string) {
     const section = await this.prisma.section.findUnique({
       where: { id },
-      select: { id: true },
+      select: { id: true, pageId: true },
     });
 
     if (!section) {
       throw new NotFoundException('Bölüm bulunamadı.');
+    }
+
+    return section;
+  }
+
+  // Eşzamanlı iki istek kontrolü aynı anda geçerse veritabanı (P2002)
+  // yakalar; 500 yerine anlamlı bir 409 dönülür.
+  private rethrowKeyConflict(error: unknown): never {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      error.code === 'P2002'
+    ) {
+      throw new ConflictException('Bu anahtar bu sayfada zaten kullanılıyor.');
+    }
+
+    throw error;
+  }
+
+  // Aynı sayfada aynı anahtar iki kez kullanılamaz.
+  // Not: Ana sayfada pageId = NULL olduğu için veritabanındaki
+  // @@unique([pageId, key]) bu durumu yakalamaz (SQL'de NULL'lar
+  // birbirinden farklı sayılır). Bu yüzden kontrol burada da yapılır.
+  private async ensureKeyAvailable(
+    pageId: string | null,
+    key: string,
+    exceptId?: string,
+  ) {
+    const existing = await this.prisma.section.findFirst({
+      where: {
+        pageId,
+        key,
+        ...(exceptId ? { id: { not: exceptId } } : {}),
+      },
+      select: { id: true },
+    });
+
+    if (existing) {
+      throw new ConflictException(
+        `"${key}" anahtarı bu sayfada zaten kullanılıyor.`,
+      );
     }
   }
 

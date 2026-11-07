@@ -24,6 +24,7 @@ export type SectionItem = {
 export type Section = {
   id: string;
   pageId: string | null;
+  key: string | null;
   type: SectionType;
   title: string | null;
   subtitle: string | null;
@@ -57,6 +58,7 @@ export async function getAdminSections(
 // API'deki null değerleri form için boş string'e çevir
 export function toSectionFormValues(section: Section): SectionFormValues {
   return {
+    key: section.key ?? "",
     type: section.type,
     title: section.title ?? "",
     subtitle: section.subtitle ?? "",
