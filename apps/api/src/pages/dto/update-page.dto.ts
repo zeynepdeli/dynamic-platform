@@ -6,7 +6,11 @@ import {
   MaxLength,
   ValidateIf,
 } from 'class-validator';
-import { IsImageUrl } from '../../common/validators.js';
+import {
+  HEX_COLOR_MESSAGE,
+  HEX_COLOR_REGEX,
+  IsImageUrl,
+} from '../../common/validators.js';
 
 export class UpdatePageDto {
   @ValidateIf((_, value) => value !== undefined)
@@ -58,4 +62,13 @@ export class UpdatePageDto {
   @ValidateIf((_, value) => value !== undefined)
   @IsBoolean()
   noIndex?: boolean;
+
+  // Sayfaya özel arka plan (null = site genel arka planı)
+  @ValidateIf((_, value) => value !== undefined && value !== null)
+  @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })
+  backgroundColor?: string | null;
+
+  @ValidateIf((_, value) => value !== undefined && value !== null)
+  @IsImageUrl()
+  backgroundImage?: string | null;
 }

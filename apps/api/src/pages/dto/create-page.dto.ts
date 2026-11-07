@@ -6,7 +6,11 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
-import { IsImageUrl } from '../../common/validators.js';
+import {
+  HEX_COLOR_MESSAGE,
+  HEX_COLOR_REGEX,
+  IsImageUrl,
+} from '../../common/validators.js';
 
 export class CreatePageDto {
   @IsString()
@@ -56,4 +60,13 @@ export class CreatePageDto {
   @IsOptional()
   @IsBoolean()
   noIndex?: boolean;
+
+  // Sayfaya özel arka plan (null = site genel arka planı)
+  @IsOptional()
+  @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })
+  backgroundColor?: string;
+
+  @IsOptional()
+  @IsImageUrl()
+  backgroundImage?: string;
 }

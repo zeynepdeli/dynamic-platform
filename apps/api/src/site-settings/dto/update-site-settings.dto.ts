@@ -72,4 +72,13 @@ export class UpdateSiteSettingsDto {
   @IsString()
   @MaxLength(300)
   metaDescription?: string | null;
+
+  // ───── Ana sayfaya özel arka plan (null = genel arka plan) ─────
+  @ValidateIf(notNull)
+  @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })
+  homeBackgroundColor?: string | null;
+
+  @ValidateIf(notNull)
+  @IsImageUrl()
+  homeBackgroundImage?: string | null;
 }

@@ -9,6 +9,8 @@ export type Page = {
   published: boolean;
   createdAt: string;
   updatedAt: string;
+  backgroundColor?: string | null;
+  backgroundImage?: string | null;
 };
 
 export async function getAdminPages(): Promise<Page[]> {

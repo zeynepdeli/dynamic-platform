@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Pencil, Plus, Save } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,20 +12,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FormField } from "@/components/forms/FormField";
-import { FormTextarea } from "@/components/forms/FormTextarea";
-import { FormSwitch } from "@/components/forms/FormSwitch";
-import { ImageUploadField } from "@/components/forms/ImageUploadField";
+import { HeroSlideForm } from "@/components/hero/HeroSlideForm";
 
 import {
   createHeroSlideAction,
   updateHeroSlideAction,
 } from "@/app/actions/hero-slides";
-import {
-  heroSlideDefaultValues,
-  heroSlideSchema,
-  type HeroSlideFormValues,
-} from "@/lib/validations/hero-slide.schema";
+import type { HeroSlideFormValues } from "@/lib/validations/hero-slide.schema";
 
 type HeroSlideDialogProps =
   | { mode: "create"; mediaBaseUrl: string }
@@ -37,142 +28,6 @@ type HeroSlideDialogProps =
       initialValues: HeroSlideFormValues;
       mediaBaseUrl: string;
     };
-
-function HeroSlideForm({
-  props,
-  onDone,
-  onCancel,
-}: {
-  props: HeroSlideDialogProps;
-  onDone: () => void;
-  onCancel: () => void;
-}) {
-  const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting, isDirty },
-  } = useForm<HeroSlideFormValues>({
-    resolver: zodResolver(heroSlideSchema),
-    defaultValues:
-      props.mode === "edit" ? props.initialValues : heroSlideDefaultValues,
-  });
-
-  async function submit(values: HeroSlideFormValues) {
-    setSubmitError(null);
-    const result =
-      props.mode === "create"
-        ? await createHeroSlideAction(values)
-        : await updateHeroSlideAction(props.slideId, values);
-
-    if (!result.success) {
-      setSubmitError(result.error);
-      return;
-    }
-    onDone();
-  }
-
-  return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="space-y-6">
-      <div className="grid gap-5 md:grid-cols-2">
-        <FormField
-          name="title"
-          label="Başlık"
-          register={register}
-          error={errors.title}
-          required
-        />
-        <FormField
-          name="subtitle"
-          label="Üst Başlık"
-          placeholder="ör. Hoş Geldiniz"
-          register={register}
-          error={errors.subtitle}
-        />
-      </div>
-
-      <FormTextarea
-        name="description"
-        label="Açıklama"
-        description="Düz metin olarak gösterilir (HTML çalışmaz)."
-        rows={3}
-        register={register}
-        error={errors.description}
-      />
-
-      <ImageUploadField
-        name="imageUrl"
-        label="Görsel (masaüstü)"
-        control={control}
-        mediaBaseUrl={props.mediaBaseUrl}
-        description="Geniş görsel önerilir (ör. 1920×800) — en fazla 5 MB."
-      />
-
-      <ImageUploadField
-        name="mobileImageUrl"
-        label="Görsel (mobil, isteğe bağlı)"
-        control={control}
-        mediaBaseUrl={props.mediaBaseUrl}
-        description="Boşsa masaüstü görseli kullanılır. Dikey görsel önerilir."
-        previewClassName="aspect-[3/4] @md:w-32"
-      />
-
-      <div className="grid gap-5 md:grid-cols-2">
-        <FormField
-          name="buttonText"
-          label="Buton Metni"
-          placeholder="ör. Keşfet"
-          register={register}
-          error={errors.buttonText}
-        />
-        <FormField
-          name="buttonHref"
-          label="Buton Bağlantısı"
-          placeholder="/hakkimizda"
-          description="Site içi adres, / ile başlamalı."
-          register={register}
-          error={errors.buttonHref}
-        />
-      </div>
-
-      <FormSwitch
-        name="active"
-        label="Yayında"
-        description="Kapalıysa slider sitede gösterilmez."
-        control={control}
-      />
-
-      {submitError && (
-        <div
-          role="alert"
-          className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive"
-        >
-          {submitError}
-        </div>
-      )}
-
-      <div className="flex justify-end gap-3 border-t border-border pt-5">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          İptal
-        </Button>
-        <Button
-          type="submit"
-          disabled={isSubmitting || (props.mode === "edit" && !isDirty)}
-          className="min-h-11 gap-2 px-5"
-        >
-          {isSubmitting ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Save className="size-4" />
-          )}
-          {isSubmitting ? "Kaydediliyor..." : "Kaydet"}
-        </Button>
-      </div>
-    </form>
-  );
-}
 
 export function HeroSlideDialog(props: HeroSlideDialogProps) {
   const router = useRouter();
@@ -220,11 +75,19 @@ export function HeroSlideDialog(props: HeroSlideDialogProps) {
 
           <HeroSlideForm
             key={formKey}
-            props={props}
+            mode={props.mode}
+            initialValues={props.mode === "edit" ? props.initialValues : undefined}
+            mediaBaseUrl={props.mediaBaseUrl}
             onCancel={() => setOpen(false)}
-            onDone={() => {
+            onSubmit={async (values) => {
+              const result =
+                props.mode === "create"
+                  ? await createHeroSlideAction(values)
+                  : await updateHeroSlideAction(props.slideId, values);
+              if (!result.success) return result.error;
               setOpen(false);
               router.refresh();
+              return null;
             }}
           />
         </DialogContent>

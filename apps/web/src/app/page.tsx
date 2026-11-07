@@ -1,12 +1,13 @@
 import { getSite } from "@/core/site";
 import { safeImageSrc, safeInternalHref } from "@/core/safe";
 import { HeroSlider, type HeroSlideView } from "@/components/site/HeroSlider";
+import { PageBackground } from "@/components/site/PageBackground";
 import { SectionRenderer } from "@/components/sections/SectionRenderer";
 
 // ✏️ MÜŞTERİYE ÖZEL: Ana sayfa düzeni.
 // Özel tasarım için: const home = await getHome(); home.section("hizmetler")
 export default async function HomePage() {
-  const { heroSlides, homeSections } = await getSite();
+  const { heroSlides, homeSections, settings } = await getSite();
 
   // İstemci bileşenine yalnızca doğrulanmış adresler gönderilir
   const slides: HeroSlideView[] = heroSlides.map((slide) => {
@@ -23,9 +24,9 @@ export default async function HomePage() {
   });
 
   return (
-    <>
+    <PageBackground color={settings.homeBackgroundColor} image={settings.homeBackgroundImage}>
       <HeroSlider slides={slides} />
       <SectionRenderer sections={homeSections} />
-    </>
+    </PageBackground>
   );
 }

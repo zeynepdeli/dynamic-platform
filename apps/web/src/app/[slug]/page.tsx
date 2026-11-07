@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getPage } from "@/core/site";
 import { safeImageSrc } from "@/core/safe";
 import { SectionRenderer } from "@/components/sections/SectionRenderer";
+import { PageBackground } from "@/components/site/PageBackground";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -41,7 +42,7 @@ export default async function GenericPage({ params }: Props) {
   const { page, sections } = data;
 
   return (
-    <>
+    <PageBackground color={page.backgroundColor} image={page.backgroundImage}>
       <header className="bg-primary text-on-primary">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{page.title}</h1>
@@ -56,6 +57,6 @@ export default async function GenericPage({ params }: Props) {
       )}
 
       <SectionRenderer sections={sections} />
-    </>
+    </PageBackground>
   );
 }

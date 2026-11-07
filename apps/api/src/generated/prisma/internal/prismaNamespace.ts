@@ -1141,6 +1141,8 @@ export const SiteSettingsScalarFieldEnum = {
   backgroundType: 'backgroundType',
   backgroundColor: 'backgroundColor',
   backgroundImage: 'backgroundImage',
+  homeBackgroundColor: 'homeBackgroundColor',
+  homeBackgroundImage: 'homeBackgroundImage',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
   createdAt: 'createdAt',
@@ -1163,7 +1165,9 @@ export const PageScalarFieldEnum = {
   seoDescription: 'seoDescription',
   seoKeywords: 'seoKeywords',
   ogImageUrl: 'ogImageUrl',
-  noIndex: 'noIndex'
+  noIndex: 'noIndex',
+  backgroundColor: 'backgroundColor',
+  backgroundImage: 'backgroundImage'
 } as const
 
 export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]

@@ -4,6 +4,7 @@ import { HeroSlideDialog } from "@/components/hero/HeroSlideDialog";
 import { HeroSlideList } from "@/components/hero/HeroSlideList";
 import { getAdminHeroSlides, toHeroSlideFormValues } from "@/lib/hero-slides";
 import { getMediaBaseUrl } from "@/lib/media-base-url";
+import { MAX_HERO_SLIDES } from "@/lib/validations/hero-slide.schema";
 
 export default async function HeroSlidesPage() {
   const slides = await getAdminHeroSlides();
@@ -19,12 +20,18 @@ export default async function HeroSlidesPage() {
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">Slider</h1>
             <p className="text-sm text-muted-foreground">
-              Ana sayfanın en üstündeki kayan görselleri yönetin.
+              Ana sayfanın en üstündeki kayan görselleri yönetin (en fazla 5).
             </p>
           </div>
         </div>
 
-        <HeroSlideDialog mode="create" mediaBaseUrl={mediaBaseUrl} />
+        {slides.length < MAX_HERO_SLIDES ? (
+          <HeroSlideDialog mode="create" mediaBaseUrl={mediaBaseUrl} />
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            En fazla {MAX_HERO_SLIDES} slayt eklenebilir.
+          </p>
+        )}
       </header>
 
       <HeroSlideList

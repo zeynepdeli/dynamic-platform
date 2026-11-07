@@ -10,14 +10,13 @@ import {
   Link2,
   Lock,
   MousePointerClick,
+  PaintBucket,
   Plus,
   X,
 } from "lucide-react";
 
 import { ConfirmDeleteDialog } from "@/components/common/ConfirmDeleteDialog";
 import { swapIds } from "@/components/common/OrderButtons";
-import { HeroSlideDialog } from "@/components/hero/HeroSlideDialog";
-import { HeroSlideList } from "@/components/hero/HeroSlideList";
 import { MenuItemDialog } from "@/components/menu/MenuItemDialog";
 import { MenuTree } from "@/components/menu/MenuTree";
 import { HeaderBrandingForm, type Branding } from "@/components/outline/HeaderBlock";
@@ -27,6 +26,8 @@ import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplat
 import { SectionForm } from "@/components/sections/SectionForm";
 import { FooterForm } from "@/components/settings/FooterForm";
 import { CanvasBlock } from "@/components/visual/CanvasBlock";
+import { BackgroundForm } from "@/components/visual/panels/BackgroundForm";
+import { SlidesPanel } from "@/components/visual/panels/SlidesPanel";
 import {
   PreviewFooter,
   PreviewHeader,
@@ -34,7 +35,7 @@ import {
   PreviewPageTitle,
   PreviewSection,
 } from "@/components/visual/preview/Previews";
-import type { PreviewTheme } from "@/components/visual/preview/safe";
+import { color as safeColor, image as safeImage, type PreviewTheme } from "@/components/visual/preview/safe";
 
 import {
   createSectionAction,
@@ -43,6 +44,7 @@ import {
   setSectionActiveAction,
   updateSectionAction,
 } from "@/app/actions/sections";
+import type { BackgroundValues } from "@/app/actions/background";
 import type { TemplateSection } from "@/brand/page-templates";
 import type { HeroSlide } from "@/lib/hero-slides";
 import type { MenuNode } from "@/lib/menu";
@@ -52,7 +54,7 @@ import type { HeroSlideFormValues } from "@/lib/validations/hero-slide.schema";
 import type { PageFormValues } from "@/lib/validations/page.schema";
 import { SECTION_TYPE_LABELS, type SectionFormValues } from "@/lib/validations/section.schema";
 
-type Selection = "header" | "hero" | "page" | "footer" | "new" | `s:${string}`;
+type Selection = "header" | "hero" | "page" | "footer" | "new" | "background" | `s:${string}`;
 
 export type VisualPageEditorProps = {
   isHome: boolean;
@@ -67,6 +69,8 @@ export type VisualPageEditorProps = {
   missing: TemplateSection[];
   allowExtraSections: boolean;
   footer: FooterFormValues;
+  /** Sayfaya özel arka plan (boş = sitenin genel arka planı) */
+  background: BackgroundValues;
 };
 
 const toolbarButton =
@@ -86,18 +90,41 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   const [brandingDraft, setBrandingDraft] = useState<Branding | null>(null);
   const [footerDraft, setFooterDraft] = useState<FooterFormValues | null>(null);
   const [sectionDraft, setSectionDraft] = useState<{ id: string; values: SectionFormValues } | null>(null);
+  const [backgroundDraft, setBackgroundDraft] = useState<BackgroundValues | null>(null);
+  const [slideDraft, setSlideDraft] = useState<{ id: string; values: HeroSlideFormValues } | null>(null);
+  const [heroIndex, setHeroIndex] = useState(0);
 
   const select = useCallback((next: Selection) => {
     // Başka bloğa geçince kaydedilmemiş önizleme değerleri bırakılır
     setBrandingDraft(null);
     setFooterDraft(null);
     setSectionDraft(null);
+    setBackgroundDraft(null);
+    setSlideDraft(null);
     setError(null);
     setSelected(next);
   }, []);
 
   const branding = brandingDraft ?? props.branding;
   const footer = footerDraft ?? props.footer;
+  const background = backgroundDraft ?? props.background;
+  const pageBgColor = safeColor(background.backgroundColor) ?? theme.background;
+  const pageBgImage = safeImage(background.backgroundImage, theme.mediaBaseUrl);
+
+  // Önizlemedeki slaytlar (düzenlenen slayt canlı değerlerle)
+  const previewSlides = props.slides.map((slide) => {
+    const v = slideDraft?.id === slide.id ? slideDraft.values : slide.formValues;
+    return {
+      id: slide.id,
+      title: v.title,
+      subtitle: v.subtitle,
+      description: v.description,
+      imageUrl: v.imageUrl,
+      buttonText: v.buttonText,
+      active: v.active,
+    };
+  });
+  const safeHeroIndex = Math.min(heroIndex, Math.max(previewSlides.length - 1, 0));
 
   const selectedSection = selected.startsWith("s:")
     ? sections.find((s) => s.id === selected.slice(2))
@@ -147,11 +174,31 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
 
     if (selected === "hero") {
       return (
-        <Panel title="Slider" hint="Sayfanın en üstündeki kayan görseller" onClose={() => select(firstSelection())}>
-          <div className="mb-4 flex justify-end">
-            <HeroSlideDialog mode="create" mediaBaseUrl={theme.mediaBaseUrl} />
-          </div>
-          <HeroSlideList mediaBaseUrl={theme.mediaBaseUrl} slides={props.slides} />
+        <Panel title="Slider" hint="Sayfanın en üstündeki kayan görseller (en fazla 5)" onClose={() => select(firstSelection())}>
+          <SlidesPanel
+            slides={props.slides}
+            mediaBaseUrl={theme.mediaBaseUrl}
+            activeIndex={safeHeroIndex}
+            onActiveChange={setHeroIndex}
+            onDraftChange={setSlideDraft}
+          />
+        </Panel>
+      );
+    }
+
+    if (selected === "background") {
+      return (
+        <Panel
+          title="Sayfa Arka Planı"
+          hint={isHome ? "Ana sayfaya özel renk ve fotoğraf" : "Bu sayfaya özel renk ve fotoğraf"}
+          onClose={() => select(firstSelection())}
+        >
+          <BackgroundForm
+            pageId={pageId}
+            initialValues={props.background}
+            mediaBaseUrl={theme.mediaBaseUrl}
+            onValuesChange={setBackgroundDraft}
+          />
         </Panel>
       );
     }
@@ -262,10 +309,32 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
             <span className="ml-3 flex-1 truncate rounded-md bg-white px-3 py-1 font-mono text-xs text-neutral-500 ring-1 ring-neutral-200">
               {isHome ? "/" : `/${props.pageInfo?.slug ?? ""}`}
             </span>
+            <button
+              type="button"
+              onClick={() => select("background")}
+              className={`flex items-center gap-2 rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+                selected === "background"
+                  ? "border-[#2563eb] bg-blue-50 text-[#2563eb]"
+                  : "border-neutral-200 bg-white text-neutral-600 hover:border-[#2563eb]/50"
+              }`}
+            >
+              <PaintBucket className="size-3.5" />
+              Sayfa arka planı
+              <span
+                aria-hidden="true"
+                className="size-3.5 rounded-sm ring-1 ring-black/10"
+                style={{ backgroundColor: pageBgColor }}
+              />
+            </button>
             <span className="hidden text-[11px] font-medium text-neutral-400 sm:block">Önizleme</span>
           </div>
 
-          <div style={{ backgroundColor: theme.background }}>
+          <div className="relative isolate" style={{ backgroundColor: pageBgColor }}>
+            {/* Sayfa arka plan fotoğrafı (doğrulanmış, CSS url() yok) */}
+            {pageBgImage && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={pageBgImage} alt="" className="absolute inset-0 -z-10 size-full object-cover" />
+            )}
             <CanvasBlock label="Header · ortak" selected={selected === "header"} onSelect={() => select("header")}>
               <PreviewHeader
                 theme={theme}
@@ -277,7 +346,12 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
 
             {isHome ? (
               <CanvasBlock label="Slider" selected={selected === "hero"} onSelect={() => select("hero")}>
-                <PreviewHero theme={theme} slide={props.slides.find((s) => s.active)} count={props.slides.filter((s) => s.active).length} />
+                <PreviewHero
+                  theme={theme}
+                  slides={previewSlides}
+                  index={safeHeroIndex}
+                  onIndexChange={setHeroIndex}
+                />
               </CanvasBlock>
             ) : (
               <CanvasBlock label="Sayfa Bilgileri" selected={selected === "page"} onSelect={() => select("page")}>

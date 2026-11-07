@@ -51,11 +51,21 @@ export class MediaService {
   async findUsedUrls(): Promise<Set<string>> {
     const [settings, pages, slides, sections, items] = await Promise.all([
       this.prisma.siteSettings.findMany({
-        select: { logoUrl: true, faviconUrl: true, backgroundImage: true },
+        select: {
+          logoUrl: true,
+          faviconUrl: true,
+          backgroundImage: true,
+          homeBackgroundImage: true,
+        },
       }),
       this.prisma.page.findMany({
-        where: { ogImageUrl: { not: null } },
-        select: { ogImageUrl: true },
+        where: {
+          OR: [
+            { ogImageUrl: { not: null } },
+            { backgroundImage: { not: null } },
+          ],
+        },
+        select: { ogImageUrl: true, backgroundImage: true },
       }),
       this.prisma.heroSlide.findMany({
         select: { imageUrl: true, mobileImageUrl: true },
@@ -71,8 +81,13 @@ export class MediaService {
     ]);
 
     const urls = [
-      ...settings.flatMap((s) => [s.logoUrl, s.faviconUrl, s.backgroundImage]),
-      ...pages.map((p) => p.ogImageUrl),
+      ...settings.flatMap((s) => [
+        s.logoUrl,
+        s.faviconUrl,
+        s.backgroundImage,
+        s.homeBackgroundImage,
+      ]),
+      ...pages.flatMap((p) => [p.ogImageUrl, p.backgroundImage]),
       ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl]),
       ...sections.map((s) => s.backgroundImage),
       ...items.map((i) => i.imageUrl),

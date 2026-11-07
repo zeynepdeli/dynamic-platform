@@ -2,6 +2,9 @@ import { z } from "zod";
 
 import { imageUrlSchema, internalPathSchema } from "./common";
 
+/** API ile aynı sınır */
+export const MAX_HERO_SLIDES = 5;
+
 export const heroSlideSchema = z
   .object({
     title: z

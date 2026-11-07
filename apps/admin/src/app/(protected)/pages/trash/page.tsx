@@ -12,8 +12,9 @@ export default async function TrashPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Çöp Kutusu</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Silinen sayfaları buradan görüntüleyebilir ve geri
-            yükleyebilirsiniz.
+            Çöp kutusuna taşınan sayfalar sitede görünmez ama kaybolmaz.
+            &ldquo;Geri Yükle&rdquo; ile sayfa tüm bölümleriyle birlikte eski
+            haline döner.
           </p>
         </div>
 
