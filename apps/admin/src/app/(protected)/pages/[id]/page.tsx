@@ -70,7 +70,7 @@ export default async function PageEditor({ params }: PageEditorProps) {
                 )}
               </h1>
               <p className="text-sm text-muted-foreground">
-                Önizlemede düzenlemek istediğiniz alana tıklayın. Değişiklikler önizlemede anında görünür.
+                Yukarıdan düzenlemek istediğiniz bölümü seçin. Web görünümünü alttaki önizlemeden açabilirsiniz.
               </p>
             </div>
           </div>
