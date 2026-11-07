@@ -1250,6 +1250,7 @@ export type FooterSettingsScalarFieldEnum = (typeof FooterSettingsScalarFieldEnu
 export const SectionScalarFieldEnum = {
   id: 'id',
   pageId: 'pageId',
+  key: 'key',
   type: 'type',
   title: 'title',
   subtitle: 'subtitle',

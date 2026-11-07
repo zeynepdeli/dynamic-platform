@@ -162,6 +162,10 @@ model Section {
   pageId String?
   page   Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
+  // Geliştirici anahtarı (ör. "vizyon"). Frontend bölümü bununla bulur.
+  // Aynı sayfada tekrar edemez. Boş = serbest bölüm.
+  key String?
+
   type     SectionType @default(CARDS)
   title    String?
   subtitle String?
@@ -185,6 +189,7 @@ model Section {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([pageId, key])
   @@index([pageId, active, order])
 }
 

@@ -1,4 +1,8 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, type TestingModule } from '@nestjs/testing';
 
 import { PrismaService } from '../prisma/prisma.service.js';
@@ -12,6 +16,7 @@ describe('SectionsService', () => {
     page: { findFirst: vi.fn() },
     section: {
       findUnique: vi.fn(),
+      findFirst: vi.fn(),
       findMany: vi.fn(),
       count: vi.fn(),
       create: vi.fn(),
@@ -160,6 +165,48 @@ describe('SectionsService', () => {
         service.reorderItems('section-A', ['item-of-B']),
       ).rejects.toBeInstanceOf(BadRequestException);
       expect(prisma.$transaction).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('bölüm anahtarı (key)', () => {
+    it('ana sayfada aynı anahtar ikinci kez kullanılamaz', async () => {
+      prisma.section.count.mockResolvedValue(1);
+      prisma.section.findFirst.mockResolvedValue({ id: 'mevcut' });
+
+      await expect(service.create({ key: 'vizyon' })).rejects.toBeInstanceOf(
+        ConflictException,
+      );
+      expect(prisma.section.findFirst).toHaveBeenCalledWith({
+        where: { pageId: null, key: 'vizyon' },
+        select: { id: true },
+      });
+      expect(prisma.section.create).not.toHaveBeenCalled();
+    });
+
+    it('güncellemede kendi anahtarı çakışma sayılmaz', async () => {
+      prisma.section.findUnique.mockResolvedValue({
+        id: 'section-A',
+        pageId: null,
+      });
+      prisma.section.findFirst.mockResolvedValue(null);
+      prisma.section.update.mockResolvedValue({});
+
+      await service.update('section-A', { key: 'vizyon' });
+
+      expect(prisma.section.findFirst).toHaveBeenCalledWith({
+        where: { pageId: null, key: 'vizyon', id: { not: 'section-A' } },
+        select: { id: true },
+      });
+      expect(prisma.section.update).toHaveBeenCalled();
+    });
+
+    it('public yanıtta key alanı bulunur', async () => {
+      prisma.section.findMany.mockResolvedValue([]);
+
+      await service.findPublicHome();
+
+      const args = prisma.section.findMany.mock.calls[0][0];
+      expect(args.select.key).toBe(true);
     });
   });
 });

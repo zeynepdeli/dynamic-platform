@@ -16,6 +16,8 @@ import {
   INTERNAL_PATH_MESSAGE,
   INTERNAL_PATH_REGEX,
   IsImageUrl,
+  SECTION_KEY_MESSAGE,
+  SECTION_KEY_REGEX,
 } from '../../common/validators.js';
 import { SectionType } from '../../generated/prisma/enums.js';
 
@@ -23,6 +25,13 @@ import { SectionType } from '../../generated/prisma/enums.js';
 const notNull = (_: object, value: unknown) => value != null;
 
 export class UpdateSectionDto {
+  // null = anahtarı kaldır
+  @ValidateIf(notNull)
+  @IsString()
+  @MaxLength(50)
+  @Matches(SECTION_KEY_REGEX, { message: SECTION_KEY_MESSAGE })
+  key?: string | null;
+
   @IsOptional()
   @IsEnum(SectionType, { message: 'Geçersiz bölüm tipi.' })
   type?: SectionType;

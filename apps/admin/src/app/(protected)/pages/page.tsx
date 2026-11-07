@@ -1,8 +1,11 @@
 import Link from "next/link";
 import {
   CheckCircle2,
+  ChevronRight,
   Clock3,
   FileText,
+  Home,
+  LayoutGrid,
   LayoutTemplate,
   Trash2,
 } from "lucide-react";
@@ -135,6 +138,26 @@ export default async function PagesPage() {
         })}
       </section>
 
+      {/* Ana sayfa (sabit, silinemez) */}
+      <Link
+        href="/pages/home"
+        className="group flex items-center gap-4 rounded-xl border border-border bg-surface p-5 transition-colors hover:border-[#346872]/40 hover:bg-surface-muted/40"
+      >
+        <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#183350]/10 text-[#183350]">
+          <Home className="size-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold text-foreground">Ana Sayfa</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Sitenin açılış sayfası. Bölümlerini ve kartlarını yönetin.
+          </p>
+        </div>
+        <span className="inline-flex items-center gap-1 text-sm font-medium text-[#346872]">
+          Bölümleri Düzenle
+          <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+        </span>
+      </Link>
+
       {/* Sayfa listesi */}
       <section className="overflow-hidden rounded-xl border border-border bg-surface">
         <div className="flex flex-col gap-3 border-b border-border px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
@@ -250,6 +273,14 @@ export default async function PagesPage() {
                       {/* Düzenleme ve silme işlemleri */}
                       <td className="px-6 py-5 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/pages/${page.id}`}
+                            className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-surface-muted"
+                          >
+                            <LayoutGrid className="size-3.5" />
+                            Bölümler
+                          </Link>
+
                           <EditPageDialog pageId={page.id} />
 
                           <DeletePageDialog
@@ -303,6 +334,14 @@ export default async function PagesPage() {
 
                   {/* Düzenleme ve silme işlemleri */}
                   <div className="flex flex-col gap-2">
+                    <Link
+                      href={`/pages/${page.id}`}
+                      className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-surface-muted"
+                    >
+                      <LayoutGrid className="size-4" />
+                      Bölümler
+                    </Link>
+
                     <EditPageDialog pageId={page.id} mobile />
 
                     <DeletePageDialog pageId={page.id} pageTitle={page.title} />
