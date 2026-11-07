@@ -2,7 +2,6 @@
 
 import {
   useCallback,
-  useEffect,
   useMemo,
   useState,
   useTransition,
@@ -66,7 +65,7 @@ import {
   type SectionFormValues,
 } from "@/lib/validations/section.schema";
 
-type Selection =
+export type Selection =
   | "hero"
   | "page"
   | "new"
@@ -84,6 +83,10 @@ export type VisualPageEditorProps = {
   sections: SectionListEntry[];
   templateByKey: Record<string, TemplateSection>;
   missing: TemplateSection[];
+  /** Bu ekranda düzenlenen blok (her blok kendi ekranında) */
+  block: Selection;
+  /** Blok adreslerinin kökü: /pages/home veya /pages/<id> */
+  basePath: string;
   allowExtraSections: boolean;
   footer: FooterFormValues;
   socialLinks: SocialLink[];
@@ -100,15 +103,12 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  const [selected, setSelected] = useState<Selection>(
-    sections[0] ? `s:${sections[0].id}` : isHome ? "hero" : "page",
-  );
+  const selected = props.block;
 
   // Kaydedilmemiş canlı değerler (yalnızca seçili blok için)
   const [sectionDrafts, setSectionDrafts] = useState<
     Record<string, SectionFormValues>
   >({});
-  const [showNew, setShowNew] = useState(false);
   const [backgroundDraft, setBackgroundDraft] =
     useState<BackgroundValues | null>(null);
   const [slideDraft, setSlideDraft] = useState<{
@@ -118,36 +118,11 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   const [heroIndex, setHeroIndex] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
 
-  // Tüm bloklar alt alta: seçmek = o karta kaydırmak
-  const select = useCallback((next: Selection) => {
-    setSelected(next);
-    if (next === "new") setShowNew(true);
-    requestAnimationFrame(() =>
-      document
-        .getElementById(blockDomId(next))
-        ?.scrollIntoView({ behavior: "smooth", block: "start" }),
-    );
-  }, []);
-
-  // Kaydırdıkça üst çubukta görünen bloğu işaretle
-  useEffect(() => {
-    const els = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-block]"),
-    );
-    if (els.length === 0) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        const first = visible[0]?.target as HTMLElement | undefined;
-        if (first?.dataset.block) setSelected(first.dataset.block as Selection);
-      },
-      { rootMargin: "-150px 0px -55% 0px" },
-    );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [sections.length, showNew]);
+  // Önizlemede başka bloğa tıklanınca o bloğun ekranına git
+  const select = useCallback(
+    (next: Selection) => router.push(blockHref(props.basePath, next)),
+    [router, props.basePath],
+  );
 
   const branding = props.branding;
   const footer = props.footer;
@@ -212,7 +187,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     if (selected === "background") {
       return (
         <Panel
-          title="Genel Görsel Ayarları"
+          title="Arka Plan"
           hint={
             isHome
               ? "Ana sayfaya özel renk ve fotoğraf"
@@ -246,12 +221,11 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
           <SectionForm
             mode="create"
             mediaBaseUrl={theme.mediaBaseUrl}
-            onCancel={() => setShowNew(false)}
+            onCancel={() => router.push("/dashboard")}
             onSubmit={async (values) => {
               const result = await createSectionAction(pageId, values);
               if (!result.success) return result.error;
-              router.refresh();
-              setShowNew(false);
+              router.push("/dashboard");
               return null;
             }}
           />
@@ -404,109 +378,12 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
 
   // Önizlemeden seçilince formun başına kaydır
   function selectAndScroll(next: Selection) {
-    select(next);
+    if (next !== selected) select(next);
   }
 
-  // ───────────── Yerleşim: üstte bölüm seçici, ortada form, altta önizleme ─────────────
-  const navItems: {
-    id: Selection;
-    label: string;
-    hidden?: boolean;
-    shared?: boolean;
-    icon?: React.ReactNode;
-  }[] = [
-    isHome
-      ? { id: "hero", label: "Slider" }
-      : { id: "page", label: "Sayfa Bilgileri" },
-    ...sections.map((section) => ({
-      id: `s:${section.id}` as Selection,
-      label: sectionTitle(section),
-      hidden: !section.active,
-    })),
-  ];
-
+  // ───────────── Yerleşim: form (tek blok) + altta isteğe bağlı önizleme ─────────────
   return (
     <div className="space-y-6">
-      {/* Bölüm seçici (sayfadaki sırayla) */}
-      <nav
-        aria-label="Sayfa bölümleri"
-        className="sticky top-16 z-30 -mx-1 overflow-x-auto rounded-2xl border border-border bg-card/95 p-2 shadow-sm backdrop-blur"
-      >
-        <ol className="flex min-w-max items-center gap-1.5">
-          {navItems.map((item, i) => (
-            <li key={item.id}>
-              <button
-                type="button"
-                aria-current={selected === item.id ? "step" : undefined}
-                onClick={() => select(item.id)}
-                className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition ${
-                  selected === item.id
-                    ? "bg-[#183350] text-white shadow-sm"
-                    : "text-foreground hover:bg-surface-muted"
-                } ${item.hidden ? "opacity-60" : ""}`}
-              >
-                <span
-                  className={`flex size-5 items-center justify-center rounded-md text-[11px] font-bold ${
-                    selected === item.id
-                      ? "bg-white/20"
-                      : "bg-[#183350]/10 text-[#183350]"
-                  }`}
-                >
-                  {i + 1}
-                </span>
-                <span className="max-w-44 truncate">{item.label}</span>
-                {item.shared && (
-                  <Link2
-                    className="size-3.5 opacity-60"
-                    aria-label="Tüm sayfalarda ortak"
-                  />
-                )}
-                {item.hidden && (
-                  <EyeOff className="size-3.5 opacity-70" aria-label="Gizli" />
-                )}
-              </button>
-            </li>
-          ))}
-
-          <li aria-hidden="true" className="mx-1 h-6 w-px bg-border" />
-          <li>
-            <button
-              type="button"
-              onClick={() => select("background")}
-              className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition ${
-                selected === "background"
-                  ? "bg-[#183350] text-white"
-                  : "hover:bg-surface-muted"
-              }`}
-            >
-              <PaintBucket className="size-4" />
-              Arka plan
-              <span
-                aria-hidden="true"
-                className="size-3.5 rounded-sm ring-1 ring-black/10"
-                style={{ backgroundColor: pageBgColor }}
-              />
-            </button>
-          </li>
-          {props.allowExtraSections && (
-            <li>
-              <button
-                type="button"
-                onClick={() => select("new")}
-                className={`flex items-center gap-2 rounded-xl border border-dashed px-3.5 py-2 text-sm font-medium transition ${
-                  selected === "new"
-                    ? "border-[#183350] bg-[#183350] text-white"
-                    : "border-border text-[#346872] hover:bg-surface-muted"
-                }`}
-              >
-                <Plus className="size-4" />
-                Yeni bölüm
-              </button>
-            </li>
-          )}
-        </ol>
-      </nav>
-
       {error && (
         <div
           role="alert"
@@ -516,57 +393,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
         </div>
       )}
 
-      {/* Şablonda olup henüz oluşturulmamış bölümler */}
-      {props.missing.length > 0 && (
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-amber-400/50 bg-amber-50 p-4 text-sm text-amber-900">
-          <span className="font-semibold">Tasarımın beklediği bölümler:</span>
-          {props.missing.map((entry) => (
-            <span
-              key={entry.key}
-              className="flex items-center gap-2 rounded-xl bg-white/70 py-1 pl-3 pr-1"
-            >
-              {entry.label}
-              <CreateTemplateSectionButton pageId={pageId} entry={entry} />
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Tüm bloklar alt alta (sayfadaki sırayla) */}
-      <div className="space-y-6">
-        {(["background", ...navItems.map((i) => i.id)] as Selection[]).map(
-          (id) => (
-            <div
-              key={id}
-              id={blockDomId(id)}
-              data-block={id}
-              className="scroll-mt-36"
-            >
-              {renderPanel(id)}
-            </div>
-          ),
-        )}
-
-        {props.allowExtraSections &&
-          (showNew ? (
-            <div
-              id={blockDomId("new")}
-              data-block="new"
-              className="scroll-mt-36"
-            >
-              {renderPanel("new")}
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => select("new")}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border p-6 text-sm font-semibold text-[#346872] transition hover:border-[#346872] hover:bg-card"
-            >
-              <Plus className="size-4" />
-              Yeni bölüm ekle
-            </button>
-          ))}
-      </div>
+      {renderPanel(selected)}
 
       {/* Web önizlemesi (isteğe bağlı) */}
       <section className="space-y-4">
@@ -783,8 +610,13 @@ function SharedPreviewBlock({
   );
 }
 
-function blockDomId(id: string) {
-  return `blok-${id.replace(/[^a-zA-Z0-9-]/g, "-")}`;
+/** Bloğun kendi ekranının adresi */
+export function blockHref(basePath: string, block: Selection) {
+  if (block === "hero") return `${basePath}/slider`;
+  if (block === "page") return `${basePath}/bilgiler`;
+  if (block === "background") return `${basePath}/arka-plan`;
+  if (block === "new") return `${basePath}/yeni-bolum`;
+  return `${basePath}/bolum/${block.slice(2)}`;
 }
 
 function Panel({
