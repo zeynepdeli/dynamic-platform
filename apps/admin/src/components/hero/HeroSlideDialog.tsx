@@ -116,7 +116,7 @@ function HeroSlideForm({
         control={control}
         mediaBaseUrl={props.mediaBaseUrl}
         description="Boşsa masaüstü görseli kullanılır. Dikey görsel önerilir."
-        previewClassName="aspect-[3/4] sm:w-32"
+        previewClassName="aspect-[3/4] @md:w-32"
       />
 
       <div className="grid gap-5 md:grid-cols-2">

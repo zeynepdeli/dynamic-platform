@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, Save } from "lucide-react";
@@ -37,6 +37,8 @@ type SectionFormProps = {
   mediaBaseUrl: string;
   /** Hata mesajı döndürürse gösterilir; null = başarılı */
   onSubmit: (values: SectionFormValues) => Promise<string | null>;
+  /** Canlı önizleme: form değiştikçe çağrılır */
+  onValuesChange?: (values: SectionFormValues) => void;
   /** Pencere içinde kullanılırken "İptal" butonu */
   onCancel?: () => void;
 };
@@ -50,6 +52,7 @@ export function SectionForm({
   initialValues,
   mediaBaseUrl,
   onSubmit,
+  onValuesChange,
   onCancel,
 }: SectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -66,6 +69,12 @@ export function SectionForm({
     resolver: zodResolver(sectionSchema),
     defaultValues: initialValues ?? sectionDefaultValues,
   });
+
+  // Canlı önizleme: her değişiklikte üst bileşene bildir
+  const liveValues = useWatch({ control });
+  useEffect(() => {
+    onValuesChange?.(liveValues as SectionFormValues);
+  }, [liveValues, onValuesChange]);
 
   const type = useWatch({ control, name: "type" });
   const columns = useWatch({ control, name: "columns" });
@@ -104,7 +113,7 @@ export function SectionForm({
   const canSubmit = !isSubmitting && (mode === "create" || isDirty);
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="space-y-6">
+    <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-6">
       {/* Bölüm tipi (şablona bağlı bölümlerde gizli) */}
       {!lock && (
         <div className="space-y-2">
@@ -138,7 +147,7 @@ export function SectionForm({
       )}
 
       {(titleLabel || subtitleLabel) && (
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 @xl:grid-cols-2">
           {titleLabel && (
             <FormField name="title" label={titleLabel} register={register} error={errors.title} />
           )}
@@ -196,7 +205,7 @@ export function SectionForm({
       )}
 
       {(bgColorLabel || textColorLabel) && (
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 @xl:grid-cols-2">
           {bgColorLabel && (
             <ColorField
               allowEmpty
@@ -219,7 +228,7 @@ export function SectionForm({
       )}
 
       {(buttonTextLabel || buttonHrefLabel) && (
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 @xl:grid-cols-2">
           {buttonTextLabel && (
             <FormField
               name="buttonText"

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, Save } from "lucide-react";
 
@@ -25,7 +25,14 @@ const SOCIAL_FIELDS = [
   { name: "githubUrl", label: "GitHub" },
 ] as const;
 
-export function FooterForm({ initialValues }: { initialValues: FooterFormValues }) {
+export function FooterForm({
+  initialValues,
+  onValuesChange,
+}: {
+  initialValues: FooterFormValues;
+  /** Canlı önizleme */
+  onValuesChange?: (values: FooterFormValues) => void;
+}) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -40,6 +47,11 @@ export function FooterForm({ initialValues }: { initialValues: FooterFormValues 
     resolver: zodResolver(footerSchema),
     defaultValues: initialValues,
   });
+
+  const liveValues = useWatch({ control });
+  useEffect(() => {
+    onValuesChange?.(liveValues as FooterFormValues);
+  }, [liveValues, onValuesChange]);
 
   async function submit(values: FooterFormValues) {
     setSubmitError(null);
@@ -57,7 +69,7 @@ export function FooterForm({ initialValues }: { initialValues: FooterFormValues 
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="space-y-7">
+    <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-7">
       <section className="space-y-5 rounded-2xl border border-border bg-card p-6">
         <h2 className="text-base font-semibold">Footer</h2>
 
@@ -88,7 +100,7 @@ export function FooterForm({ initialValues }: { initialValues: FooterFormValues 
       <section className="space-y-5 rounded-2xl border border-border bg-card p-6">
         <h2 className="text-base font-semibold">İletişim Bilgileri</h2>
 
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 @xl:grid-cols-2">
           <FormField
             name="email"
             label="E-posta"
@@ -118,7 +130,7 @@ export function FooterForm({ initialValues }: { initialValues: FooterFormValues 
       <section className="space-y-5 rounded-2xl border border-border bg-card p-6">
         <h2 className="text-base font-semibold">Sosyal Medya</h2>
 
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 @xl:grid-cols-2">
           {SOCIAL_FIELDS.map((field) => (
             <FormField
               key={field.name}
