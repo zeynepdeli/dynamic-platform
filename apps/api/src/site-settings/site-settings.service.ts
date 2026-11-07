@@ -22,19 +22,22 @@ export class SiteSettingsService {
 
   // ADMIN: Site ayarlarını güncelle
   async updateSettings(data: UpdateSiteSettingsDto) {
-    const current = await this.getSettings();
+    // Kayıt yoksa oluştur
+    await this.getSettings();
 
-    // Güncelleme sonrası oluşacak durumu kontrol et
-    const nextType = data.backgroundType ?? current.backgroundType;
-    const nextImage =
-      data.backgroundImage !== undefined
-        ? data.backgroundImage
-        : current.backgroundImage;
-
-    if (nextType === 'IMAGE' && !nextImage) {
-      throw new BadRequestException(
-        'Görsel arka plan seçildiğinde arka plan görseli zorunludur.',
-      );
+    // Buton: metin ve bağlantı birlikte olmalı
+    if (
+      data.headerButtonText !== undefined ||
+      data.headerButtonHref !== undefined
+    ) {
+      const current = await this.getSettings();
+      const text = data.headerButtonText !== undefined ? data.headerButtonText : current.headerButtonText;
+      const href = data.headerButtonHref !== undefined ? data.headerButtonHref : current.headerButtonHref;
+      if (!!text?.trim() !== !!href) {
+        throw new BadRequestException(
+          'Header butonu için metin ve bağlantı birlikte girilmeli.',
+        );
+      }
     }
 
     return this.prisma.siteSettings.update({

@@ -59,6 +59,10 @@ export class CreateSectionItemDto {
   backgroundColor?: string;
 
   @IsOptional()
+  @IsImageUrl()
+  backgroundImage?: string;
+
+  @IsOptional()
   @IsInt()
   @Min(0)
   @Max(10000)

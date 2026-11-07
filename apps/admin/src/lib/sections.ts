@@ -17,6 +17,7 @@ export type SectionItem = {
   buttonText: string | null;
   buttonHref: string | null;
   backgroundColor: string | null;
+  backgroundImage: string | null;
   order: number;
   active: boolean;
 };
@@ -84,6 +85,7 @@ export function toSectionItemFormValues(
     buttonText: item.buttonText ?? "",
     buttonHref: item.buttonHref ?? "",
     backgroundColor: item.backgroundColor ?? "",
+    backgroundImage: item.backgroundImage ?? "",
     active: item.active,
   };
 }

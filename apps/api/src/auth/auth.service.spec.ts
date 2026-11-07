@@ -68,3 +68,38 @@ describe('AuthService', () => {
     });
   });
 });
+
+describe('AuthService.changePassword', () => {
+  let service: AuthService;
+  const prisma = { user: { findUnique: vi.fn(), update: vi.fn() } };
+  const jwt = { signAsync: vi.fn().mockResolvedValue('new-token') };
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        AuthService,
+        { provide: PrismaService, useValue: prisma },
+        { provide: JwtService, useValue: jwt },
+      ],
+    }).compile();
+    service = module.get(AuthService);
+  });
+
+  it('mevcut şifre hatalıysa değiştirmez', async () => {
+    const hash = await service.hashPassword('dogru-sifre-123');
+    prisma.user.findUnique.mockResolvedValue({ id: 'u', role: 'ADMIN', active: true, passwordHash: hash });
+    await expect(service.changePassword('u', 'yanlis-sifre-12', 'yeni-sifre-12345')).rejects.toThrow('Mevcut şifre hatalı.');
+    expect(prisma.user.update).not.toHaveBeenCalled();
+  });
+
+  it('şifreyi değiştirir, eski oturumları geçersiz kılar, yeni token döner', async () => {
+    const hash = await service.hashPassword('dogru-sifre-123');
+    prisma.user.findUnique.mockResolvedValue({ id: 'u', role: 'ADMIN', active: true, passwordHash: hash });
+    const result = await service.changePassword('u', 'dogru-sifre-123', 'yeni-sifre-12345');
+    expect(result.accessToken).toBe('new-token');
+    const data = prisma.user.update.mock.calls[0][0].data;
+    expect(data.passwordChangedAt).toBeInstanceOf(Date);
+    expect(await service.verifyPassword(data.passwordHash, 'yeni-sifre-12345')).toBe(true);
+  });
+});

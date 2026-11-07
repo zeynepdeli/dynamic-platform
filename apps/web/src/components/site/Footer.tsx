@@ -1,7 +1,9 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 
-import { safeHttpsUrl, safeMailto, safeTel } from "@/core/safe";
-import type { FooterSettings, SiteSettings, SocialLink } from "@/core/types";
+import { buildMenuTree } from "@/core/site";
+import { readableTextColor, safeColor, safeHttpsUrl, safeImageSrc, safeInternalHref, safeMailto, safeTel } from "@/core/safe";
+import type { FooterSettings, MenuItem, SiteSettings, SocialLink } from "@/core/types";
+import Link from "next/link";
 import { getIcon } from "./icons";
 
 // ✏️ MÜŞTERİYE ÖZEL: Footer tasarımı
@@ -9,10 +11,12 @@ export function Footer({
   footer,
   settings,
   socialLinks,
+  menuItems,
 }: {
   footer: FooterSettings;
   settings: SiteSettings;
   socialLinks: SocialLink[];
+  menuItems: MenuItem[];
 }) {
   if (!footer.enabled) return null;
 
@@ -27,8 +31,23 @@ export function Footer({
       : [];
   });
 
+  // Footer linkleri: yalnızca site içi adresler
+  const links = buildMenuTree(menuItems, "FOOTER").flatMap((l) => {
+    const href = safeInternalHref(l.href);
+    return href ? [{ id: l.id, href, label: l.label }] : [];
+  });
+  const bg = safeColor(footer.backgroundColor);
+  const bgImage = safeImageSrc(footer.backgroundImage);
+
   return (
-    <footer className="mt-auto bg-primary text-on-primary">
+    <footer
+      className={`relative isolate mt-auto ${bg ? "" : "bg-primary text-on-primary"}`}
+      style={bg ? { backgroundColor: bg, color: readableTextColor(bg) } : undefined}
+    >
+      {bgImage && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={bgImage} alt="" aria-hidden="true" className="absolute inset-0 -z-10 size-full object-cover" />
+      )}
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div className="space-y-3">
           <p className="text-lg font-semibold">{settings.siteName}</p>
@@ -78,6 +97,20 @@ export function Footer({
           </ul>
         )}
       </div>
+
+      {links.length > 0 && (
+        <nav aria-label="Footer linkleri" className="mx-auto max-w-6xl px-4 pb-6 sm:px-6">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm opacity-85">
+            {links.map((l) => (
+              <li key={l.id}>
+                <Link href={l.href} className="hover:underline">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       {footer.copyright && (
         <p className="border-t border-white/10 px-4 py-5 text-center text-xs opacity-70">

@@ -3,7 +3,7 @@ import { MenuIcon } from "./icons";
 import { ChevronDown } from "lucide-react";
 
 import { buildMenuTree } from "@/core/site";
-import { safeImageSrc, safeInternalHref } from "@/core/safe";
+import { readableTextColor, safeColor, safeImageSrc, safeInternalHref } from "@/core/safe";
 import type { MenuItem, SiteSettings } from "@/core/types";
 
 import { MobileMenu } from "./MobileMenu";
@@ -16,11 +16,23 @@ type HeaderProps = {
 
 // ✏️ MÜŞTERİYE ÖZEL: Header tasarımını buradan değiştirin.
 export function Header({ settings, menuItems }: HeaderProps) {
-  const tree = buildMenuTree(menuItems);
+  const tree = buildMenuTree(menuItems, "HEADER");
   const logo = safeImageSrc(settings.logoUrl);
+  // Admin → Header Yönetimi → arka plan (boşsa tema ana rengi)
+  const bg = safeColor(settings.headerBackgroundColor);
+  const bgImage = safeImageSrc(settings.headerBackgroundImage);
+  const buttonHref = safeInternalHref(settings.headerButtonHref);
+  const buttonText = settings.headerButtonText?.trim();
 
   return (
-    <header className="sticky top-0 z-40 bg-primary text-on-primary shadow-sm">
+    <header
+      className={`sticky top-0 z-40 isolate shadow-sm ${bg ? "" : "bg-primary text-on-primary"}`}
+      style={bg ? { backgroundColor: bg, color: readableTextColor(bg) } : undefined}
+    >
+      {bgImage && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={bgImage} alt="" aria-hidden="true" className="absolute inset-0 -z-10 size-full object-cover" />
+      )}
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4 sm:px-6">
         <Link href="/" className="flex min-w-0 items-center gap-3 font-semibold">
           {logo ? (
@@ -68,6 +80,15 @@ export function Header({ settings, menuItems }: HeaderProps) {
             ))}
           </ul>
         </nav>
+
+        {buttonText && buttonHref && (
+          <Link
+            href={buttonHref}
+            className="hidden shrink-0 rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-on-secondary transition hover:opacity-90 md:inline-flex"
+          >
+            {buttonText}
+          </Link>
+        )}
 
         {/* İstemciye yalnızca doğrulanmış bağlantılar gönderilir */}
         <MobileMenu

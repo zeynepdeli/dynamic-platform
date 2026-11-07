@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
@@ -113,6 +114,43 @@ export class AuthService {
       role: user.role,
     };
   }
+  /**
+   * Şifre değiştir: mevcut şifre doğrulanır, eski oturumlar geçersiz olur
+   * (passwordChangedAt), yeni bir oturum anahtarı döner.
+   */
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+  ) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user?.active) throw new UnauthorizedException('Geçersiz oturum.');
+
+    const valid = await this.verifyPassword(user.passwordHash, currentPassword);
+    if (!valid) throw new BadRequestException('Mevcut şifre hatalı.');
+
+    if (currentPassword === newPassword) {
+      throw new BadRequestException('Yeni şifre eskisiyle aynı olamaz.');
+    }
+
+    // JWT 'iat' saniye hassasiyetinde: yeni token eskilerden ayrılsın diye
+    // değişiklik zamanı tam saniyeye yuvarlanır ve yeni token sonra verilir.
+    const changedAt = new Date(Math.floor(Date.now() / 1000) * 1000);
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash: await this.hashPassword(newPassword),
+        passwordChangedAt: changedAt,
+      },
+    });
+
+    const accessToken = await this.jwtService.signAsync({
+      sub: user.id,
+      role: user.role,
+    });
+    return { accessToken, tokenType: 'Bearer', expiresIn: 900 };
+  }
+
   async login(dto: LoginDto) {
     const user = await this.validateUser(dto);
 

@@ -537,10 +537,6 @@ export type PageNullableScalarRelationFilter = {
   isNot?: Prisma.PageWhereInput | null
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }

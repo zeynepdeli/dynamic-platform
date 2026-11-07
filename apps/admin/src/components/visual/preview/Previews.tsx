@@ -21,18 +21,24 @@ export function PreviewHeader({
   siteName,
   logoUrl,
   menu,
+  style,
 }: {
   theme: PreviewTheme;
   siteName: string;
   logoUrl: string;
   menu: { id: string; label: string; icon?: string | null; hasChildren: boolean }[];
+  style?: { backgroundColor: string; backgroundImage: string; buttonText: string };
 }) {
   const logo = image(logoUrl, theme.mediaBaseUrl);
+  const bg = color(style?.backgroundColor) ?? theme.primary;
+  const bgImage = image(style?.backgroundImage, theme.mediaBaseUrl);
   return (
     <div
-      className="flex items-center gap-4 px-6 py-4"
-      style={{ backgroundColor: theme.primary, color: readable(theme.primary) }}
+      className="relative isolate flex items-center gap-4 overflow-hidden px-6 py-4"
+      style={{ backgroundColor: bg, color: readable(bg) }}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      {bgImage && <img src={bgImage} alt="" className="absolute inset-0 -z-10 size-full object-cover" />}
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={logo} alt="" className="h-8 w-auto max-w-36 object-contain" />
@@ -51,6 +57,11 @@ export function PreviewHeader({
           );
         })}
       </nav>
+      {style?.buttonText && (
+        <span className="hidden rounded-lg px-3 py-1.5 text-xs font-semibold sm:inline" style={{ backgroundColor: theme.secondary, color: readable(theme.secondary) }}>
+          {style.buttonText}
+        </span>
+      )}
     </div>
   );
 }
@@ -240,12 +251,15 @@ export function PreviewSection({
               {items.map((item) => {
                 const cardBg = color(item.backgroundColor);
                 const cardImg = image(item.imageUrl, theme.mediaBaseUrl);
+                const cardBgImg = image(item.backgroundImage, theme.mediaBaseUrl);
                 return (
                   <div
                     key={item.id}
-                    className={`overflow-hidden rounded-xl bg-white text-neutral-900 shadow-sm ring-1 ring-black/5 ${item.active ? "" : "opacity-40"}`}
+                    className={`relative isolate overflow-hidden rounded-xl bg-white text-neutral-900 shadow-sm ring-1 ring-black/5 ${item.active ? "" : "opacity-40"}`}
                     style={cardBg ? { backgroundColor: cardBg, color: readable(cardBg) } : undefined}
                   >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {cardBgImg && <img src={cardBgImg} alt="" className="absolute inset-0 -z-10 size-full object-cover" />}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     {cardImg && <img src={cardImg} alt="" className="aspect-[4/3] w-full object-cover" />}
                     <div className="space-y-1 p-4">
@@ -283,8 +297,12 @@ export function PreviewFooter({
       </div>
     );
   }
+  const bg = color(values.backgroundColor) ?? theme.primary;
+  const bgImage = image(values.backgroundImage, theme.mediaBaseUrl);
   return (
-    <div style={{ backgroundColor: theme.primary, color: readable(theme.primary) }}>
+    <div className="relative isolate overflow-hidden" style={{ backgroundColor: bg, color: readable(bg) }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      {bgImage && <img src={bgImage} alt="" className="absolute inset-0 -z-10 size-full object-cover" />}
       <div className="grid gap-6 px-8 py-10 text-sm md:grid-cols-3">
         <div className="space-y-2">
           <p className="font-semibold">{siteName}</p>

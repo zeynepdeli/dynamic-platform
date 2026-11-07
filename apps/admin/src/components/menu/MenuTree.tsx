@@ -17,14 +17,18 @@ import {
 } from "@/app/actions/menu";
 import type { MenuNode } from "@/lib/menu";
 
-type MenuTreeProps = { tree: MenuNode[] };
+type MenuTreeProps = { tree: MenuNode[]; location?: "HEADER" | "FOOTER" };
 
-export function MenuTree({ tree }: MenuTreeProps) {
+export function MenuTree({ tree, location = "HEADER" }: MenuTreeProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  const parents = tree.map((node) => ({ id: node.id, label: node.label }));
+  // Footer linkleri tek seviyeli: üst menü seçeneği yok
+  const parents =
+    location === "FOOTER"
+      ? []
+      : tree.map((node) => ({ id: node.id, label: node.label }));
 
   function run(action: () => Promise<{ success: boolean; error?: string }>) {
     setError(null);
@@ -38,16 +42,25 @@ export function MenuTree({ tree }: MenuTreeProps) {
     });
   }
 
-  function move(parentId: string | null, ids: string[], index: number, dir: -1 | 1) {
+  function move(
+    parentId: string | null,
+    ids: string[],
+    index: number,
+    dir: -1 | 1,
+  ) {
     const next = swapIds(ids, index, dir);
-    if (next) run(() => reorderMenuItemsAction(parentId, next));
+    if (next) run(() => reorderMenuItemsAction(parentId, next, location));
   }
 
   if (tree.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
         <ListTree className="size-8" />
-        <p>Henüz menü öğesi yok.</p>
+        <p>
+          {location === "FOOTER"
+            ? "Henüz footer linki eklenmemiş."
+            : "Henüz menü linki eklenmemiş."}
+        </p>
       </div>
     );
   }
@@ -70,7 +83,10 @@ export function MenuTree({ tree }: MenuTreeProps) {
           const childIds = node.children.map((child) => child.id);
 
           return (
-            <li key={node.id} className="rounded-2xl border border-border bg-card">
+            <li
+              key={node.id}
+              className="rounded-2xl border border-border bg-card"
+            >
               <div
                 className={`flex flex-wrap items-center gap-4 p-4 ${node.visible ? "" : "opacity-60"}`}
               >
@@ -110,6 +126,7 @@ export function MenuTree({ tree }: MenuTreeProps) {
                     initialValues={node.formValues}
                     parents={parents}
                     hasChildren={node.children.length > 0}
+                    location={location}
                   />
 
                   {node.children.length === 0 ? (
@@ -188,12 +205,14 @@ export function MenuTree({ tree }: MenuTreeProps) {
                   </div>
                 ))}
 
-                <MenuItemDialog
-                  mode="create"
-                  parents={parents}
-                  defaultParentId={node.id}
-                  triggerLabel="Alt Menü Ekle"
-                />
+                {location === "HEADER" && (
+                  <MenuItemDialog
+                    mode="create"
+                    parents={parents}
+                    defaultParentId={node.id}
+                    triggerLabel="Alt Menü Ekle"
+                  />
+                )}
               </div>
             </li>
           );
@@ -207,7 +226,10 @@ function MenuIconBadge({ icon }: { icon: string | null }) {
   const entry = getIcon("menu", icon);
   if (!entry) return null;
   return (
-    <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-[#183350]/10 text-[#183350]" title={entry.label}>
+    <span
+      className="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-[#183350]/10 text-[#183350]"
+      title={entry.label}
+    >
       <entry.Icon className="size-3.5" />
     </span>
   );

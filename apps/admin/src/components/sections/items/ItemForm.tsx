@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, Save } from "lucide-react";
 
@@ -10,6 +10,7 @@ import { FormField } from "@/components/forms/FormField";
 import { FormTextarea } from "@/components/forms/FormTextarea";
 import { FormSwitch } from "@/components/forms/FormSwitch";
 import { ColorField } from "@/components/forms/ColorField";
+import { IconPicker } from "@/components/icons/IconPicker";
 import { ImageUploadField } from "@/components/forms/ImageUploadField";
 
 import type { FieldConfig, ItemField } from "@/brand/page-templates";
@@ -76,7 +77,8 @@ export function ItemForm({
   const descriptionLabel = label("description", "Açıklama");
   const imageLabel = label("imageUrl", "Görsel");
   const iconLabel = label("icon", "İkon (isteğe bağlı)");
-  const colorLabel = label("backgroundColor", "Renk");
+  const colorLabel = label("backgroundColor", "Kart Arka Plan Rengi");
+  const bgImageLabel = label("backgroundImage", "Kart Arka Plan Fotoğrafı");
   const buttonTextLabel = label("buttonText", "Buton Metni");
   const buttonHrefLabel = label("buttonHref", "Buton Bağlantısı");
 
@@ -101,18 +103,21 @@ export function ItemForm({
         <ImageUploadField name="imageUrl" label={imageLabel} control={control} mediaBaseUrl={mediaBaseUrl} />
       )}
 
-      {(iconLabel || colorLabel) && (
-        <div className="grid gap-5 @xl:grid-cols-2">
-          {iconLabel && (
-            <FormField
-              name="icon"
-              label={iconLabel}
-              placeholder="ör. truck, shield-check"
-              description="Tasarımdaki ikon setinden bir isim."
-              register={register}
-              error={errors.icon}
-            />
-          )}
+      {iconLabel && (
+        <div className="space-y-2">
+          <p className="text-sm font-medium">{iconLabel}</p>
+          <Controller
+            name="icon"
+            control={control}
+            render={({ field }) => (
+              <IconPicker kind="menu" allowNone label={iconLabel} value={field.value} onChange={(key) => field.onChange(key)} />
+            )}
+          />
+        </div>
+      )}
+
+      {(colorLabel || bgImageLabel) && (
+        <div className="grid items-start gap-5 @xl:grid-cols-2">
           {colorLabel && (
             <ColorField
               allowEmpty
@@ -121,6 +126,9 @@ export function ItemForm({
               description="Boş bırakılırsa bölüm/tema rengi."
               control={control}
             />
+          )}
+          {bgImageLabel && (
+            <ImageUploadField name="backgroundImage" label={bgImageLabel} control={control} mediaBaseUrl={mediaBaseUrl} />
           )}
         </div>
       )}

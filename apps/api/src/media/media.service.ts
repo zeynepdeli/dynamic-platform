@@ -49,14 +49,20 @@ export class MediaService {
    * kullanımdaki bir görsel silinebilir.
    */
   async findUsedUrls(): Promise<Set<string>> {
-    const [settings, pages, slides, sections, items] = await Promise.all([
+    const [settings, footers, pages, slides, sections, items] =
+      await Promise.all([
       this.prisma.siteSettings.findMany({
         select: {
           logoUrl: true,
           faviconUrl: true,
           backgroundImage: true,
           homeBackgroundImage: true,
+          headerBackgroundImage: true,
+          ogImageUrl: true,
         },
+      }),
+      this.prisma.footerSettings.findMany({
+        select: { backgroundImage: true },
       }),
       this.prisma.page.findMany({
         where: {
@@ -75,8 +81,13 @@ export class MediaService {
         select: { backgroundImage: true },
       }),
       this.prisma.sectionItem.findMany({
-        where: { imageUrl: { not: null } },
-        select: { imageUrl: true },
+        where: {
+          OR: [
+            { imageUrl: { not: null } },
+            { backgroundImage: { not: null } },
+          ],
+        },
+        select: { imageUrl: true, backgroundImage: true },
       }),
     ]);
 
@@ -86,11 +97,14 @@ export class MediaService {
         s.faviconUrl,
         s.backgroundImage,
         s.homeBackgroundImage,
+        s.headerBackgroundImage,
+        s.ogImageUrl,
       ]),
+      ...footers.map((f) => f.backgroundImage),
       ...pages.flatMap((p) => [p.ogImageUrl, p.backgroundImage]),
       ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl]),
       ...sections.map((s) => s.backgroundImage),
-      ...items.map((i) => i.imageUrl),
+      ...items.flatMap((i) => [i.imageUrl, i.backgroundImage]),
     ];
 
     return new Set(

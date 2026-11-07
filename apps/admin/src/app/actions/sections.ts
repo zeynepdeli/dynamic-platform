@@ -86,6 +86,7 @@ function itemPayload(v: SectionItemFormValues) {
     buttonText: emptyToNull(v.buttonText),
     buttonHref: emptyToNull(v.buttonHref),
     backgroundColor: emptyToNull(v.backgroundColor),
+    backgroundImage: emptyToNull(v.backgroundImage),
     active: v.active,
   };
 }

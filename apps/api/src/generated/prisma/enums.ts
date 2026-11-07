@@ -9,12 +9,12 @@
 * 🟢 You can import this file directly.
 */
 
-export const BackgroundType = {
-  COLOR: 'COLOR',
-  IMAGE: 'IMAGE'
+export const MenuLocation = {
+  HEADER: 'HEADER',
+  FOOTER: 'FOOTER'
 } as const
 
-export type BackgroundType = (typeof BackgroundType)[keyof typeof BackgroundType]
+export type MenuLocation = (typeof MenuLocation)[keyof typeof MenuLocation]
 
 
 export const UserRole = {

@@ -18,18 +18,27 @@ export async function generateMetadata(): Promise<Metadata> {
   const favicon = safeImageSrc(settings.faviconUrl);
   const title = settings.metaTitle || settings.siteName;
 
+  const ogImage = safeImageSrc(settings.ogImageUrl);
+
   return {
     title: { default: title, template: `%s | ${settings.siteName}` },
     description: settings.metaDescription ?? settings.description ?? undefined,
+    keywords: settings.metaKeywords ?? undefined,
     icons: favicon ? { icon: favicon } : undefined,
-    openGraph: { siteName: settings.siteName, type: "website" },
+    openGraph: {
+      siteName: settings.siteName,
+      type: "website",
+      images: ogImage ? [{ url: ogImage }] : undefined,
+    },
+    // Admin → SEO Yönetimi → Robots
+    robots: settings.allowIndexing === false ? { index: false, follow: false } : undefined,
   };
 }
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { settings, menuItems, footer, socialLinks } = await getSite();
-  const backgroundImage =
-    settings.backgroundType === "IMAGE" ? safeImageSrc(settings.backgroundImage) : undefined;
+  // Renk her zaman (themeStyle), fotoğraf varsa rengin üstünde
+  const backgroundImage = safeImageSrc(settings.backgroundImage);
 
   return (
     <html lang="tr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
@@ -56,7 +65,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main" className="flex-1">
           {children}
         </main>
-        <Footer footer={footer} settings={settings} socialLinks={socialLinks} />
+        <Footer footer={footer} settings={settings} socialLinks={socialLinks} menuItems={menuItems} />
       </body>
     </html>
   );

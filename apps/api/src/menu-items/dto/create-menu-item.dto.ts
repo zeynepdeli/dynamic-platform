@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsEnum,
   IsIn,
   IsInt,
   IsOptional,
@@ -16,6 +17,8 @@ import {
   INTERNAL_PATH_REGEX,
 } from '../../common/validators.js';
 import { MENU_ICON_KEYS } from '../../common/icons.js';
+import { MenuLocation } from '../../generated/prisma/enums.js';
+import { ReorderWithParentDto } from '../../common/reorder.js';
 
 export class CreateMenuItemDto {
   @IsString()
@@ -50,4 +53,15 @@ export class CreateMenuItemDto {
   @IsOptional()
   @IsUUID()
   parentId?: string;
+
+  // Oluştururken seçilir, sonradan değişmez
+  @IsOptional()
+  @IsEnum(MenuLocation, { message: 'Geçersiz menü konumu.' })
+  location?: MenuLocation;
+}
+
+export class ReorderMenuDto extends ReorderWithParentDto {
+  @IsOptional()
+  @IsEnum(MenuLocation, { message: 'Geçersiz menü konumu.' })
+  location?: MenuLocation;
 }

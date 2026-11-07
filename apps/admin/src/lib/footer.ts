@@ -16,6 +16,8 @@ export async function getFooterFormValues(): Promise<FooterFormValues> {
 
   return {
     enabled: s.enabled ?? true,
+    backgroundColor: s.backgroundColor ?? "",
+    backgroundImage: s.backgroundImage ?? "",
     description: s.description ?? "",
     copyright: s.copyright ?? "",
     email: s.email ?? "",

@@ -2,7 +2,10 @@ import "server-only";
 
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, Info, LayoutGrid, PaintBucket, PanelsTopLeft, Plus } from "lucide-react";
+
+import { AreaHeader } from "@/components/areas/AreaShell";
+import { SECTION_TYPE_LABELS } from "@/lib/validations/section.schema";
 import { z } from "zod";
 
 import { VisualPageEditor, type Selection } from "@/components/visual/VisualPageEditor";
@@ -56,12 +59,26 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
 
   const pageTitle = isHome ? "Ana Sayfa" : (page as Page).title;
 
+  // Ekran başlığı (enfesGurme düzeni: "X Yönetimi")
+  const section = block.startsWith("s:") ? sections.find((s) => s.id === block.slice(2)) : undefined;
+  const sectionLabel = section && ((section.key && template.byKey[section.key]?.label) || section.title || "Başlıksız");
+  const heading =
+    block === "hero"
+      ? { icon: PanelsTopLeft, title: "Hero Slider Yönetimi", description: "Ana sayfanın en üstündeki kayan görseller. Fotoğraf, başlık, açıklama ve butonu her slayt için ayrı girin." }
+      : block === "background"
+        ? { icon: PaintBucket, title: "Sayfa Arka Planı", description: `${pageTitle} sayfasına özel arka plan. Boş bırakırsanız Site Arka Planı kullanılır.` }
+        : block === "page"
+          ? { icon: Info, title: "Sayfa Bilgileri", description: "Sayfanın başlığı, adresi, yayın durumu ve arama motoru (SEO) bilgileri." }
+          : block === "new"
+            ? { icon: Plus, title: "Yeni Bölüm", description: `${pageTitle} sayfasına yeni bir bölüm ekleyin.` }
+            : { icon: LayoutGrid, title: `${sectionLabel} Bölümü`, description: `${section ? SECTION_TYPE_LABELS[section.type] : ""} · Bölümün metinleri, görselleri ve arka planı.` };
+
   return (
-    <main className="mx-auto w-full min-w-0 max-w-6xl space-y-5 pb-16">
+    <main className="mx-auto w-full min-w-0 max-w-6xl space-y-6 pb-16">
       <nav aria-label="Sayfa yolu" className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
         <Link href="/dashboard" className="inline-flex items-center gap-1.5 hover:text-[#346872]">
           <ArrowLeft className="size-3.5" />
-          Site Haritası
+          Dashboard
         </Link>
         <ChevronRight className="size-3.5 opacity-50" />
         <span className="font-medium text-foreground">{pageTitle}</span>
@@ -69,6 +86,8 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
           <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">Taslak</span>
         )}
       </nav>
+
+      <AreaHeader icon={heading.icon} eyebrow={`${pageTitle} Yönetimi`} title={heading.title} description={heading.description} />
 
       <VisualPageEditor
         block={block}
@@ -95,6 +114,11 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
         allowExtraSections={template.allowExtraSections}
         footer={footer}
         socialLinks={socialLinks}
+        headerStyle={{
+          backgroundColor: settings.headerBackgroundColor ?? "",
+          backgroundImage: settings.headerBackgroundImage ?? "",
+          buttonText: settings.headerButtonText ?? "",
+        }}
         background={
           isHome
             ? { backgroundColor: settings.homeBackgroundColor ?? "", backgroundImage: settings.homeBackgroundImage ?? "" }

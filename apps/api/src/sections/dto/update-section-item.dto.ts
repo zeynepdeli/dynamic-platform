@@ -60,6 +60,10 @@ export class UpdateSectionItemDto {
   @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })
   backgroundColor?: string | null;
 
+  @ValidateIf(notNull)
+  @IsImageUrl()
+  backgroundImage?: string | null;
+
   @IsOptional()
   @IsInt()
   @Min(0)

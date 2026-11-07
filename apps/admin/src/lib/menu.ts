@@ -12,7 +12,10 @@ export type MenuItem = {
   order: number;
   visible: boolean;
   parentId: string | null;
+  location: MenuLocation;
 };
+
+export type MenuLocation = "HEADER" | "FOOTER";
 
 export type MenuNode = MenuItem & {
   formValues: MenuItemFormValues;
@@ -35,13 +38,19 @@ export function toMenuFormValues(item: MenuItem): MenuItemFormValues {
     label: item.label,
     href: item.href,
     parentId: item.parentId ?? "",
-    icon: getIcon("menu", item.icon) ? (item.icon as MenuItemFormValues["icon"]) : "",
+    icon: getIcon("menu", item.icon)
+      ? (item.icon as MenuItemFormValues["icon"])
+      : "",
     visible: item.visible,
   };
 }
 
 // Düz listeyi 2 seviyeli ağaca çevirir (sıralı)
-export function buildMenuTree(items: MenuItem[]): MenuNode[] {
+export function buildMenuTree(
+  items: MenuItem[],
+  location: MenuLocation = "HEADER",
+): MenuNode[] {
+  items = items.filter((item) => (item.location ?? "HEADER") === location);
   const byOrder = (a: MenuItem, b: MenuItem) => a.order - b.order;
   const withForm = (item: MenuItem) => ({
     ...item,

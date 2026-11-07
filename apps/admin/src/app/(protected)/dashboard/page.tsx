@@ -2,6 +2,10 @@ import Link from "next/link";
 import {
   EyeOff,
   FileText,
+  Inbox,
+  LayoutDashboard,
+  SearchCode,
+  Wallpaper,
   Home,
   Info,
   LayoutGrid,
@@ -16,6 +20,8 @@ import {
 
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
 import { DeletePageDialog } from "@/components/pages/DeletePageDialog";
+import { AreaHeader } from "@/components/areas/AreaShell";
+import { getUnreadCount } from "@/lib/contact-messages";
 import { getAdminPages, type Page } from "@/lib/pages";
 import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
 import { getAdminSections, type Section } from "@/lib/sections";
@@ -25,7 +31,7 @@ type Icon = React.ComponentType<{ className?: string }>;
 
 /** Site Haritası: sitenin her parçası ayrı bir kutucuk; her biri kendi ekranında düzenlenir */
 export default async function DashboardPage() {
-  const pages = await getAdminPages();
+  const [pages, unread] = await Promise.all([getAdminPages(), getUnreadCount()]);
   const [homeSections, ...pageSections] = await Promise.all([
     getAdminSections(null),
     ...pages.map((p) => getAdminSections(p.id)),
@@ -33,17 +39,35 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto w-full min-w-0 max-w-6xl space-y-8 pb-16">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Site Haritası</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-          Sitenin her parçası ayrı bir kutucuk. Düzenlemek istediğinize tıklayın; her biri kendi ekranında açılır.
-        </p>
-      </header>
+      <AreaHeader
+        icon={LayoutDashboard}
+        eyebrow="Yönetim Paneli"
+        title="Dashboard"
+        description="Sitenin her parçası ayrı bir kutucuk. Düzenlemek istediğinize tıklayın; her biri kendi ekranında açılır."
+        actions={
+          <Link
+            href="/pages/new"
+            className="inline-flex items-center gap-2 rounded-full bg-[#183350] px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-[#183350]/90"
+          >
+            <Plus className="size-4" />
+            Yeni Sayfa
+          </Link>
+        }
+      />
 
-      <Group title="Tüm sayfalarda ortak" hint="Her sayfada görünür">
-        <Tile href="/areas/header" icon={PanelTop} title="Header" description="Site adı, logo, menü" />
-        <Tile href="/areas/footer" icon={PanelBottom} title="Footer" description="İletişim, sosyal medya, telif" />
-        <Tile href="/areas/general" icon={Palette} title="Genel Ayarlar" description="Renkler, varsayılan arka plan, SEO" />
+      <Group eyebrow="Tüm sayfalarda ortak" title="Site Geneli">
+        <Tile href="/areas/header" icon={PanelTop} title="Header Yönetimi" description="Site adı, logo, arka plan, buton, menü linkleri" />
+        <Tile href="/areas/footer" icon={PanelBottom} title="Footer Yönetimi" description="Marka, iletişim, linkler, sosyal medya, telif" />
+        <Tile href="/areas/background" icon={Wallpaper} title="Site Arka Planı" description="Tüm sayfaların varsayılan rengi ve fotoğrafı" />
+        <Tile href="/areas/theme" icon={Palette} title="Tema Renkleri" description="Ana renk ve ikincil renk" />
+        <Tile href="/areas/seo" icon={SearchCode} title="SEO Yönetimi" description="Başlık, açıklama, favicon, paylaşım görseli" />
+        <Tile
+          href="/messages"
+          icon={Inbox}
+          title="Gelen Mesajlar"
+          description="İletişim formundan gelenler"
+          badge={unread > 0 && <span className="rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-bold text-white">{unread} yeni</span>}
+        />
       </Group>
 
       <PageGroup title="Ana Sayfa" icon={Home} basePath={`/pages/${HOME_TEMPLATE_KEY}`} sections={homeSections} templateKey={HOME_TEMPLATE_KEY} pageId={null} />
@@ -61,14 +85,7 @@ export default async function DashboardPage() {
         />
       ))}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6">
-        <Link
-          href="/pages/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-[#183350] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#183350]/90"
-        >
-          <Plus className="size-4" />
-          Yeni Sayfa
-        </Link>
+      <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-6">
         <Link href="/pages/trash" className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-[#346872]">
           <Trash2 className="size-4" />
           Çöp kutusu
@@ -100,9 +117,9 @@ function PageGroup({
 
   return (
     <Group
-      title={title}
+      eyebrow={page ? `Sayfa · /${page.slug}` : "Sayfa · /"}
+      title={`${title} Yönetimi`}
       icon={icon}
-      hint={page ? `/${page.slug}` : "/"}
       badge={
         page &&
         !page.published && (
@@ -111,9 +128,9 @@ function PageGroup({
       }
       action={page && <DeletePageDialog pageId={page.id} pageTitle={page.title} />}
     >
-      {page && <Tile href={`${basePath}/bilgiler`} icon={Info} title="Sayfa Bilgileri" description="Başlık, adres, yayın, SEO" />}
-      <Tile href={`${basePath}/arka-plan`} icon={PaintBucket} title="Arka Plan" description="Bu sayfanın rengi ve fotoğrafı" />
-      {!page && <Tile href={`${basePath}/slider`} icon={PanelsTopLeft} title="Slider" description="En üstteki kayan görseller (en fazla 5)" />}
+      {page && <Tile href={`${basePath}/bilgiler`} icon={Info} title="Sayfa Bilgileri" description="Başlık, adres, yayın durumu, sayfa SEO'su" />}
+      <Tile href={`${basePath}/arka-plan`} icon={PaintBucket} title="Sayfa Arka Planı" description="Yalnızca bu sayfanın rengi ve fotoğrafı" />
+      {!page && <Tile href={`${basePath}/slider`} icon={PanelsTopLeft} title="Hero Slider" description="En üstteki kayan görseller (en fazla 5)" />}
 
       {sections.map((section, i) => (
         <Tile
@@ -122,7 +139,7 @@ function PageGroup({
           icon={LayoutGrid}
           number={i + 1}
           title={label(section)}
-          description={SECTION_TYPE_LABELS[section.type]}
+          description={`${SECTION_TYPE_LABELS[section.type]} bölümü`}
           badge={
             !section.active && (
               <span className="inline-flex items-center gap-1 rounded-full bg-neutral-500/10 px-2 py-0.5 text-[11px] font-semibold text-neutral-600">
@@ -135,7 +152,7 @@ function PageGroup({
       ))}
 
       {template.missing.map((entry) => (
-        <div key={entry.key} className="flex min-h-24 flex-col justify-between gap-3 rounded-2xl border border-dashed border-amber-400/60 bg-amber-50 p-4 text-sm text-amber-900">
+        <div key={entry.key} className="flex min-h-28 flex-col justify-between gap-3 rounded-2xl border border-dashed border-amber-400/60 bg-amber-50 p-4 text-sm text-amber-900">
           <p>
             <span className="font-semibold">{entry.label}</span> bölümü henüz yok
           </p>
@@ -146,7 +163,7 @@ function PageGroup({
       {template.allowExtraSections && (
         <Link
           href={`${basePath}/yeni-bolum`}
-          className="flex min-h-24 items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-4 text-sm font-semibold text-[#346872] transition hover:border-[#346872]/50 hover:bg-surface"
+          className="flex min-h-28 items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-4 text-sm font-semibold text-[#346872] transition hover:border-[#346872]/50 hover:bg-surface"
         >
           <Plus className="size-4" />
           Yeni bölüm
@@ -157,32 +174,34 @@ function PageGroup({
 }
 
 function Group({
+  eyebrow,
   title,
-  hint,
   icon: GroupIcon,
   badge,
   action,
   children,
 }: {
+  eyebrow?: string;
   title: string;
-  hint?: string;
   icon?: Icon;
   badge?: React.ReactNode;
   action?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-6">
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="flex flex-wrap items-center gap-2 text-lg font-semibold">
-          {GroupIcon && <GroupIcon className="size-5 text-[#183350]" />}
-          {title}
-          {hint && <span className="font-mono text-xs font-normal text-muted-foreground">{hint}</span>}
-          {badge}
-        </h2>
+    <section className="space-y-4">
+      <header className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-3">
+        <div>
+          {eyebrow && <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#346872]">{eyebrow}</p>}
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-2xl font-bold tracking-tight text-[#183350]">
+            {GroupIcon && <GroupIcon className="size-5" />}
+            {title}
+            {badge}
+          </h2>
+        </div>
         {action}
       </header>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{children}</div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{children}</div>
     </section>
   );
 }
@@ -205,17 +224,17 @@ function Tile({
   return (
     <Link
       href={href}
-      className="group flex min-h-24 items-start gap-3 rounded-2xl border border-border bg-surface p-4 transition hover:-translate-y-0.5 hover:border-[#346872]/40 hover:shadow-md"
+      className="group flex min-h-28 items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#346872]/40 hover:shadow-md"
     >
-      <span className="relative flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#183350]/10 text-[#183350]">
+      <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-[#183350]/10 text-[#183350] transition group-hover:bg-[#183350] group-hover:text-white">
         {number ? <span className="text-sm font-bold">{number}</span> : <TileIcon className="size-5" />}
       </span>
       <span className="min-w-0">
-        <span className="flex flex-wrap items-center gap-1.5 font-semibold text-foreground">
+        <span className="flex flex-wrap items-center gap-1.5 text-base font-bold text-[#183350]">
           <span className="truncate">{title}</span>
           {badge}
         </span>
-        {description && <span className="mt-0.5 block text-xs leading-5 text-muted-foreground">{description}</span>}
+        {description && <span className="mt-1 block text-sm leading-5 text-muted-foreground">{description}</span>}
       </span>
     </Link>
   );

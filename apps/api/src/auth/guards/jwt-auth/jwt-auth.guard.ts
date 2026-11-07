@@ -11,6 +11,7 @@ import type { Request } from 'express';
 type JwtPayload = {
   sub: string;
   role: 'ADMIN' | 'USER';
+  iat?: number;
 };
 
 @Injectable()
@@ -49,11 +50,21 @@ export class JwtAuthGuard implements CanActivate {
           email: true,
           role: true,
           active: true,
+          passwordChangedAt: true,
         },
       });
 
       if (!user?.active) {
         throw new UnauthorizedException('Geçersiz oturum.');
+      }
+
+      // Şifre değiştikten ÖNCE verilmiş oturumlar geçersiz
+      if (
+        user.passwordChangedAt &&
+        (typeof payload.iat !== 'number' ||
+          payload.iat * 1000 < user.passwordChangedAt.getTime())
+      ) {
+        throw new UnauthorizedException('Oturumun süresi doldu.');
       }
 
       // Token'daki role güvenmek yerine güncel rolü

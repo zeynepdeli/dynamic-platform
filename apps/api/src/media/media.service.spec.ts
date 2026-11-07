@@ -15,6 +15,7 @@ describe('MediaService', () => {
   const prisma = {
     media: { findMany: vi.fn(), findUnique: vi.fn(), delete: vi.fn() },
     siteSettings: { findMany: vi.fn() },
+    footerSettings: { findMany: vi.fn().mockResolvedValue([]) },
     page: { findMany: vi.fn() },
     heroSlide: { findMany: vi.fn() },
     section: { findMany: vi.fn() },
