@@ -1,122 +1,137 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Home, LayoutGrid, Palette } from "lucide-react";
+import { ArrowLeft, ExternalLink, Home, LayoutGrid } from "lucide-react";
 import { z } from "zod";
 
-import { EditPageDialog } from "@/components/pages/EditPageDialog";
+import { HeroSlideDialog } from "@/components/hero/HeroSlideDialog";
+import { HeroSlideList } from "@/components/hero/HeroSlideList";
+import { MenuItemDialog } from "@/components/menu/MenuItemDialog";
+import { MenuTree } from "@/components/menu/MenuTree";
+import { HeaderBrandingForm } from "@/components/outline/HeaderBlock";
+import { OutlineBlock } from "@/components/outline/OutlineBlock";
+import { PageInfoForm } from "@/components/outline/PageInfoForm";
+import { PageSections } from "@/components/outline/PageSections";
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
-import { SectionDialog } from "@/components/sections/SectionDialog";
-import { SectionList } from "@/components/sections/SectionList";
+import { FooterForm } from "@/components/settings/FooterForm";
 
-import { getAdminPageById, type Page } from "@/lib/pages";
+import { getPageForEditAction } from "@/app/actions/pages";
+import { getFooterFormValues } from "@/lib/footer";
+import { getAdminHeroSlides, toHeroSlideFormValues } from "@/lib/hero-slides";
+import { getMediaBaseUrl } from "@/lib/media-base-url";
+import { buildMenuTree, getAdminMenuItems } from "@/lib/menu";
 import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
-import {
-  getAdminSections,
-  toSectionFormValues,
-  toSectionItemFormValues,
-} from "@/lib/sections";
+import { getAdminPageById, type Page } from "@/lib/pages";
+import { getAdminSections, toSectionFormValues, toSectionItemFormValues } from "@/lib/sections";
+import { getSiteSettings } from "@/lib/site-settings";
 
-type PageEditorProps = {
-  params: Promise<{ id: string }>;
-};
+type PageEditorProps = { params: Promise<{ id: string }> };
 
-// "home" = Ana Sayfa (bölümleri pageId = null), aksi halde sayfa UUID'si
+/**
+ * Bir sayfanın her şeyi, sitedeki sırasıyla yukarıdan aşağıya:
+ * Header → (Slider | Sayfa bilgileri) → Bölümler → Footer
+ */
 export default async function PageEditor({ params }: PageEditorProps) {
   const { id } = await params;
   const isHome = id === HOME_TEMPLATE_KEY;
 
   // URL parametresi doğrulanmadan API'ye gönderilmez
-  if (!isHome && !z.uuid().safeParse(id).success) {
-    notFound();
-  }
+  if (!isHome && !z.uuid().safeParse(id).success) notFound();
 
   const page = isHome ? null : ((await getAdminPageById(id)) as Page | null);
-  if (!isHome && !page) {
-    notFound();
-  }
+  if (!isHome && !page) notFound();
 
   const pageId = page?.id ?? null;
-  const sections = await getAdminSections(pageId);
-  const template = resolveTemplate(
-    isHome ? HOME_TEMPLATE_KEY : (page as Page).slug,
-    sections,
-  );
+  const mediaBaseUrl = getMediaBaseUrl();
 
-  const mediaBaseUrl = (
-    process.env.API_PUBLIC_URL ??
-    process.env.API_URL ??
-    ""
-  ).replace(/\/$/, "");
+  const [sections, settings, menuItems, footer, slides, pageForm] = await Promise.all([
+    getAdminSections(pageId),
+    getSiteSettings(),
+    getAdminMenuItems(),
+    getFooterFormValues(),
+    isHome ? getAdminHeroSlides() : Promise.resolve([]),
+    pageId ? getPageForEditAction(pageId) : Promise.resolve(null),
+  ]);
 
+  const template = resolveTemplate(isHome ? HOME_TEMPLATE_KEY : (page as Page).slug, sections);
+  const menuTree = buildMenuTree(menuItems);
   const title = isHome ? "Ana Sayfa" : (page as Page).title;
 
+  // Numaralar: 1 Header, 2 Slider/Sayfa bilgileri, 3.. bölümler, son Footer
+  const firstSectionNumber = 3;
+  const footerNumber = firstSectionNumber + sections.length;
+
   return (
-    <main className="min-w-0 space-y-7 pb-10">
-      {/* Breadcrumb */}
-      <nav
-        aria-label="Sayfa yolu"
-        className="flex items-center gap-2 text-sm text-muted-foreground"
-      >
-        <Link
-          href="/pages"
-          className="inline-flex items-center gap-1.5 transition-colors hover:text-[#346872]"
-        >
+    <main className="mx-auto min-w-0 max-w-6xl space-y-6 pb-16">
+      <nav aria-label="Sayfa yolu" className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 hover:text-[#346872]">
           <ArrowLeft className="size-3.5" />
-          Sayfa Yönetimi
+          Site Haritası
         </Link>
         <span className="text-muted-foreground/50">/</span>
         <span className="font-medium text-foreground">{title}</span>
       </nav>
 
-      {/* Başlık */}
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 items-center gap-4">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#183350]/10 text-[#183350]">
-            {isHome ? <Home className="size-6" /> : <LayoutGrid className="size-6" />}
-          </div>
-          <div className="min-w-0">
-            <h1 className="truncate text-2xl font-semibold tracking-tight">
-              {title}
-            </h1>
-            <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <span className="font-mono">{isHome ? "/" : `/${(page as Page).slug}`}</span>
-              {!isHome && (
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                    (page as Page).published
-                      ? "bg-emerald-500/10 text-emerald-700"
-                      : "bg-amber-500/10 text-amber-700"
-                  }`}
-                >
-                  {(page as Page).published ? "Yayında" : "Taslak"}
-                </span>
-              )}
-            </p>
-          </div>
+      <header className="flex flex-wrap items-center gap-4">
+        <div className="flex size-12 items-center justify-center rounded-2xl bg-[#183350]/10 text-[#183350]">
+          {isHome ? <Home className="size-6" /> : <LayoutGrid className="size-6" />}
         </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          {isHome ? (
-            <Link
-              href="/appearance"
-              className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-border bg-surface px-4 text-sm font-medium hover:bg-surface-muted"
-            >
-              <Palette className="size-4" />
-              Görünüm & SEO
-            </Link>
-          ) : (
-            <EditPageDialog pageId={(page as Page).id} />
-          )}
-
-          {template.allowExtraSections && (
-            <SectionDialog
-              mode="create"
-              pageId={pageId}
-              mediaBaseUrl={mediaBaseUrl}
-            />
-          )}
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-2xl font-semibold tracking-tight">{title}</h1>
+          <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <span className="font-mono">{isHome ? "/" : `/${(page as Page).slug}`}</span>
+            {!isHome && (
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                  (page as Page).published ? "bg-emerald-500/10 text-emerald-700" : "bg-amber-500/10 text-amber-700"
+                }`}
+              >
+                {(page as Page).published ? "Yayında" : "Taslak"}
+              </span>
+            )}
+          </p>
         </div>
+        <p className="w-full text-sm text-muted-foreground sm:w-auto">
+          Bloklar sitedeki sırasıyla listelenir. Düzenlemek için bloğa tıklayın.
+        </p>
       </header>
+
+      {/* ① Header */}
+      <OutlineBlock number={1} title="Header" hint="Logo, site adı ve menü" shared>
+        <div className="grid gap-8 xl:grid-cols-2">
+          <HeaderBrandingForm
+            initialValues={{ siteName: settings.siteName, logoUrl: settings.logoUrl ?? "" }}
+            mediaBaseUrl={mediaBaseUrl}
+          />
+          <div className="space-y-4 xl:border-l xl:border-border xl:pl-8">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-semibold">Menü</p>
+              <MenuItemDialog mode="create" parents={menuTree.map((n) => ({ id: n.id, label: n.label }))} />
+            </div>
+            <MenuTree tree={menuTree} />
+          </div>
+        </div>
+      </OutlineBlock>
+
+      {/* ② Slider (ana sayfa) / Sayfa bilgileri (diğer sayfalar) */}
+      {isHome ? (
+        <OutlineBlock number={2} title="Slider" hint={`${slides.length} slayt · sayfanın en üstündeki kayan alan`}>
+          <div className="space-y-4">
+            <div className="flex justify-end">
+              <HeroSlideDialog mode="create" mediaBaseUrl={mediaBaseUrl} />
+            </div>
+            <HeroSlideList
+              mediaBaseUrl={mediaBaseUrl}
+              slides={slides.map((s) => ({ ...s, formValues: toHeroSlideFormValues(s) }))}
+            />
+          </div>
+        </OutlineBlock>
+      ) : (
+        pageForm?.success && (
+          <OutlineBlock number={2} title="Sayfa Bilgileri" hint="Başlık, adres, içerik, SEO ve yayın durumu">
+            <PageInfoForm pageId={(page as Page).id} initialData={pageForm.data} />
+          </OutlineBlock>
+        )
+      )}
 
       {/* Şablonda olup henüz oluşturulmamış bölümler */}
       {template.missing.length > 0 && (
@@ -129,15 +144,10 @@ export default async function PageEditor({ params }: PageEditorProps) {
           </div>
           <ul className="space-y-2">
             {template.missing.map((entry) => (
-              <li
-                key={entry.key}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
-              >
+              <li key={entry.key} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4">
                 <div>
                   <p className="font-medium">{entry.label}</p>
-                  {entry.hint && (
-                    <p className="text-xs text-muted-foreground">{entry.hint}</p>
-                  )}
+                  {entry.hint && <p className="text-xs text-muted-foreground">{entry.hint}</p>}
                 </div>
                 <CreateTemplateSectionButton pageId={pageId} entry={entry} />
               </li>
@@ -146,24 +156,39 @@ export default async function PageEditor({ params }: PageEditorProps) {
         </section>
       )}
 
-      <SectionList
+      {/* ③… Bölümler */}
+      <PageSections
         pageId={pageId}
         templateByKey={template.byKey}
+        allowExtraSections={template.allowExtraSections}
         mediaBaseUrl={mediaBaseUrl}
+        startNumber={firstSectionNumber}
         sections={sections.map((section) => ({
           ...section,
           formValues: toSectionFormValues(section),
-          items: section.items.map((item) => ({
-            ...item,
-            formValues: toSectionItemFormValues(item),
-          })),
+          items: section.items.map((item) => ({ ...item, formValues: toSectionItemFormValues(item) })),
         }))}
       />
 
-      {!isHome && (
+      {/* Son: Footer */}
+      <OutlineBlock
+        number={footerNumber}
+        title="Footer"
+        hint="İletişim bilgileri, sosyal medya ve telif metni"
+        shared
+        badge={
+          !footer.enabled && (
+            <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">Kapalı</span>
+          )
+        }
+      >
+        <FooterForm initialValues={footer} />
+      </OutlineBlock>
+
+      {!isHome && (page as Page).published && (
         <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <ExternalLink className="size-3.5" />
-          Sayfa başlığı, adresi ve SEO ayarları için “Düzenle” butonunu kullanın.
+          Sitede: <span className="font-mono">/{(page as Page).slug}</span>
         </p>
       )}
     </main>
