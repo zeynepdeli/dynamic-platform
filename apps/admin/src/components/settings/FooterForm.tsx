@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, useWatch } from "react-hook-form";
+import { useLiveValues } from "@/lib/hooks/use-live-values";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, Save } from "lucide-react";
 
@@ -48,10 +49,7 @@ export function FooterForm({
     defaultValues: initialValues,
   });
 
-  const liveValues = useWatch({ control });
-  useEffect(() => {
-    onValuesChange?.(liveValues as FooterFormValues);
-  }, [liveValues, onValuesChange]);
+  useLiveValues(control, onValuesChange);
 
   async function submit(values: FooterFormValues) {
     setSubmitError(null);

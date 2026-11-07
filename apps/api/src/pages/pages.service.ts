@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+import type { Prisma } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { CreatePageDto } from './dto/create-page.dto.js';
@@ -23,8 +24,10 @@ export class PagesService {
     seoDescription: true,
     ogImageUrl: true,
     noIndex: true,
+    backgroundColor: true,
+    backgroundImage: true,
     updatedAt: true,
-  } as const;
+  } satisfies Prisma.PageSelect;
 
   // PUBLIC: Yayındaki ve silinmemiş sayfalar
   async findAll() {
@@ -114,6 +117,8 @@ export class PagesService {
           seoDescription: dto.seoDescription ?? null,
           seoKeywords: dto.seoKeywords ?? null,
           ogImageUrl: dto.ogImageUrl ?? null,
+          backgroundColor: dto.backgroundColor ?? null,
+          backgroundImage: dto.backgroundImage ?? null,
           noIndex: dto.noIndex ?? false,
         },
       });
@@ -183,6 +188,14 @@ export class PagesService {
 
           ...(dto.noIndex !== undefined && {
             noIndex: dto.noIndex,
+          }),
+
+          ...(dto.backgroundColor !== undefined && {
+            backgroundColor: dto.backgroundColor,
+          }),
+
+          ...(dto.backgroundImage !== undefined && {
+            backgroundImage: dto.backgroundImage,
           }),
         },
       });

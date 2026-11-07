@@ -33,6 +33,10 @@ model SiteSettings {
   backgroundColor String         @default("#FFFFFF")
   backgroundImage String?
 
+  // Ana sayfaya özel arka plan (boşsa genel arka plan)
+  homeBackgroundColor String?
+  homeBackgroundImage String?
+
   metaTitle       String?
   metaDescription String?
 
@@ -55,7 +59,12 @@ model Page {
   seoKeywords    String?
   ogImageUrl     String?
   noIndex        Boolean   @default(false)
-  sections       Section[]
+
+  // Sayfaya özel arka plan (boşsa site genel arka planı)
+  backgroundColor String?
+  backgroundImage String?
+
+  sections Section[]
 }
 
 enum UserRole {

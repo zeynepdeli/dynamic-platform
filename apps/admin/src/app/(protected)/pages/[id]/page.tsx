@@ -99,6 +99,17 @@ export default async function PageEditor({ params }: PageEditorProps) {
         missing={template.missing}
         allowExtraSections={template.allowExtraSections}
         footer={footer}
+        background={
+          isHome
+            ? {
+                backgroundColor: settings.homeBackgroundColor ?? "",
+                backgroundImage: settings.homeBackgroundImage ?? "",
+              }
+            : {
+                backgroundColor: (page as Page).backgroundColor ?? "",
+                backgroundImage: (page as Page).backgroundImage ?? "",
+              }
+        }
       />
     </main>
   );

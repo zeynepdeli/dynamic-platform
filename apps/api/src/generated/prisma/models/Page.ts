@@ -38,6 +38,8 @@ export type PageMinAggregateOutputType = {
   seoKeywords: string | null
   ogImageUrl: string | null
   noIndex: boolean | null
+  backgroundColor: string | null
+  backgroundImage: string | null
 }
 
 export type PageMaxAggregateOutputType = {
@@ -54,6 +56,8 @@ export type PageMaxAggregateOutputType = {
   seoKeywords: string | null
   ogImageUrl: string | null
   noIndex: boolean | null
+  backgroundColor: string | null
+  backgroundImage: string | null
 }
 
 export type PageCountAggregateOutputType = {
@@ -70,6 +74,8 @@ export type PageCountAggregateOutputType = {
   seoKeywords: number
   ogImageUrl: number
   noIndex: number
+  backgroundColor: number
+  backgroundImage: number
   _all: number
 }
 
@@ -88,6 +94,8 @@ export type PageMinAggregateInputType = {
   seoKeywords?: true
   ogImageUrl?: true
   noIndex?: true
+  backgroundColor?: true
+  backgroundImage?: true
 }
 
 export type PageMaxAggregateInputType = {
@@ -104,6 +112,8 @@ export type PageMaxAggregateInputType = {
   seoKeywords?: true
   ogImageUrl?: true
   noIndex?: true
+  backgroundColor?: true
+  backgroundImage?: true
 }
 
 export type PageCountAggregateInputType = {
@@ -120,6 +130,8 @@ export type PageCountAggregateInputType = {
   seoKeywords?: true
   ogImageUrl?: true
   noIndex?: true
+  backgroundColor?: true
+  backgroundImage?: true
   _all?: true
 }
 
@@ -209,6 +221,8 @@ export type PageGroupByOutputType = {
   seoKeywords: string | null
   ogImageUrl: string | null
   noIndex: boolean
+  backgroundColor: string | null
+  backgroundImage: string | null
   _count: PageCountAggregateOutputType | null
   _min: PageMinAggregateOutputType | null
   _max: PageMaxAggregateOutputType | null
@@ -246,6 +260,8 @@ export type PageWhereInput = {
   seoKeywords?: Prisma.StringNullableFilter<"Page"> | string | null
   ogImageUrl?: Prisma.StringNullableFilter<"Page"> | string | null
   noIndex?: Prisma.BoolFilter<"Page"> | boolean
+  backgroundColor?: Prisma.StringNullableFilter<"Page"> | string | null
+  backgroundImage?: Prisma.StringNullableFilter<"Page"> | string | null
   sections?: Prisma.SectionListRelationFilter
 }
 
@@ -263,6 +279,8 @@ export type PageOrderByWithRelationInput = {
   seoKeywords?: Prisma.SortOrderInput | Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   noIndex?: Prisma.SortOrder
+  backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   sections?: Prisma.SectionOrderByRelationAggregateInput
 }
 
@@ -283,6 +301,8 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   seoKeywords?: Prisma.StringNullableFilter<"Page"> | string | null
   ogImageUrl?: Prisma.StringNullableFilter<"Page"> | string | null
   noIndex?: Prisma.BoolFilter<"Page"> | boolean
+  backgroundColor?: Prisma.StringNullableFilter<"Page"> | string | null
+  backgroundImage?: Prisma.StringNullableFilter<"Page"> | string | null
   sections?: Prisma.SectionListRelationFilter
 }, "id" | "slug">
 
@@ -300,6 +320,8 @@ export type PageOrderByWithAggregationInput = {
   seoKeywords?: Prisma.SortOrderInput | Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   noIndex?: Prisma.SortOrder
+  backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PageCountOrderByAggregateInput
   _max?: Prisma.PageMaxOrderByAggregateInput
   _min?: Prisma.PageMinOrderByAggregateInput
@@ -322,6 +344,8 @@ export type PageScalarWhereWithAggregatesInput = {
   seoKeywords?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   ogImageUrl?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   noIndex?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
+  backgroundColor?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
+  backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
 }
 
 export type PageCreateInput = {
@@ -338,6 +362,8 @@ export type PageCreateInput = {
   seoKeywords?: string | null
   ogImageUrl?: string | null
   noIndex?: boolean
+  backgroundColor?: string | null
+  backgroundImage?: string | null
   sections?: Prisma.SectionCreateNestedManyWithoutPageInput
 }
 
@@ -355,6 +381,8 @@ export type PageUncheckedCreateInput = {
   seoKeywords?: string | null
   ogImageUrl?: string | null
   noIndex?: boolean
+  backgroundColor?: string | null
+  backgroundImage?: string | null
   sections?: Prisma.SectionUncheckedCreateNestedManyWithoutPageInput
 }
 
@@ -372,6 +400,8 @@ export type PageUpdateInput = {
   seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sections?: Prisma.SectionUpdateManyWithoutPageNestedInput
 }
 
@@ -389,6 +419,8 @@ export type PageUncheckedUpdateInput = {
   seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sections?: Prisma.SectionUncheckedUpdateManyWithoutPageNestedInput
 }
 
@@ -406,6 +438,8 @@ export type PageCreateManyInput = {
   seoKeywords?: string | null
   ogImageUrl?: string | null
   noIndex?: boolean
+  backgroundColor?: string | null
+  backgroundImage?: string | null
 }
 
 export type PageUpdateManyMutationInput = {
@@ -422,6 +456,8 @@ export type PageUpdateManyMutationInput = {
   seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PageUncheckedUpdateManyInput = {
@@ -438,6 +474,8 @@ export type PageUncheckedUpdateManyInput = {
   seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PageCountOrderByAggregateInput = {
@@ -454,6 +492,8 @@ export type PageCountOrderByAggregateInput = {
   seoKeywords?: Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrder
   noIndex?: Prisma.SortOrder
+  backgroundColor?: Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrder
 }
 
 export type PageMaxOrderByAggregateInput = {
@@ -470,6 +510,8 @@ export type PageMaxOrderByAggregateInput = {
   seoKeywords?: Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrder
   noIndex?: Prisma.SortOrder
+  backgroundColor?: Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrder
 }
 
 export type PageMinOrderByAggregateInput = {
@@ -486,6 +528,8 @@ export type PageMinOrderByAggregateInput = {
   seoKeywords?: Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrder
   noIndex?: Prisma.SortOrder
+  backgroundColor?: Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrder
 }
 
 export type PageNullableScalarRelationFilter = {
@@ -531,6 +575,8 @@ export type PageCreateWithoutSectionsInput = {
   seoKeywords?: string | null
   ogImageUrl?: string | null
   noIndex?: boolean
+  backgroundColor?: string | null
+  backgroundImage?: string | null
 }
 
 export type PageUncheckedCreateWithoutSectionsInput = {
@@ -547,6 +593,8 @@ export type PageUncheckedCreateWithoutSectionsInput = {
   seoKeywords?: string | null
   ogImageUrl?: string | null
   noIndex?: boolean
+  backgroundColor?: string | null
+  backgroundImage?: string | null
 }
 
 export type PageCreateOrConnectWithoutSectionsInput = {
@@ -579,6 +627,8 @@ export type PageUpdateWithoutSectionsInput = {
   seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PageUncheckedUpdateWithoutSectionsInput = {
@@ -595,6 +645,8 @@ export type PageUncheckedUpdateWithoutSectionsInput = {
   seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -642,6 +694,8 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   seoKeywords?: boolean
   ogImageUrl?: boolean
   noIndex?: boolean
+  backgroundColor?: boolean
+  backgroundImage?: boolean
   sections?: boolean | Prisma.Page$sectionsArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["page"]>
@@ -660,6 +714,8 @@ export type PageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   seoKeywords?: boolean
   ogImageUrl?: boolean
   noIndex?: boolean
+  backgroundColor?: boolean
+  backgroundImage?: boolean
 }, ExtArgs["result"]["page"]>
 
 export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -676,6 +732,8 @@ export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   seoKeywords?: boolean
   ogImageUrl?: boolean
   noIndex?: boolean
+  backgroundColor?: boolean
+  backgroundImage?: boolean
 }, ExtArgs["result"]["page"]>
 
 export type PageSelectScalar = {
@@ -692,9 +750,11 @@ export type PageSelectScalar = {
   seoKeywords?: boolean
   ogImageUrl?: boolean
   noIndex?: boolean
+  backgroundColor?: boolean
+  backgroundImage?: boolean
 }
 
-export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "published" | "deletedAt" | "createdAt" | "updatedAt" | "seoTitle" | "seoDescription" | "seoKeywords" | "ogImageUrl" | "noIndex", ExtArgs["result"]["page"]>
+export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "published" | "deletedAt" | "createdAt" | "updatedAt" | "seoTitle" | "seoDescription" | "seoKeywords" | "ogImageUrl" | "noIndex" | "backgroundColor" | "backgroundImage", ExtArgs["result"]["page"]>
 export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sections?: boolean | Prisma.Page$sectionsArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
@@ -721,6 +781,8 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     seoKeywords: string | null
     ogImageUrl: string | null
     noIndex: boolean
+    backgroundColor: string | null
+    backgroundImage: string | null
   }, ExtArgs["result"]["page"]>
   composites: {}
 }
@@ -1158,6 +1220,8 @@ export interface PageFieldRefs {
   readonly seoKeywords: Prisma.FieldRef<"Page", 'String'>
   readonly ogImageUrl: Prisma.FieldRef<"Page", 'String'>
   readonly noIndex: Prisma.FieldRef<"Page", 'Boolean'>
+  readonly backgroundColor: Prisma.FieldRef<"Page", 'String'>
+  readonly backgroundImage: Prisma.FieldRef<"Page", 'String'>
 }
     
 

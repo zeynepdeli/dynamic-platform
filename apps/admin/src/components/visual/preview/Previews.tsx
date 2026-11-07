@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ImageIcon } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
 
 import type { FooterFormValues } from "@/lib/validations/footer.schema";
 import type { SectionFormValues, SectionItemFormValues } from "@/lib/validations/section.schema";
@@ -49,48 +49,87 @@ export function PreviewHeader({
   );
 }
 
+type HeroPreviewSlide = {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  imageUrl: string;
+  buttonText: string;
+  active: boolean;
+};
+
+/** Çalışan slider önizlemesi: oklar ve noktalarla slaytlar arasında gezinilir */
 export function PreviewHero({
   theme,
-  slide,
-  count,
+  slides,
+  index,
+  onIndexChange,
 }: {
   theme: PreviewTheme;
-  slide:
-    | { title: string; subtitle: string | null; description: string | null; imageUrl: string | null; buttonText: string | null }
-    | undefined;
-  count: number;
+  slides: HeroPreviewSlide[];
+  index: number;
+  onIndexChange: (index: number) => void;
 }) {
-  if (!slide) {
+  if (slides.length === 0) {
     return (
       <div className="flex min-h-56 items-center justify-center bg-neutral-100 text-sm text-neutral-500">
-        Henüz slider yok — eklemek için tıklayın
+        Henüz slayt yok — eklemek için tıklayın
       </div>
     );
   }
-  const bg = image(slide.imageUrl, theme.mediaBaseUrl);
+
+  const current = slides[Math.min(index, slides.length - 1)];
+  const bg = image(current.imageUrl, theme.mediaBaseUrl);
+  const go = (next: number) => onIndexChange((next + slides.length) % slides.length);
+
   return (
-    <div className="relative isolate min-h-72 overflow-hidden text-white" style={{ backgroundColor: theme.primary }}>
+    <div className="relative isolate min-h-80 overflow-hidden text-white" style={{ backgroundColor: theme.primary }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       {bg && <img src={bg} alt="" className="absolute inset-0 -z-10 size-full object-cover" />}
       <div className="absolute inset-0 -z-10 bg-black/40" />
-      <div className="px-8 py-16">
-        {slide.subtitle && <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-90">{slide.subtitle}</p>}
-        <p className="mt-2 max-w-xl text-3xl font-bold leading-tight">{slide.title}</p>
-        {slide.description && <p className="mt-3 max-w-lg text-sm leading-6 opacity-90">{slide.description}</p>}
-        {slide.buttonText && (
+
+      {!current.active && (
+        <span className="absolute right-3 top-14 z-10 rounded-md bg-amber-400 px-2 py-0.5 text-[11px] font-semibold text-amber-950">
+          Gizli — sitede görünmez
+        </span>
+      )}
+
+      <div className="px-10 py-16">
+        {current.subtitle && <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-90">{current.subtitle}</p>}
+        <p className="mt-2 max-w-xl text-3xl font-bold leading-tight">{current.title || "Başlık"}</p>
+        {current.description && <p className="mt-3 max-w-lg text-sm leading-6 opacity-90">{current.description}</p>}
+        {current.buttonText && (
           <span
             className="mt-5 inline-flex rounded-lg px-4 py-2 text-sm font-semibold"
             style={{ backgroundColor: theme.secondary, color: readable(theme.secondary) }}
           >
-            {slide.buttonText}
+            {current.buttonText}
           </span>
         )}
       </div>
-      {count > 1 && (
-        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-1.5">
-          {Array.from({ length: count }, (_, i) => (
-            <span key={i} className={`h-1.5 rounded-full ${i === 0 ? "w-5 bg-white" : "w-1.5 bg-white/50"}`} />
+
+      {slides.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+          <button type="button" aria-label="Önceki slayt" onClick={() => go(index - 1)} className="rounded-full bg-black/30 p-1.5 hover:bg-black/50">
+            <ChevronLeft className="size-4" />
+          </button>
+          {slides.map((slide, i) => (
+            <button
+              key={slide.id}
+              type="button"
+              aria-label={`${i + 1}. slayt`}
+              aria-current={i === index}
+              onClick={() => onIndexChange(i)}
+              className={`h-2 rounded-full transition-all ${i === index ? "w-6 bg-white" : "w-2 bg-white/50"}`}
+            />
           ))}
+          <button type="button" aria-label="Sonraki slayt" onClick={() => go(index + 1)} className="rounded-full bg-black/30 p-1.5 hover:bg-black/50">
+            <ChevronRight className="size-4" />
+          </button>
+          <span className="ml-1 rounded bg-black/30 px-1.5 py-0.5 text-[11px]">
+            {index + 1}/{slides.length}
+          </span>
         </div>
       )}
     </div>

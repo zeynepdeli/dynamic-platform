@@ -10,6 +10,8 @@ export type SiteSettings = {
   backgroundType: "COLOR" | "IMAGE";
   backgroundColor: string;
   backgroundImage: string | null;
+  homeBackgroundColor: string | null;
+  homeBackgroundImage: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
 };
@@ -88,6 +90,8 @@ export type Page = {
   seoKeywords: string | null;
   ogImageUrl: string | null;
   noIndex: boolean;
+  backgroundColor: string | null;
+  backgroundImage: string | null;
   updatedAt: string;
 };
 

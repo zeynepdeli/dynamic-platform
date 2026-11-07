@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm, useWatch } from "react-hook-form";
+import { useLiveValues } from "@/lib/hooks/use-live-values";
+import { useForm } from "react-hook-form";
 import { CheckCircle2, Loader2, Palette, Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -37,10 +38,7 @@ export function HeaderBrandingForm({
     formState: { errors, isSubmitting, isDirty },
   } = useForm<Branding>({ defaultValues: initialValues });
 
-  const liveValues = useWatch({ control });
-  useEffect(() => {
-    onValuesChange?.(liveValues as Branding);
-  }, [liveValues, onValuesChange]);
+  useLiveValues(control, onValuesChange);
 
   async function submit(values: Branding) {
     setError(null);

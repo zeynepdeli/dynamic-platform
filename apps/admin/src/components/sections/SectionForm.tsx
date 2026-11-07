@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useLiveValues } from "@/lib/hooks/use-live-values";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, Save } from "lucide-react";
@@ -71,10 +72,7 @@ export function SectionForm({
   });
 
   // Canlı önizleme: her değişiklikte üst bileşene bildir
-  const liveValues = useWatch({ control });
-  useEffect(() => {
-    onValuesChange?.(liveValues as SectionFormValues);
-  }, [liveValues, onValuesChange]);
+  useLiveValues(control, onValuesChange);
 
   const type = useWatch({ control, name: "type" });
   const columns = useWatch({ control, name: "columns" });

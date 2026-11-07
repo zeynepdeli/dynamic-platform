@@ -11,7 +11,7 @@ import type { CreateHeroSlideDto } from './dto/create-hero-slide.dto.js';
 import type { UpdateHeroSlideDto } from './dto/update-hero-slide.dto.js';
 
 // Kaynak tüketimini sınırla (OWASP A04)
-const MAX_HERO_SLIDES = 20;
+const MAX_HERO_SLIDES = 5;
 
 @Injectable()
 export class HeroSlidesService {

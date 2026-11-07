@@ -35,6 +35,8 @@ export type SiteSettingsMinAggregateOutputType = {
   backgroundType: $Enums.BackgroundType | null
   backgroundColor: string | null
   backgroundImage: string | null
+  homeBackgroundColor: string | null
+  homeBackgroundImage: string | null
   metaTitle: string | null
   metaDescription: string | null
   createdAt: Date | null
@@ -52,6 +54,8 @@ export type SiteSettingsMaxAggregateOutputType = {
   backgroundType: $Enums.BackgroundType | null
   backgroundColor: string | null
   backgroundImage: string | null
+  homeBackgroundColor: string | null
+  homeBackgroundImage: string | null
   metaTitle: string | null
   metaDescription: string | null
   createdAt: Date | null
@@ -69,6 +73,8 @@ export type SiteSettingsCountAggregateOutputType = {
   backgroundType: number
   backgroundColor: number
   backgroundImage: number
+  homeBackgroundColor: number
+  homeBackgroundImage: number
   metaTitle: number
   metaDescription: number
   createdAt: number
@@ -88,6 +94,8 @@ export type SiteSettingsMinAggregateInputType = {
   backgroundType?: true
   backgroundColor?: true
   backgroundImage?: true
+  homeBackgroundColor?: true
+  homeBackgroundImage?: true
   metaTitle?: true
   metaDescription?: true
   createdAt?: true
@@ -105,6 +113,8 @@ export type SiteSettingsMaxAggregateInputType = {
   backgroundType?: true
   backgroundColor?: true
   backgroundImage?: true
+  homeBackgroundColor?: true
+  homeBackgroundImage?: true
   metaTitle?: true
   metaDescription?: true
   createdAt?: true
@@ -122,6 +132,8 @@ export type SiteSettingsCountAggregateInputType = {
   backgroundType?: true
   backgroundColor?: true
   backgroundImage?: true
+  homeBackgroundColor?: true
+  homeBackgroundImage?: true
   metaTitle?: true
   metaDescription?: true
   createdAt?: true
@@ -212,6 +224,8 @@ export type SiteSettingsGroupByOutputType = {
   backgroundType: $Enums.BackgroundType
   backgroundColor: string
   backgroundImage: string | null
+  homeBackgroundColor: string | null
+  homeBackgroundImage: string | null
   metaTitle: string | null
   metaDescription: string | null
   createdAt: Date
@@ -250,6 +264,8 @@ export type SiteSettingsWhereInput = {
   backgroundType?: Prisma.EnumBackgroundTypeFilter<"SiteSettings"> | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFilter<"SiteSettings"> | string
   backgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  homeBackgroundColor?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  homeBackgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
@@ -267,6 +283,8 @@ export type SiteSettingsOrderByWithRelationInput = {
   backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeBackgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeBackgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -287,6 +305,8 @@ export type SiteSettingsWhereUniqueInput = Prisma.AtLeast<{
   backgroundType?: Prisma.EnumBackgroundTypeFilter<"SiteSettings"> | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFilter<"SiteSettings"> | string
   backgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  homeBackgroundColor?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  homeBackgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
@@ -304,6 +324,8 @@ export type SiteSettingsOrderByWithAggregationInput = {
   backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeBackgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeBackgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -327,6 +349,8 @@ export type SiteSettingsScalarWhereWithAggregatesInput = {
   backgroundType?: Prisma.EnumBackgroundTypeWithAggregatesFilter<"SiteSettings"> | $Enums.BackgroundType
   backgroundColor?: Prisma.StringWithAggregatesFilter<"SiteSettings"> | string
   backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  homeBackgroundColor?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  homeBackgroundImage?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   metaTitle?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   metaDescription?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSettings"> | Date | string
@@ -344,6 +368,8 @@ export type SiteSettingsCreateInput = {
   backgroundType?: $Enums.BackgroundType
   backgroundColor?: string
   backgroundImage?: string | null
+  homeBackgroundColor?: string | null
+  homeBackgroundImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
   createdAt?: Date | string
@@ -361,6 +387,8 @@ export type SiteSettingsUncheckedCreateInput = {
   backgroundType?: $Enums.BackgroundType
   backgroundColor?: string
   backgroundImage?: string | null
+  homeBackgroundColor?: string | null
+  homeBackgroundImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
   createdAt?: Date | string
@@ -378,6 +406,8 @@ export type SiteSettingsUpdateInput = {
   backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -395,6 +425,8 @@ export type SiteSettingsUncheckedUpdateInput = {
   backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -412,6 +444,8 @@ export type SiteSettingsCreateManyInput = {
   backgroundType?: $Enums.BackgroundType
   backgroundColor?: string
   backgroundImage?: string | null
+  homeBackgroundColor?: string | null
+  homeBackgroundImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
   createdAt?: Date | string
@@ -429,6 +463,8 @@ export type SiteSettingsUpdateManyMutationInput = {
   backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -446,6 +482,8 @@ export type SiteSettingsUncheckedUpdateManyInput = {
   backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -463,6 +501,8 @@ export type SiteSettingsCountOrderByAggregateInput = {
   backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  homeBackgroundColor?: Prisma.SortOrder
+  homeBackgroundImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -480,6 +520,8 @@ export type SiteSettingsMaxOrderByAggregateInput = {
   backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  homeBackgroundColor?: Prisma.SortOrder
+  homeBackgroundImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -497,6 +539,8 @@ export type SiteSettingsMinOrderByAggregateInput = {
   backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  homeBackgroundColor?: Prisma.SortOrder
+  homeBackgroundImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -532,6 +576,8 @@ export type SiteSettingsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  homeBackgroundColor?: boolean
+  homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   createdAt?: boolean
@@ -549,6 +595,8 @@ export type SiteSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  homeBackgroundColor?: boolean
+  homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   createdAt?: boolean
@@ -566,6 +614,8 @@ export type SiteSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  homeBackgroundColor?: boolean
+  homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   createdAt?: boolean
@@ -583,13 +633,15 @@ export type SiteSettingsSelectScalar = {
   backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  homeBackgroundColor?: boolean
+  homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundType" | "backgroundColor" | "backgroundImage" | "metaTitle" | "metaDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
+export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundType" | "backgroundColor" | "backgroundImage" | "homeBackgroundColor" | "homeBackgroundImage" | "metaTitle" | "metaDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
 
 export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SiteSettings"
@@ -605,6 +657,8 @@ export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     backgroundType: $Enums.BackgroundType
     backgroundColor: string
     backgroundImage: string | null
+    homeBackgroundColor: string | null
+    homeBackgroundImage: string | null
     metaTitle: string | null
     metaDescription: string | null
     createdAt: Date
@@ -1042,6 +1096,8 @@ export interface SiteSettingsFieldRefs {
   readonly backgroundType: Prisma.FieldRef<"SiteSettings", 'BackgroundType'>
   readonly backgroundColor: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly backgroundImage: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly homeBackgroundColor: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly homeBackgroundImage: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly metaTitle: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly metaDescription: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly createdAt: Prisma.FieldRef<"SiteSettings", 'DateTime'>
