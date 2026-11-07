@@ -35,7 +35,7 @@ export async function createMenuItemAction(
     "POST",
     { ...rest, ...(parentId ? { parentId } : {}) },
     "Menü öğesi oluşturulamadı.",
-    "/menu",
+    "/areas/header",
   );
 }
 
@@ -53,7 +53,7 @@ export async function updateMenuItemAction(
     "PATCH",
     payload(parsed.data),
     "Menü öğesi güncellenemedi.",
-    "/menu",
+    "/areas/header",
   );
 }
 
@@ -68,7 +68,7 @@ export async function setMenuItemVisibleAction(
     "PATCH",
     { visible },
     "Menü öğesi güncellenemedi.",
-    "/menu",
+    "/areas/header",
   );
 }
 
@@ -80,7 +80,7 @@ export async function deleteMenuItemAction(id: string): Promise<ActionResult> {
     "DELETE",
     undefined,
     "Menü öğesi silinemedi.",
-    "/menu",
+    "/areas/header",
   );
 }
 
@@ -96,6 +96,6 @@ export async function reorderMenuItemsAction(
     "PATCH",
     { ids, ...(parentId ? { parentId } : {}) },
     "Sıralama kaydedilemedi.",
-    "/menu",
+    "/areas/header",
   );
 }

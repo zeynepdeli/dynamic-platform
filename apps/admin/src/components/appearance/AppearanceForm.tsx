@@ -84,15 +84,10 @@ export function AppearanceForm({
       <div className="space-y-7">
         {/* ───── Genel ───── */}
         <section className="space-y-5 rounded-2xl border border-border bg-card p-6">
-          <h2 className="text-base font-semibold">Genel Bilgiler</h2>
-
-          <FormField
-            name="siteName"
-            label="Site Adı"
-            register={register}
-            error={errors.siteName}
-            required
-          />
+          <h2 className="text-base font-semibold">Site Kimliği</h2>
+          <p className="-mt-3 text-sm text-muted-foreground">
+            Site adı ve logo Header ekranından düzenlenir.
+          </p>
 
           <FormTextarea
             name="description"
@@ -100,13 +95,6 @@ export function AppearanceForm({
             rows={3}
             register={register}
             error={errors.description}
-          />
-
-          <ImageUploadField
-            name="logoUrl"
-            label="Logo"
-            control={control}
-            mediaBaseUrl={mediaBaseUrl}
           />
 
           <ImageUploadField

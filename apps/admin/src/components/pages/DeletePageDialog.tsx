@@ -20,9 +20,11 @@ import { deletePageAction } from "@/app/actions/pages";
 type DeletePageDialogProps = {
   pageId: string;
   pageTitle: string;
+  /** Silindikten sonra gidilecek adres (sayfa ekranından silinince) */
+  redirectTo?: string;
 };
 
-export function DeletePageDialog({ pageId, pageTitle }: DeletePageDialogProps) {
+export function DeletePageDialog({ pageId, pageTitle, redirectTo }: DeletePageDialogProps) {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -44,7 +46,8 @@ export function DeletePageDialog({ pageId, pageTitle }: DeletePageDialogProps) {
       }
 
       setOpen(false);
-      router.refresh();
+      if (redirectTo) router.push(redirectTo);
+      else router.refresh();
     } catch {
       setError("Silme işlemi sırasında bir hata oluştu.");
     } finally {

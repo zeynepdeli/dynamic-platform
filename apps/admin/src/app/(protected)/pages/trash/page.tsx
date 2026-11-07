@@ -19,7 +19,7 @@ export default async function TrashPage() {
         </div>
 
         <Link
-          href="/pages"
+          href="/dashboard"
           className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface"
         >
           <ArrowLeft className="size-4" />

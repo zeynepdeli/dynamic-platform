@@ -3,25 +3,22 @@ import {
   ArrowUpRight,
   FileText,
   Home,
-  Images,
-  ListTree,
   Palette,
   PanelBottom,
-  PanelsTopLeft,
+  PanelTop,
   Plus,
+  Trash2,
 } from "lucide-react";
 
 import { pageTemplates } from "@/brand/page-templates";
 import { getAdminPages } from "@/lib/pages";
 import { HOME_TEMPLATE_KEY } from "@/lib/page-templates";
 
-// Tüm sayfalarda ortak alanlar
+// Tüm sayfalarda ortak alanlar — her biri YALNIZCA burada düzenlenir
 const sharedAreas = [
-  { title: "Header & Menü", description: "Logo, site adı ve üst menü", href: "/menu", icon: ListTree },
-  { title: "Slider", description: "Ana sayfanın en üstündeki kayan görseller", href: "/hero-slides", icon: PanelsTopLeft },
-  { title: "Footer & İletişim", description: "İletişim bilgileri, sosyal medya, telif", href: "/settings", icon: PanelBottom },
-  { title: "Renkler & Logo", description: "Tema renkleri, arka plan, favicon, SEO", href: "/appearance", icon: Palette },
-  { title: "Medya", description: "Yüklenen tüm görseller", href: "/media", icon: Images },
+  { title: "Header", description: "Site adı, logo ve menü", href: "/areas/header", icon: PanelTop },
+  { title: "Footer", description: "İletişim bilgileri, sosyal medya, telif", href: "/areas/footer", icon: PanelBottom },
+  { title: "Genel Ayarlar", description: "Tema renkleri, varsayılan arka plan, favicon, SEO", href: "/areas/general", icon: Palette },
 ];
 
 function templateDescription(key: string) {
@@ -71,8 +68,8 @@ export default async function DashboardPage() {
       <header className="border-b border-border pb-6">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Site Haritası</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-          Düzenlemek istediğiniz sayfaya tıklayın. Her sayfada header&apos;dan
-          footer&apos;a kadar o sayfaya ait her şey sırasıyla yer alır.
+          Her şeyin tek bir yeri var: sayfaya ait içerik o sayfanın ekranında,
+          her sayfada görünen Header, Footer ve renkler aşağıdaki ortak alanlarda.
         </p>
       </header>
 
@@ -81,8 +78,9 @@ export default async function DashboardPage() {
           <h2 id="pages-heading" className="text-lg font-semibold">
             Sayfalar
           </h2>
-          <Link href="/pages" className="text-sm font-medium text-[#346872] hover:underline">
-            Sayfa listesi ve çöp kutusu →
+          <Link href="/pages/trash" className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-[#346872]">
+            <Trash2 className="size-4" />
+            Çöp kutusu
           </Link>
         </div>
 
@@ -91,7 +89,7 @@ export default async function DashboardPage() {
             href="/pages/home"
             icon={Home}
             title="Ana Sayfa"
-            description={templateDescription(HOME_TEMPLATE_KEY) ?? "Slider ve ana sayfa bölümleri"}
+            description={templateDescription(HOME_TEMPLATE_KEY) ?? "Arka plan, slider ve ana sayfa bölümleri"}
           />
 
           {pages.map((page) => (
@@ -127,11 +125,11 @@ export default async function DashboardPage() {
             Tüm sayfalarda ortak
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Bu alanlar her sayfada görünür. Sayfa ekranlarından da düzenlenebilir.
+            Bu alanlar her sayfada görünür ve yalnızca buradan düzenlenir.
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 ">
           {sharedAreas.map((area) => (
             <Tile key={area.href} {...area} />
           ))}
