@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# apps/web — Ziyaretçi sitesi (başlangıç kiti)
 
-## Getting Started
-
-First, run the development server:
+İçeriğin tamamı admin panelinden gelir. Her müşteri projesinde sadece
+**görünüm** değişir; veri çekme ve güvenlik katmanı hazırdır.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
+pnpm dev            # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Klasör yapısı
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├─ core/            🔒 ÇEKİRDEK — müşteri projesinde değiştirmeyin
+│  ├─ api.ts        API isteği (timeout, önbellek, yönlendirme yok)
+│  ├─ site.ts       getSite(), getPage(slug), getHome(), buildMenuTree()
+│  ├─ safe.ts       renk / görsel / bağlantı doğrulayıcıları
+│  ├─ theme.ts      admin renkleri → CSS değişkenleri
+│  └─ types.ts
+├─ components/      ✏️ MÜŞTERİYE ÖZEL — tasarımı burada değiştirin
+│  ├─ site/         Header, MobileMenu, Footer, HeroSlider, SmartLink
+│  └─ sections/     CardsSection, TextSection, ImageTextSection, CtaSection,
+│                   icons.tsx (kart ikonları), SectionRenderer
+└─ app/             ✏️ Sayfalar
+   ├─ page.tsx      Ana sayfa
+   ├─ [slug]/       Genel sayfa şablonu (admin'deki her sayfa)
+   └─ layout.tsx    Fontlar, header/footer yerleşimi
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tema renkleri
 
-## Learn More
+Admin → Görünüm'deki renkler otomatik olarak CSS değişkeni olur.
+Bileşenlerde sabit renk yerine şunları kullanın:
 
-To learn more about Next.js, take a look at the following resources:
+| Sınıf | Kaynak |
+|---|---|
+| `bg-primary`, `text-primary` | Ana renk |
+| `bg-secondary`, `text-secondary` | İkincil renk (butonlar) |
+| `text-on-primary`, `text-on-secondary` | Bu renklerin üstünde okunur yazı rengi (otomatik) |
+| `bg-site`, `text-foreground` | Sayfa arka planı ve yazı rengi |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Bir sayfaya özel tasarım
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Admin'de bölüme bir **anahtar** verin (ör. `vizyon`) — ya da
+`apps/admin/src/brand/page-templates.ts` içinde şablon tanımlayın.
+Sonra:
 
-## Deploy on Vercel
+```tsx
+// src/app/hakkimizda/page.tsx   ([slug]'dan önce eşleşir)
+import { notFound } from "next/navigation";
+import { getPage } from "@/core/site";
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+export default async function About() {
+  const data = await getPage("hakkimizda");
+  if (!data) notFound();
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  const vizyon = data.section("vizyon");
+  const degerler = data.section("degerler");
+
+  return (
+    <>
+      <MyVisionHero title={vizyon?.title} body={vizyon?.body} />
+      <MyValuesGrid cards={degerler?.items ?? []} />
+    </>
+  );
+}
+```
+
+Ana sayfa için: `const home = await getHome(); home.section("hizmetler")`.
+
+## 🔐 Güvenlik kuralları (bozmayın)
+
+1. Admin'den gelen değeri **doğrulamadan** `style`, `href`, `src`'ye yazmayın:
+   `safeColor()`, `safeImageSrc()`, `safeInternalHref()`, `safeHttpsUrl()` kullanın.
+   Site içi linkler için `<SmartLink>` ve `<SectionButton>` hazır.
+2. **`dangerouslySetInnerHTML` kullanmayın.** Metinler düz metindir;
+   satır sonları `whitespace-pre-line` ile korunur.
+3. Görseller CSS `url(...)` ile değil, `<img>` ile verilir (CSS injection yok).
+4. Harici linklerde `target="_blank"` varsa `rel="noopener noreferrer"` zorunlu.
+5. İstemci bileşenlerine (`"use client"`) yalnızca sunucuda doğrulanmış
+   değerler gönderin (bkz. `app/page.tsx` → `HeroSlider`).
+6. Kart ikonları yalnızca `components/sections/icons.tsx` listesinden seçilir;
+   admin'den SVG/HTML gelmez.
