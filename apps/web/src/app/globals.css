@@ -1,26 +1,45 @@
 @import "tailwindcss";
 
+/*
+ * Tema renkleri admin'den gelir (src/core/theme.ts → <body style>).
+ * Bileşenlerde sabit renk yerine bu sınıfları kullanın:
+ *   bg-primary, text-primary, bg-secondary, text-on-primary,
+ *   bg-site, text-site ...
+ * Müşteri admin'den rengi değiştirdiğinde site kendiliğinden güncellenir.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --site-primary: #183350;
+  --site-secondary: #346872;
+  --site-background: #ffffff;
+  --site-on-primary: #ffffff;
+  --site-on-secondary: #ffffff;
+  --site-foreground: #111827;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--site-primary);
+  --color-secondary: var(--site-secondary);
+  --color-site: var(--site-background);
+  --color-on-primary: var(--site-on-primary);
+  --color-on-secondary: var(--site-on-secondary);
+  --color-foreground: var(--site-foreground);
+  /* Font yüklenemezse sistem fontuna düş (serif'e değil) */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--site-background);
+  color: var(--site-foreground);
+}
+
+/* Erişilebilirlik: hareket azaltma tercihine saygı */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
