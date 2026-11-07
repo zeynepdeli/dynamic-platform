@@ -13,6 +13,7 @@ import { FooterSettingsModule } from './footer-settings/footer-settings.module.j
 import { SiteBootstrapModule } from './site-bootstrap/site-bootstrap.module.js';
 import { validateEnv } from './config/env.validation.js';
 import { SectionsModule } from './sections/sections.module.js';
+import { SocialLinksModule } from './social-links/social-links.module.js';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { SectionsModule } from './sections/sections.module.js';
     FooterSettingsModule,
     SiteBootstrapModule,
     SectionsModule,
+    SocialLinksModule,
   ],
   providers: [
     {

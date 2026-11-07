@@ -77,6 +77,11 @@ export type Media = Prisma.MediaModel
  */
 export type FooterSettings = Prisma.FooterSettingsModel
 /**
+ * Model SocialLink
+ * 
+ */
+export type SocialLink = Prisma.SocialLinkModel
+/**
  * Model Section
  * 
  */

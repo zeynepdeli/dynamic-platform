@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const { settings, menuItems, footer } = await getSite();
+  const { settings, menuItems, footer, socialLinks } = await getSite();
   const backgroundImage =
     settings.backgroundType === "IMAGE" ? safeImageSrc(settings.backgroundImage) : undefined;
 
@@ -56,7 +56,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main" className="flex-1">
           {children}
         </main>
-        <Footer footer={footer} settings={settings} />
+        <Footer footer={footer} settings={settings} socialLinks={socialLinks} />
       </body>
     </html>
   );

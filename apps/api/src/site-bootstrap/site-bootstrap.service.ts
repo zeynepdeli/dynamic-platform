@@ -4,6 +4,7 @@ import { MenuItemsService } from '../menu-items/menu-items.service.js';
 import { HeroSlidesService } from '../hero-slides/hero-slides.service.js';
 import { FooterSettingsService } from '../footer-settings/footer-settings.service.js';
 import { SectionsService } from '../sections/sections.service.js';
+import { SocialLinksService } from '../social-links/social-links.service.js';
 
 @Injectable()
 export class SiteBootstrapService {
@@ -13,16 +14,18 @@ export class SiteBootstrapService {
     private readonly heroSlidesService: HeroSlidesService,
     private readonly footerSettingsService: FooterSettingsService,
     private readonly sectionsService: SectionsService,
+    private readonly socialLinksService: SocialLinksService,
   ) {}
 
   async getBootstrap() {
-    const [settings, menuItems, heroSlides, footer, homeSections] =
+    const [settings, menuItems, heroSlides, footer, homeSections, socialLinks] =
       await Promise.all([
         this.siteSettingsService.getSettings(),
         this.menuItemsService.findPublic(),
         this.heroSlidesService.findPublic(),
         this.footerSettingsService.findPublic(),
         this.sectionsService.findPublicHome(),
+        this.socialLinksService.findPublic(),
       ]);
 
     return {
@@ -31,6 +34,7 @@ export class SiteBootstrapService {
       heroSlides,
       footer,
       homeSections,
+      socialLinks,
     };
   }
 }

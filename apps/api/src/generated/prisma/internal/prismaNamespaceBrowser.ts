@@ -58,6 +58,7 @@ export const ModelName = {
   HeroSlide: 'HeroSlide',
   Media: 'Media',
   FooterSettings: 'FooterSettings',
+  SocialLink: 'SocialLink',
   Section: 'Section',
   SectionItem: 'SectionItem'
 } as const
@@ -138,6 +139,7 @@ export const MenuItemScalarFieldEnum = {
   id: 'id',
   label: 'label',
   href: 'href',
+  icon: 'icon',
   order: 'order',
   visible: 'visible',
   parentId: 'parentId',
@@ -186,17 +188,26 @@ export const FooterSettingsScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   address: 'address',
-  facebookUrl: 'facebookUrl',
-  instagramUrl: 'instagramUrl',
-  linkedinUrl: 'linkedinUrl',
-  youtubeUrl: 'youtubeUrl',
-  githubUrl: 'githubUrl',
   enabled: 'enabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type FooterSettingsScalarFieldEnum = (typeof FooterSettingsScalarFieldEnum)[keyof typeof FooterSettingsScalarFieldEnum]
+
+
+export const SocialLinkScalarFieldEnum = {
+  id: 'id',
+  icon: 'icon',
+  label: 'label',
+  url: 'url',
+  order: 'order',
+  visible: 'visible',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SocialLinkScalarFieldEnum = (typeof SocialLinkScalarFieldEnum)[keyof typeof SocialLinkScalarFieldEnum]
 
 
 export const SectionScalarFieldEnum = {

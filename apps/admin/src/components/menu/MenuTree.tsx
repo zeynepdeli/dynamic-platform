@@ -1,5 +1,6 @@
 "use client";
 
+import { getIcon } from "@/components/icons/registry";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { CornerDownRight, ListTree } from "lucide-react";
@@ -81,7 +82,10 @@ export function MenuTree({ tree }: MenuTreeProps) {
                 />
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-semibold">{node.label}</p>
+                  <p className="flex items-center gap-2 truncate font-semibold">
+                    <MenuIconBadge icon={node.icon} />
+                    {node.label}
+                  </p>
                   <p className="truncate font-mono text-xs text-muted-foreground">
                     {node.href}
                   </p>
@@ -147,7 +151,10 @@ export function MenuTree({ tree }: MenuTreeProps) {
                       onMove={(dir) => move(node.id, childIds, childIndex, dir)}
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{child.label}</p>
+                      <p className="flex items-center gap-2 truncate text-sm font-medium">
+                        <MenuIconBadge icon={child.icon} />
+                        {child.label}
+                      </p>
                       <p className="truncate font-mono text-xs text-muted-foreground">
                         {child.href}
                       </p>
@@ -193,5 +200,15 @@ export function MenuTree({ tree }: MenuTreeProps) {
         })}
       </ol>
     </div>
+  );
+}
+
+function MenuIconBadge({ icon }: { icon: string | null }) {
+  const entry = getIcon("menu", icon);
+  if (!entry) return null;
+  return (
+    <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-[#183350]/10 text-[#183350]" title={entry.label}>
+      <entry.Icon className="size-3.5" />
+    </span>
   );
 }

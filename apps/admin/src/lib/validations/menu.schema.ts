@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { INTERNAL_PATH_REGEX } from "./common";
+import { MENU_ICON_KEYS } from "@/components/icons/registry";
 
 export const menuItemSchema = z.object({
   label: z
@@ -19,6 +20,8 @@ export const menuItemSchema = z.object({
     ),
   // "" = üst seviye
   parentId: z.union([z.uuid(), z.literal("")]),
+  // "" = ikon yok
+  icon: z.union([z.enum(MENU_ICON_KEYS), z.literal("")]),
   visible: z.boolean(),
 });
 
@@ -28,5 +31,6 @@ export const menuItemDefaultValues: MenuItemFormValues = {
   label: "",
   href: "",
   parentId: "",
+  icon: "",
   visible: true,
 };

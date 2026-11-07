@@ -88,6 +88,8 @@ model MenuItem {
 
   label String
   href  String
+  // Whitelist anahtarı (common/icons.ts → MENU_ICON_KEYS). Boş = ikonsuz
+  icon  String?
 
   order   Int     @default(0)
   visible Boolean @default(true)
@@ -146,15 +148,29 @@ model FooterSettings {
   email        String?
   phone        String?
   address      String?
-  facebookUrl  String?
-  instagramUrl String?
-  linkedinUrl  String?
-  youtubeUrl   String?
-  githubUrl    String?
   enabled      Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Footer'daki sosyal medya bağlantıları (ikon + adres, sıralanabilir)
+model SocialLink {
+  id String @id @default(uuid())
+
+  // Whitelist anahtarı (common/icons.ts → SOCIAL_ICON_KEYS)
+  icon  String
+  // Erişilebilirlik etiketi; boşsa platform adı kullanılır
+  label String?
+  url   String
+
+  order   Int     @default(0)
+  visible Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
 }
 
 enum SectionType {
