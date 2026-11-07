@@ -69,3 +69,30 @@ export function apiErrorMessage(status: number, fallback: string): string {
   if (status === 429) return "Çok fazla istek gönderildi. Biraz bekleyin.";
   return fallback;
 }
+
+/**
+ * API'nin döndürdüğü hata mesajını okur (400/409: doğrulama ve iş kuralı
+ * mesajları — bunlar bizim yazdığımız, kullanıcıya gösterilebilir metinler).
+ * 5xx ve diğer durumlarda iç ayrıntı sızmasın diye genel mesaj döner.
+ */
+export async function readApiError(
+  response: Response,
+  fallback: string,
+): Promise<string> {
+  if (response.status === 400 || response.status === 409) {
+    try {
+      const data = (await response.json()) as { message?: unknown };
+      const message = Array.isArray(data.message)
+        ? data.message.filter((m) => typeof m === "string").join(" ")
+        : data.message;
+
+      if (typeof message === "string" && message.trim()) {
+        return message.slice(0, 300);
+      }
+    } catch {
+      // JSON değilse genel mesaja düş
+    }
+  }
+
+  return apiErrorMessage(response.status, fallback);
+}

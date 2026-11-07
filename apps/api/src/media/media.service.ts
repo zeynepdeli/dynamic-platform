@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -27,10 +28,59 @@ export class MediaService {
     private readonly fileValidator: MediaFileValidatorService,
   ) {}
 
+  // En fazla bu kadar kayıt döner (yanıt boyutu / DoS sınırı)
+  private static readonly LIST_LIMIT = 500;
+
   async findAll() {
-    return this.prisma.media.findMany({
-      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-    });
+    const [items, usedUrls] = await Promise.all([
+      this.prisma.media.findMany({
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: MediaService.LIST_LIMIT,
+      }),
+      this.findUsedUrls(),
+    ]);
+
+    return items.map((item) => ({ ...item, inUse: usedUrls.has(item.url) }));
+  }
+
+  /**
+   * Sitede herhangi bir yerde kullanılan /media/... adresleri.
+   * Yeni bir görsel alanı eklendiğinde buraya da eklenmeli; aksi halde
+   * kullanımdaki bir görsel silinebilir.
+   */
+  async findUsedUrls(): Promise<Set<string>> {
+    const [settings, pages, slides, sections, items] = await Promise.all([
+      this.prisma.siteSettings.findMany({
+        select: { logoUrl: true, faviconUrl: true, backgroundImage: true },
+      }),
+      this.prisma.page.findMany({
+        where: { ogImageUrl: { not: null } },
+        select: { ogImageUrl: true },
+      }),
+      this.prisma.heroSlide.findMany({
+        select: { imageUrl: true, mobileImageUrl: true },
+      }),
+      this.prisma.section.findMany({
+        where: { backgroundImage: { not: null } },
+        select: { backgroundImage: true },
+      }),
+      this.prisma.sectionItem.findMany({
+        where: { imageUrl: { not: null } },
+        select: { imageUrl: true },
+      }),
+    ]);
+
+    const urls = [
+      ...settings.flatMap((s) => [s.logoUrl, s.faviconUrl, s.backgroundImage]),
+      ...pages.map((p) => p.ogImageUrl),
+      ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl]),
+      ...sections.map((s) => s.backgroundImage),
+      ...items.map((i) => i.imageUrl),
+    ];
+
+    return new Set(
+      urls.filter((url): url is string => !!url && url.startsWith('/media/')),
+    );
   }
 
   async upload(input: MediaUploadInput) {
@@ -82,6 +132,14 @@ export class MediaService {
 
     if (!media) {
       throw new NotFoundException('Medya dosyası bulunamadı.');
+    }
+
+    // Kullanımdaki görsel silinirse sitede kırık görsel oluşur
+    const usedUrls = await this.findUsedUrls();
+    if (usedUrls.has(media.url)) {
+      throw new ConflictException(
+        'Bu görsel sitede kullanılıyor. Önce kullanıldığı yerden kaldırın.',
+      );
     }
 
     const filePath = join(this.storageDirectory, media.storageKey);

@@ -1,9 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
+import { assertSameIds } from '../common/reorder.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import type { CreateHeroSlideDto } from './dto/create-hero-slide.dto.js';
 import type { UpdateHeroSlideDto } from './dto/update-hero-slide.dto.js';
+
+// Kaynak tüketimini sınırla (OWASP A04)
+const MAX_HERO_SLIDES = 20;
 
 @Injectable()
 export class HeroSlidesService {
@@ -28,6 +36,13 @@ export class HeroSlidesService {
 
   // Yeni slider oluştur.
   async create(dto: CreateHeroSlideDto) {
+    const count = await this.prisma.heroSlide.count();
+    if (count >= MAX_HERO_SLIDES) {
+      throw new BadRequestException(
+        `En fazla ${MAX_HERO_SLIDES} slider oluşturulabilir.`,
+      );
+    }
+
     return this.prisma.heroSlide.create({
       data: {
         title: dto.title,
@@ -37,7 +52,7 @@ export class HeroSlidesService {
         mobileImageUrl: dto.mobileImageUrl,
         buttonText: dto.buttonText,
         buttonHref: dto.buttonHref,
-        order: dto.order ?? 0,
+        order: dto.order ?? count, // varsayılan: en sona
         active: dto.active ?? true,
       },
     });
@@ -67,6 +82,28 @@ export class HeroSlidesService {
   }
 
   // İşlem yapılacak sliderın varlığını kontrol et.
+  async reorder(ids: string[]) {
+    const slides = await this.prisma.heroSlide.findMany({
+      select: { id: true },
+    });
+
+    assertSameIds(
+      slides.map((slide) => slide.id),
+      ids,
+    );
+
+    await this.prisma.$transaction(
+      ids.map((id, index) =>
+        this.prisma.heroSlide.update({
+          where: { id },
+          data: { order: index },
+        }),
+      ),
+    );
+
+    return this.findAll();
+  }
+
   private async ensureExists(id: string) {
     const slide = await this.prisma.heroSlide.findUnique({
       where: {

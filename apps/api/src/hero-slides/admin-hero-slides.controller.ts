@@ -17,6 +17,7 @@ import { Roles } from '../auth/decorators/roles.decorator.js';
 import { HeroSlidesService } from './hero-slides.service.js';
 import { CreateHeroSlideDto } from './dto/create-hero-slide.dto.js';
 import { UpdateHeroSlideDto } from './dto/update-hero-slide.dto.js';
+import { ReorderIdsDto } from '../common/reorder.js';
 
 @Controller('admin/hero-slides')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -37,6 +38,12 @@ export class AdminHeroSlidesController {
   }
 
   // Mevcut sliderı güncelle.
+  // DİKKAT: ':id' rotasından ÖNCE tanımlanmalı
+  @Patch('reorder')
+  reorder(@Body() dto: ReorderIdsDto) {
+    return this.heroSlidesService.reorder(dto.ids);
+  }
+
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,

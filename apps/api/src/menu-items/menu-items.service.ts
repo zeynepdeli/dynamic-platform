@@ -4,10 +4,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+import { assertSameIds } from '../common/reorder.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import type { CreateMenuItemDto } from './dto/create-menu-item.dto.js';
 import type { UpdateMenuItemDto } from './dto/update-menu-item.dto.js';
+
+// Kaynak tüketimini sınırla (OWASP A04)
+const MAX_MENU_ITEMS = 100;
 
 @Injectable()
 export class MenuItemsService {
@@ -60,11 +64,23 @@ export class MenuItemsService {
       await this.ensureValidParent(dto.parentId);
     }
 
+    const total = await this.prisma.menuItem.count();
+    if (total >= MAX_MENU_ITEMS) {
+      throw new BadRequestException(
+        `En fazla ${MAX_MENU_ITEMS} menü öğesi oluşturulabilir.`,
+      );
+    }
+
+    // Varsayılan: aynı seviyenin en sonuna ekle
+    const siblings = await this.prisma.menuItem.count({
+      where: { parentId: dto.parentId ?? null },
+    });
+
     return this.prisma.menuItem.create({
       data: {
         label: dto.label,
         href: dto.href,
-        order: dto.order ?? 0,
+        order: dto.order ?? siblings,
         visible: dto.visible ?? true,
         parentId: dto.parentId ?? null,
       },
@@ -82,6 +98,17 @@ export class MenuItemsService {
       if (dto.parentId !== null) {
         await this.ensureValidParent(dto.parentId);
         await this.ensureNoCycle(id, dto.parentId);
+
+        // Alt menüsü olan bir öğe başka bir öğenin altına taşınamaz
+        // (en fazla 2 seviye)
+        const childCount = await this.prisma.menuItem.count({
+          where: { parentId: id },
+        });
+        if (childCount > 0) {
+          throw new BadRequestException(
+            'Alt menüsü olan bir öğe başka bir menünün altına taşınamaz.',
+          );
+        }
       }
     }
 
@@ -109,6 +136,30 @@ export class MenuItemsService {
     });
   }
 
+  // Aynı üst menünün altındaki öğeleri sırala (parentId = null → üst seviye)
+  async reorder(parentId: string | null, ids: string[]) {
+    const siblings = await this.prisma.menuItem.findMany({
+      where: { parentId },
+      select: { id: true },
+    });
+
+    assertSameIds(
+      siblings.map((item) => item.id),
+      ids,
+    );
+
+    await this.prisma.$transaction(
+      ids.map((id, index) =>
+        this.prisma.menuItem.update({
+          where: { id },
+          data: { order: index },
+        }),
+      ),
+    );
+
+    return this.findAll();
+  }
+
   private async ensureExists(id: string) {
     const item = await this.prisma.menuItem.findUnique({
       where: { id },
@@ -121,8 +172,17 @@ export class MenuItemsService {
     return item;
   }
 
+  // Menü en fazla 2 seviyelidir: üst menü kendisi bir alt menü olamaz
   private async ensureValidParent(parentId: string) {
-    return this.ensureExists(parentId);
+    const parent = await this.ensureExists(parentId);
+
+    if (parent.parentId !== null) {
+      throw new BadRequestException(
+        'Menü en fazla 2 seviyeli olabilir. Alt menünün altına öğe eklenemez.',
+      );
+    }
+
+    return parent;
   }
 
   // A -> B -> C gibi bir hiyerarşide A'nın C altına
