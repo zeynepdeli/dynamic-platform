@@ -6,6 +6,7 @@ import { FooterSettingsModule } from '../footer-settings/footer-settings.module.
 import { SiteBootstrapController } from './site-bootstrap.controller.js';
 import { SiteBootstrapService } from './site-bootstrap.service.js';
 import { SectionsModule } from '../sections/sections.module.js';
+import { SocialLinksModule } from '../social-links/social-links.module.js';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SectionsModule } from '../sections/sections.module.js';
     HeroSlidesModule,
     FooterSettingsModule,
     SectionsModule,
+    SocialLinksModule,
   ],
   controllers: [SiteBootstrapController],
   providers: [SiteBootstrapService],

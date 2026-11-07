@@ -21,10 +21,5 @@ export async function getFooterFormValues(): Promise<FooterFormValues> {
     email: s.email ?? "",
     phone: s.phone ?? "",
     address: s.address ?? "",
-    facebookUrl: s.facebookUrl ?? "",
-    instagramUrl: s.instagramUrl ?? "",
-    linkedinUrl: s.linkedinUrl ?? "",
-    youtubeUrl: s.youtubeUrl ?? "",
-    githubUrl: s.githubUrl ?? "",
   };
 }

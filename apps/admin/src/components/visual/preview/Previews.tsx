@@ -3,6 +3,8 @@
 import { ChevronDown, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
 
 import type { FooterFormValues } from "@/lib/validations/footer.schema";
+import type { SocialLink } from "@/lib/validations/social-link.schema";
+import { getIcon } from "@/components/icons/registry";
 import type { SectionFormValues, SectionItemFormValues } from "@/lib/validations/section.schema";
 
 import { color, image, readable, type PreviewTheme } from "./safe";
@@ -23,7 +25,7 @@ export function PreviewHeader({
   theme: PreviewTheme;
   siteName: string;
   logoUrl: string;
-  menu: { id: string; label: string; hasChildren: boolean }[];
+  menu: { id: string; label: string; icon?: string | null; hasChildren: boolean }[];
 }) {
   const logo = image(logoUrl, theme.mediaBaseUrl);
   return (
@@ -38,12 +40,16 @@ export function PreviewHeader({
         <span className="truncate text-base font-semibold">{siteName || "Site Adı"}</span>
       )}
       <nav className="ml-auto hidden items-center gap-4 text-sm opacity-90 sm:flex">
-        {menu.map((item) => (
-          <span key={item.id} className="flex items-center gap-1">
+        {menu.map((item) => {
+          const MenuIcon = getIcon("menu", item.icon)?.Icon;
+          return (
+          <span key={item.id} className="flex items-center gap-1.5">
+            {MenuIcon && <MenuIcon className="size-3.5" />}
             {item.label}
             {item.hasChildren && <ChevronDown className="size-3" />}
           </span>
-        ))}
+          );
+        })}
       </nav>
     </div>
   );
@@ -259,7 +265,17 @@ export function PreviewSection({
   );
 }
 
-export function PreviewFooter({ theme, siteName, values }: { theme: PreviewTheme; siteName: string; values: FooterFormValues }) {
+export function PreviewFooter({
+  theme,
+  siteName,
+  values,
+  socialLinks,
+}: {
+  theme: PreviewTheme;
+  siteName: string;
+  values: FooterFormValues;
+  socialLinks: SocialLink[];
+}) {
   if (!values.enabled) {
     return (
       <div className="bg-neutral-100 px-8 py-6 text-center text-xs text-neutral-500">
@@ -280,21 +296,21 @@ export function PreviewFooter({ theme, siteName, values }: { theme: PreviewTheme
           {values.address && <p className="whitespace-pre-line">{values.address}</p>}
         </div>
         <div className="flex flex-wrap gap-2 md:justify-end">
-          {(
-            [
-              ["instagramUrl", "Instagram"],
-              ["facebookUrl", "Facebook"],
-              ["linkedinUrl", "LinkedIn"],
-              ["youtubeUrl", "YouTube"],
-              ["githubUrl", "GitHub"],
-            ] as const
-          )
-            .filter(([key]) => values[key])
-            .map(([key, label]) => (
-              <span key={key} className="h-fit rounded-md border border-current/20 px-2 py-1 text-xs">
-                {label}
-              </span>
-            ))}
+          {socialLinks
+            .filter((link) => link.visible)
+            .map((link) => {
+              const entry = getIcon("social", link.icon);
+              if (!entry) return null;
+              return (
+                <span
+                  key={link.id}
+                  title={link.label || entry.label}
+                  className="flex size-8 items-center justify-center rounded-full border border-current/25"
+                >
+                  <entry.Icon className="size-4" />
+                </span>
+              );
+            })}
         </div>
       </div>
       {values.copyright && <p className="border-t border-current/10 py-3 text-center text-[11px] opacity-70">{values.copyright}</p>}

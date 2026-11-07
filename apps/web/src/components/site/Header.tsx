@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MenuIcon } from "./icons";
 import { ChevronDown } from "lucide-react";
 
 import { buildMenuTree } from "@/core/site";
@@ -41,8 +42,9 @@ export function Header({ settings, menuItems }: HeaderProps) {
               <li key={item.id} className="group relative">
                 <SmartLink
                   href={item.href}
-                  className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium opacity-90 transition hover:bg-white/10 hover:opacity-100"
+                  className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium opacity-90 transition hover:bg-white/10 hover:opacity-100"
                 >
+                  <MenuIcon icon={item.icon} className="size-4" />
                   {item.label}
                   {item.children.length > 0 && <ChevronDown className="size-3.5" />}
                 </SmartLink>
@@ -53,8 +55,9 @@ export function Header({ settings, menuItems }: HeaderProps) {
                       <li key={child.id}>
                         <SmartLink
                           href={child.href}
-                          className="block rounded-lg px-3 py-2 text-sm hover:bg-gray-100"
+                          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-gray-100"
                         >
+                          <MenuIcon icon={child.icon} className="size-4 opacity-70" />
                           {child.label}
                         </SmartLink>
                       </li>

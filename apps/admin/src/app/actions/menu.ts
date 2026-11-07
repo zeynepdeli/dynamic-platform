@@ -17,6 +17,7 @@ function payload(v: MenuItemFormValues) {
     label: v.label,
     href: v.href,
     visible: v.visible,
+    icon: v.icon === "" ? null : v.icon,
     parentId: v.parentId === "" ? null : v.parentId,
   };
 }

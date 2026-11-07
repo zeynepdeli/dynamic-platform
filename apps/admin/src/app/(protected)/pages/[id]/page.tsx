@@ -7,6 +7,7 @@ import { VisualPageEditor } from "@/components/visual/VisualPageEditor";
 
 import { getPageForEditAction } from "@/app/actions/pages";
 import { getFooterFormValues } from "@/lib/footer";
+import { getAdminSocialLinks } from "@/lib/social-links";
 import { getAdminHeroSlides, toHeroSlideFormValues } from "@/lib/hero-slides";
 import { getMediaBaseUrl } from "@/lib/media-base-url";
 import { buildMenuTree, getAdminMenuItems } from "@/lib/menu";
@@ -36,13 +37,14 @@ export default async function PageEditor({ params }: PageEditorProps) {
 
   const pageId = page?.id ?? null;
 
-  const [sections, settings, menuItems, footer, slides, pageForm] = await Promise.all([
+  const [sections, settings, menuItems, footer, slides, pageForm, socialLinks] = await Promise.all([
     getAdminSections(pageId),
     getSiteSettings(),
     getAdminMenuItems(),
     getFooterFormValues(),
     isHome ? getAdminHeroSlides() : Promise.resolve([]),
     pageId ? getPageForEditAction(pageId) : Promise.resolve(null),
+    getAdminSocialLinks(),
   ]);
 
   const template = resolveTemplate(isHome ? HOME_TEMPLATE_KEY : (page as Page).slug, sections);
@@ -99,6 +101,7 @@ export default async function PageEditor({ params }: PageEditorProps) {
         missing={template.missing}
         allowExtraSections={template.allowExtraSections}
         footer={footer}
+        socialLinks={socialLinks}
         background={
           isHome
             ? {

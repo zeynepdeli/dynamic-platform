@@ -31,11 +31,6 @@ export type FooterSettingsMinAggregateOutputType = {
   email: string | null
   phone: string | null
   address: string | null
-  facebookUrl: string | null
-  instagramUrl: string | null
-  linkedinUrl: string | null
-  youtubeUrl: string | null
-  githubUrl: string | null
   enabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -48,11 +43,6 @@ export type FooterSettingsMaxAggregateOutputType = {
   email: string | null
   phone: string | null
   address: string | null
-  facebookUrl: string | null
-  instagramUrl: string | null
-  linkedinUrl: string | null
-  youtubeUrl: string | null
-  githubUrl: string | null
   enabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,11 +55,6 @@ export type FooterSettingsCountAggregateOutputType = {
   email: number
   phone: number
   address: number
-  facebookUrl: number
-  instagramUrl: number
-  linkedinUrl: number
-  youtubeUrl: number
-  githubUrl: number
   enabled: number
   createdAt: number
   updatedAt: number
@@ -84,11 +69,6 @@ export type FooterSettingsMinAggregateInputType = {
   email?: true
   phone?: true
   address?: true
-  facebookUrl?: true
-  instagramUrl?: true
-  linkedinUrl?: true
-  youtubeUrl?: true
-  githubUrl?: true
   enabled?: true
   createdAt?: true
   updatedAt?: true
@@ -101,11 +81,6 @@ export type FooterSettingsMaxAggregateInputType = {
   email?: true
   phone?: true
   address?: true
-  facebookUrl?: true
-  instagramUrl?: true
-  linkedinUrl?: true
-  youtubeUrl?: true
-  githubUrl?: true
   enabled?: true
   createdAt?: true
   updatedAt?: true
@@ -118,11 +93,6 @@ export type FooterSettingsCountAggregateInputType = {
   email?: true
   phone?: true
   address?: true
-  facebookUrl?: true
-  instagramUrl?: true
-  linkedinUrl?: true
-  youtubeUrl?: true
-  githubUrl?: true
   enabled?: true
   createdAt?: true
   updatedAt?: true
@@ -208,11 +178,6 @@ export type FooterSettingsGroupByOutputType = {
   email: string | null
   phone: string | null
   address: string | null
-  facebookUrl: string | null
-  instagramUrl: string | null
-  linkedinUrl: string | null
-  youtubeUrl: string | null
-  githubUrl: string | null
   enabled: boolean
   createdAt: Date
   updatedAt: Date
@@ -246,11 +211,6 @@ export type FooterSettingsWhereInput = {
   email?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   phone?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   address?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  facebookUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  instagramUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  linkedinUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  youtubeUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  githubUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   enabled?: Prisma.BoolFilter<"FooterSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
@@ -263,11 +223,6 @@ export type FooterSettingsOrderByWithRelationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  facebookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  linkedinUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  youtubeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -283,11 +238,6 @@ export type FooterSettingsWhereUniqueInput = Prisma.AtLeast<{
   email?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   phone?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   address?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  facebookUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  instagramUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  linkedinUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  youtubeUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
-  githubUrl?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   enabled?: Prisma.BoolFilter<"FooterSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
@@ -300,11 +250,6 @@ export type FooterSettingsOrderByWithAggregationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  facebookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  linkedinUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  youtubeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -323,11 +268,6 @@ export type FooterSettingsScalarWhereWithAggregatesInput = {
   email?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
-  facebookUrl?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
-  instagramUrl?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
-  linkedinUrl?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
-  youtubeUrl?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
-  githubUrl?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
   enabled?: Prisma.BoolWithAggregatesFilter<"FooterSettings"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FooterSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FooterSettings"> | Date | string
@@ -340,11 +280,6 @@ export type FooterSettingsCreateInput = {
   email?: string | null
   phone?: string | null
   address?: string | null
-  facebookUrl?: string | null
-  instagramUrl?: string | null
-  linkedinUrl?: string | null
-  youtubeUrl?: string | null
-  githubUrl?: string | null
   enabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -357,11 +292,6 @@ export type FooterSettingsUncheckedCreateInput = {
   email?: string | null
   phone?: string | null
   address?: string | null
-  facebookUrl?: string | null
-  instagramUrl?: string | null
-  linkedinUrl?: string | null
-  youtubeUrl?: string | null
-  githubUrl?: string | null
   enabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -374,11 +304,6 @@ export type FooterSettingsUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -391,11 +316,6 @@ export type FooterSettingsUncheckedUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -408,11 +328,6 @@ export type FooterSettingsCreateManyInput = {
   email?: string | null
   phone?: string | null
   address?: string | null
-  facebookUrl?: string | null
-  instagramUrl?: string | null
-  linkedinUrl?: string | null
-  youtubeUrl?: string | null
-  githubUrl?: string | null
   enabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -425,11 +340,6 @@ export type FooterSettingsUpdateManyMutationInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -442,11 +352,6 @@ export type FooterSettingsUncheckedUpdateManyInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -459,11 +364,6 @@ export type FooterSettingsCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  facebookUrl?: Prisma.SortOrder
-  instagramUrl?: Prisma.SortOrder
-  linkedinUrl?: Prisma.SortOrder
-  youtubeUrl?: Prisma.SortOrder
-  githubUrl?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -476,11 +376,6 @@ export type FooterSettingsMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  facebookUrl?: Prisma.SortOrder
-  instagramUrl?: Prisma.SortOrder
-  linkedinUrl?: Prisma.SortOrder
-  youtubeUrl?: Prisma.SortOrder
-  githubUrl?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -493,11 +388,6 @@ export type FooterSettingsMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  facebookUrl?: Prisma.SortOrder
-  instagramUrl?: Prisma.SortOrder
-  linkedinUrl?: Prisma.SortOrder
-  youtubeUrl?: Prisma.SortOrder
-  githubUrl?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -512,11 +402,6 @@ export type FooterSettingsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   email?: boolean
   phone?: boolean
   address?: boolean
-  facebookUrl?: boolean
-  instagramUrl?: boolean
-  linkedinUrl?: boolean
-  youtubeUrl?: boolean
-  githubUrl?: boolean
   enabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -529,11 +414,6 @@ export type FooterSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   email?: boolean
   phone?: boolean
   address?: boolean
-  facebookUrl?: boolean
-  instagramUrl?: boolean
-  linkedinUrl?: boolean
-  youtubeUrl?: boolean
-  githubUrl?: boolean
   enabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -546,11 +426,6 @@ export type FooterSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   email?: boolean
   phone?: boolean
   address?: boolean
-  facebookUrl?: boolean
-  instagramUrl?: boolean
-  linkedinUrl?: boolean
-  youtubeUrl?: boolean
-  githubUrl?: boolean
   enabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -563,17 +438,12 @@ export type FooterSettingsSelectScalar = {
   email?: boolean
   phone?: boolean
   address?: boolean
-  facebookUrl?: boolean
-  instagramUrl?: boolean
-  linkedinUrl?: boolean
-  youtubeUrl?: boolean
-  githubUrl?: boolean
   enabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FooterSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "copyright" | "email" | "phone" | "address" | "facebookUrl" | "instagramUrl" | "linkedinUrl" | "youtubeUrl" | "githubUrl" | "enabled" | "createdAt" | "updatedAt", ExtArgs["result"]["footerSettings"]>
+export type FooterSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "copyright" | "email" | "phone" | "address" | "enabled" | "createdAt" | "updatedAt", ExtArgs["result"]["footerSettings"]>
 
 export type $FooterSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FooterSettings"
@@ -585,11 +455,6 @@ export type $FooterSettingsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     email: string | null
     phone: string | null
     address: string | null
-    facebookUrl: string | null
-    instagramUrl: string | null
-    linkedinUrl: string | null
-    youtubeUrl: string | null
-    githubUrl: string | null
     enabled: boolean
     createdAt: Date
     updatedAt: Date
@@ -1022,11 +887,6 @@ export interface FooterSettingsFieldRefs {
   readonly email: Prisma.FieldRef<"FooterSettings", 'String'>
   readonly phone: Prisma.FieldRef<"FooterSettings", 'String'>
   readonly address: Prisma.FieldRef<"FooterSettings", 'String'>
-  readonly facebookUrl: Prisma.FieldRef<"FooterSettings", 'String'>
-  readonly instagramUrl: Prisma.FieldRef<"FooterSettings", 'String'>
-  readonly linkedinUrl: Prisma.FieldRef<"FooterSettings", 'String'>
-  readonly youtubeUrl: Prisma.FieldRef<"FooterSettings", 'String'>
-  readonly githubUrl: Prisma.FieldRef<"FooterSettings", 'String'>
   readonly enabled: Prisma.FieldRef<"FooterSettings", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"FooterSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FooterSettings", 'DateTime'>

@@ -20,6 +20,7 @@ export type MenuItem = {
   id: string;
   label: string;
   href: string;
+  icon: string | null;
   order: number;
   parentId: string | null;
 };
@@ -44,11 +45,13 @@ export type FooterSettings = {
   email: string | null;
   phone: string | null;
   address: string | null;
-  facebookUrl: string | null;
-  instagramUrl: string | null;
-  linkedinUrl: string | null;
-  youtubeUrl: string | null;
-  githubUrl: string | null;
+};
+
+export type SocialLink = {
+  id: string;
+  icon: string;
+  label: string | null;
+  url: string;
 };
 
 export type SectionType = "CARDS" | "TEXT" | "IMAGE_TEXT" | "CTA";
@@ -101,4 +104,5 @@ export type SiteBootstrap = {
   heroSlides: HeroSlide[];
   footer: FooterSettings;
   homeSections: Section[];
+  socialLinks: SocialLink[];
 };

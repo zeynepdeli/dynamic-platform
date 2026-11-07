@@ -80,6 +80,7 @@ export class MenuItemsService {
       data: {
         label: dto.label,
         href: dto.href,
+        icon: dto.icon ?? null,
         order: dto.order ?? siblings,
         visible: dto.visible ?? true,
         parentId: dto.parentId ?? null,

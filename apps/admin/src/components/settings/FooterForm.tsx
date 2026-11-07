@@ -18,14 +18,6 @@ import {
   type FooterFormValues,
 } from "@/lib/validations/footer.schema";
 
-const SOCIAL_FIELDS = [
-  { name: "instagramUrl", label: "Instagram" },
-  { name: "facebookUrl", label: "Facebook" },
-  { name: "linkedinUrl", label: "LinkedIn" },
-  { name: "youtubeUrl", label: "YouTube" },
-  { name: "githubUrl", label: "GitHub" },
-] as const;
-
 export function FooterForm({
   initialValues,
   onValuesChange,
@@ -123,23 +115,6 @@ export function FooterForm({
           register={register}
           error={errors.address}
         />
-      </section>
-
-      <section className="space-y-5 rounded-2xl border border-border bg-card p-6">
-        <h2 className="text-base font-semibold">Sosyal Medya</h2>
-
-        <div className="grid gap-5 @xl:grid-cols-2">
-          {SOCIAL_FIELDS.map((field) => (
-            <FormField
-              key={field.name}
-              name={field.name}
-              label={field.label}
-              placeholder="https://..."
-              register={register}
-              error={errors[field.name]}
-            />
-          ))}
-        </div>
       </section>
 
       {submitError && (

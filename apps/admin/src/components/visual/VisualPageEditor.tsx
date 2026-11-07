@@ -34,6 +34,8 @@ import { PageInfoForm } from "@/components/outline/PageInfoForm";
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
 import { SectionForm } from "@/components/sections/SectionForm";
 import { FooterForm } from "@/components/settings/FooterForm";
+import { SocialLinksEditor } from "@/components/settings/SocialLinksEditor";
+import type { SocialLink } from "@/lib/validations/social-link.schema";
 import { CanvasBlock } from "@/components/visual/CanvasBlock";
 import { BackgroundForm } from "@/components/visual/panels/BackgroundForm";
 import { SlidesPanel } from "@/components/visual/panels/SlidesPanel";
@@ -92,6 +94,7 @@ export type VisualPageEditorProps = {
   missing: TemplateSection[];
   allowExtraSections: boolean;
   footer: FooterFormValues;
+  socialLinks: SocialLink[];
   /** Sayfaya özel arka plan (boş = sitenin genel arka planı) */
   background: BackgroundValues;
 };
@@ -275,10 +278,15 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     if (selected === "footer") {
       return (
         <Panel title="Footer" hint="İletişim, sosyal medya, telif" shared>
-          <FooterForm
-            initialValues={props.footer}
-            onValuesChange={setFooterDraft}
-          />
+          <div className="grid gap-8 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <FooterForm
+              initialValues={props.footer}
+              onValuesChange={setFooterDraft}
+            />
+            <div className="h-fit rounded-2xl border border-border bg-card p-6">
+              <SocialLinksEditor links={props.socialLinks} />
+            </div>
+          </div>
         </Panel>
       );
     }
@@ -692,6 +700,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                     menu={props.menuTree.map((n) => ({
                       id: n.id,
                       label: n.label,
+                      icon: n.icon,
                       hasChildren: n.children.length > 0,
                     }))}
                   />
@@ -799,6 +808,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                     theme={theme}
                     siteName={branding.siteName}
                     values={footer}
+                    socialLinks={props.socialLinks}
                   />
                 </CanvasBlock>
               </div>

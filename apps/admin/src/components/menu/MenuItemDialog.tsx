@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Pencil, Plus, Save } from "lucide-react";
 
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { FormField } from "@/components/forms/FormField";
 import { FormSwitch } from "@/components/forms/FormSwitch";
+import { IconPicker } from "@/components/icons/IconPicker";
 
 import {
   createMenuItemAction,
@@ -91,14 +92,34 @@ function MenuItemForm({
 
   return (
     <form onSubmit={handleSubmit(submit)} noValidate className="space-y-5">
-      <FormField
-        name="label"
-        label="Menü Başlığı"
-        placeholder="ör. Hakkımızda"
-        register={register}
-        error={errors.label}
-        required
-      />
+      <div className="flex items-end gap-3">
+        <div className="space-y-2">
+          <p className="text-sm font-medium">İkon</p>
+          <Controller
+            name="icon"
+            control={control}
+            render={({ field }) => (
+              <IconPicker
+                kind="menu"
+                allowNone
+                label="Menü ikonu"
+                value={field.value}
+                onChange={(key) => field.onChange(key)}
+              />
+            )}
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <FormField
+            name="label"
+            label="Menü Başlığı"
+            placeholder="ör. Hakkımızda"
+            register={register}
+            error={errors.label}
+            required
+          />
+        </div>
+      </div>
 
       <FormField
         name="href"

@@ -2,9 +2,14 @@ import { Settings2 } from "lucide-react";
 
 import { FooterForm } from "@/components/settings/FooterForm";
 import { getFooterFormValues } from "@/lib/footer";
+import { getAdminSocialLinks } from "@/lib/social-links";
+import { SocialLinksEditor } from "@/components/settings/SocialLinksEditor";
 
 export default async function SettingsPage() {
-  const initialValues = await getFooterFormValues();
+  const [initialValues, socialLinks] = await Promise.all([
+    getFooterFormValues(),
+    getAdminSocialLinks(),
+  ]);
 
   return (
     <main className="min-w-0 max-w-4xl space-y-7 pb-10">
@@ -21,6 +26,10 @@ export default async function SettingsPage() {
       </header>
 
       <FooterForm initialValues={initialValues} />
+
+      <section className="rounded-2xl border border-border bg-card p-6">
+        <SocialLinksEditor links={socialLinks} />
+      </section>
     </main>
   );
 }

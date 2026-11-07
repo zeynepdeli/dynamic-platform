@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsIn,
   IsInt,
   IsOptional,
   IsString,
@@ -14,6 +15,7 @@ import {
   INTERNAL_PATH_MESSAGE,
   INTERNAL_PATH_REGEX,
 } from '../../common/validators.js';
+import { MENU_ICON_KEYS } from '../../common/icons.js';
 
 export class UpdateMenuItemDto {
   @IsOptional()
@@ -31,6 +33,11 @@ export class UpdateMenuItemDto {
     message: INTERNAL_PATH_MESSAGE,
   })
   href?: string;
+
+  // null = ikonu kaldır
+  @ValidateIf((_, value: unknown) => value != null)
+  @IsIn(MENU_ICON_KEYS, { message: 'Geçersiz ikon.' })
+  icon?: string | null;
 
   @IsOptional()
   @IsInt()

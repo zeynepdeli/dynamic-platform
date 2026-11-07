@@ -1,32 +1,31 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 
 import { safeHttpsUrl, safeMailto, safeTel } from "@/core/safe";
-import type { FooterSettings, SiteSettings } from "@/core/types";
-
-const SOCIALS = [
-  ["instagramUrl", "Instagram"],
-  ["facebookUrl", "Facebook"],
-  ["linkedinUrl", "LinkedIn"],
-  ["youtubeUrl", "YouTube"],
-  ["githubUrl", "GitHub"],
-] as const;
+import type { FooterSettings, SiteSettings, SocialLink } from "@/core/types";
+import { getIcon } from "./icons";
 
 // ✏️ MÜŞTERİYE ÖZEL: Footer tasarımı
 export function Footer({
   footer,
   settings,
+  socialLinks,
 }: {
   footer: FooterSettings;
   settings: SiteSettings;
+  socialLinks: SocialLink[];
 }) {
   if (!footer.enabled) return null;
 
   const email = safeMailto(footer.email);
   const tel = safeTel(footer.phone);
-  const socials = SOCIALS.map(([key, label]) => ({
-    label,
-    href: safeHttpsUrl(footer[key]),
-  })).filter((s) => s.href);
+  // Yalnızca whitelist'teki ikonlar + doğrulanmış https adresleri
+  const socials = socialLinks.flatMap((link) => {
+    const entry = getIcon("social", link.icon);
+    const href = safeHttpsUrl(link.url);
+    return entry && href
+      ? [{ id: link.id, href, label: link.label || entry.label, Icon: entry.Icon }]
+      : [];
+  });
 
   return (
     <footer className="mt-auto bg-primary text-on-primary">
@@ -62,15 +61,17 @@ export function Footer({
         {socials.length > 0 && (
           <ul className="flex flex-wrap gap-3 md:justify-end">
             {socials.map((social) => (
-              <li key={social.label}>
+              <li key={social.id}>
                 {/* Harici bağlantı: noopener + noreferrer (tabnabbing koruması) */}
                 <a
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10"
+                  aria-label={social.label}
+                  title={social.label}
+                  className="inline-flex size-10 items-center justify-center rounded-full border border-white/20 transition hover:bg-white/10"
                 >
-                  {social.label}
+                  <social.Icon className="size-[18px]" />
                 </a>
               </li>
             ))}
