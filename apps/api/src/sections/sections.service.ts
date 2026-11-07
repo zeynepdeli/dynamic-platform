@@ -26,6 +26,7 @@ const publicItemSelect = {
   buttonText: true,
   buttonHref: true,
   backgroundColor: true,
+  backgroundImage: true,
 } satisfies Prisma.SectionItemSelect;
 
 const publicSectionSelect = {
@@ -195,6 +196,7 @@ export class SectionsService {
         buttonText: dto.buttonText,
         buttonHref: dto.buttonHref,
         backgroundColor: dto.backgroundColor,
+        backgroundImage: dto.backgroundImage,
         order: dto.order ?? count,
         active: dto.active ?? true,
       },

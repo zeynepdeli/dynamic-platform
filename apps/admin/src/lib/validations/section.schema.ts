@@ -93,6 +93,7 @@ export const sectionItemSchema = z
     buttonText: z.string().trim().max(60),
     buttonHref: internalPathSchema,
     backgroundColor: optionalHexColorSchema,
+    backgroundImage: imageUrlSchema,
     active: z.boolean(),
   })
   .refine(buttonPairIsValid, buttonPairError);
@@ -107,5 +108,6 @@ export const sectionItemDefaultValues: SectionItemFormValues = {
   buttonText: "",
   buttonHref: "",
   backgroundColor: "",
+  backgroundImage: "",
   active: true,
 };

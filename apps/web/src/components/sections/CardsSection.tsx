@@ -23,13 +23,18 @@ export function CardsSection({ section }: { section: Section }) {
         {section.items.map((item) => {
           const image = safeImageSrc(item.imageUrl);
           const bg = safeColor(item.backgroundColor);
+          const bgImage = safeImageSrc(item.backgroundImage);
 
           return (
             <li
               key={item.id}
-              className="flex flex-col overflow-hidden rounded-2xl bg-white text-gray-900 shadow-sm ring-1 ring-black/5"
+              className="relative isolate flex flex-col overflow-hidden rounded-2xl bg-white text-gray-900 shadow-sm ring-1 ring-black/5"
               style={bg ? { backgroundColor: bg, color: readableTextColor(bg) } : undefined}
             >
+              {bgImage && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={bgImage} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 -z-10 size-full object-cover" />
+              )}
               {image && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={image} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />

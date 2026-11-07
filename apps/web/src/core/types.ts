@@ -7,13 +7,19 @@ export type SiteSettings = {
   faviconUrl: string | null;
   primaryColor: string;
   secondaryColor: string;
-  backgroundType: "COLOR" | "IMAGE";
   backgroundColor: string;
   backgroundImage: string | null;
   homeBackgroundColor: string | null;
   homeBackgroundImage: string | null;
+  headerBackgroundColor: string | null;
+  headerBackgroundImage: string | null;
+  headerButtonText: string | null;
+  headerButtonHref: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  metaKeywords: string | null;
+  ogImageUrl: string | null;
+  allowIndexing: boolean;
 };
 
 export type MenuItem = {
@@ -23,6 +29,7 @@ export type MenuItem = {
   icon: string | null;
   order: number;
   parentId: string | null;
+  location: "HEADER" | "FOOTER";
 };
 
 export type MenuNode = MenuItem & { children: MenuItem[] };
@@ -40,6 +47,8 @@ export type HeroSlide = {
 
 export type FooterSettings = {
   enabled: boolean;
+  backgroundColor: string | null;
+  backgroundImage: string | null;
   description: string | null;
   copyright: string | null;
   email: string | null;
@@ -65,6 +74,7 @@ export type SectionItem = {
   buttonText: string | null;
   buttonHref: string | null;
   backgroundColor: string | null;
+  backgroundImage: string | null;
 };
 
 export type Section = {

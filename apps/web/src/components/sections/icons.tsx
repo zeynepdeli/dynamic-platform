@@ -16,6 +16,8 @@ import {
   Wrench,
 } from "lucide-react";
 
+import { getIcon } from "../site/icons";
+
 /**
  * ✏️ MÜŞTERİYE ÖZEL: Kartlarda admin'den yazılabilen ikon isimleri.
  * Admin'de kartın "İkon" alanına buradaki anahtarlardan biri yazılır.
@@ -39,6 +41,7 @@ export const ICONS: Record<string, LucideIcon> = {
 };
 
 export function CardIcon({ name, className }: { name: string | null; className?: string }) {
-  const Icon = name && Object.hasOwn(ICONS, name) ? ICONS[name] : undefined;
+  // Önce müşteriye özel set, yoksa admin'deki ikon seçicinin seti
+  const Icon = name && Object.hasOwn(ICONS, name) ? ICONS[name] : getIcon("menu", name)?.Icon;
   return Icon ? <Icon className={className} aria-hidden="true" /> : null;
 }

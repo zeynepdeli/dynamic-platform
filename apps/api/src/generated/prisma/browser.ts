@@ -53,6 +53,11 @@ export type Media = Prisma.MediaModel
  */
 export type FooterSettings = Prisma.FooterSettingsModel
 /**
+ * Model ContactMessage
+ * 
+ */
+export type ContactMessage = Prisma.ContactMessageModel
+/**
  * Model SocialLink
  * 
  */

@@ -23,7 +23,7 @@ import {
 
 import { ConfirmDeleteDialog } from "@/components/common/ConfirmDeleteDialog";
 import { swapIds } from "@/components/common/OrderButtons";
-import type { Branding } from "@/components/outline/HeaderBlock";
+type Branding = { siteName: string; logoUrl: string };
 import { InlineItems } from "@/components/outline/InlineItems";
 import { PageInfoForm } from "@/components/outline/PageInfoForm";
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
@@ -90,6 +90,7 @@ export type VisualPageEditorProps = {
   allowExtraSections: boolean;
   footer: FooterFormValues;
   socialLinks: SocialLink[];
+  headerStyle: { backgroundColor: string; backgroundImage: string; buttonText: string };
   /** Sayfaya özel arka plan (boş = sitenin genel arka planı) */
   background: BackgroundValues;
 };
@@ -170,8 +171,8 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     if (selected === "hero") {
       return (
         <Panel
-          title="Slider"
-          hint="Sayfanın en üstündeki kayan görseller (en fazla 5)"
+          title="Slaytlar"
+          hint="Sıra numarasıyla sıralayın; en fazla 5 slayt."
         >
           <SlidesPanel
             slides={props.slides}
@@ -187,7 +188,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     if (selected === "background") {
       return (
         <Panel
-          title="Arka Plan"
+          title="Arka Plan Ayarları"
           hint={
             isHome
               ? "Ana sayfaya özel renk ve fotoğraf"
@@ -207,7 +208,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     if (selected === "page" && pageId && props.pageInfo) {
       return (
         <Panel
-          title="Sayfa Bilgileri"
+          title="Genel Sayfa Ayarları"
           hint="Başlık, adres, içerik, SEO ve yayın durumu"
         >
           <PageInfoForm pageId={pageId} initialData={props.pageInfo} />
@@ -217,7 +218,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
 
     if (selected === "new") {
       return (
-        <Panel title="Yeni Bölüm" hint="Tipini seçip içeriğini girin">
+        <Panel title="Bölüm Bilgileri" hint="Tipini seçip içeriğini girin">
           <SectionForm
             mode="create"
             mediaBaseUrl={theme.mediaBaseUrl}
@@ -467,6 +468,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                     theme={theme}
                     siteName={branding.siteName}
                     logoUrl={branding.logoUrl}
+                    style={props.headerStyle}
                     menu={props.menuTree.map((n) => ({
                       id: n.id,
                       label: n.label,
@@ -639,7 +641,7 @@ function Panel({
     <section className="rounded-2xl border border-border bg-card shadow-sm">
       <header className="flex flex-wrap items-start gap-3 border-b border-border p-5 sm:px-8">
         <div className="min-w-0 flex-1">
-          <h2 className="flex flex-wrap items-center gap-2 text-xl font-semibold">
+          <h2 className="flex flex-wrap items-center gap-2 text-xl font-bold tracking-tight text-[#183350]">
             {title}
             {locked && (
               <Lock

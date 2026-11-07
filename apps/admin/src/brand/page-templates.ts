@@ -41,6 +41,7 @@ export type ItemField =
   | "imageUrl"
   | "icon"
   | "backgroundColor"
+  | "backgroundImage"
   | "buttonText"
   | "buttonHref";
 

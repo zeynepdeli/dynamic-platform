@@ -1,7 +1,11 @@
 import { z } from "zod";
 
+import { imageUrlSchema, optionalHexColorSchema } from "./common";
+
 export const footerSchema = z.object({
   enabled: z.boolean(),
+  backgroundColor: optionalHexColorSchema,
+  backgroundImage: imageUrlSchema,
   description: z.string().trim().max(1000),
   copyright: z.string().trim().max(255),
   email: z.union([

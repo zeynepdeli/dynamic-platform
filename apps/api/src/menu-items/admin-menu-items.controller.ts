@@ -12,9 +12,11 @@ import {
 
 import { MenuItemsService } from './menu-items.service.js';
 
-import { CreateMenuItemDto } from './dto/create-menu-item.dto.js';
+import {
+  CreateMenuItemDto,
+  ReorderMenuDto,
+} from './dto/create-menu-item.dto.js';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto.js';
-import { ReorderWithParentDto } from '../common/reorder.js';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles/roles.guard.js';
@@ -38,8 +40,12 @@ export class AdminMenuItemsController {
 
   // DİKKAT: ':id' rotasından ÖNCE tanımlanmalı
   @Patch('reorder')
-  reorder(@Body() dto: ReorderWithParentDto) {
-    return this.menuItemsService.reorder(dto.parentId ?? null, dto.ids);
+  reorder(@Body() dto: ReorderMenuDto) {
+    return this.menuItemsService.reorder(
+      dto.location ?? 'HEADER',
+      dto.parentId ?? null,
+      dto.ids,
+    );
   }
 
   @Patch(':id')

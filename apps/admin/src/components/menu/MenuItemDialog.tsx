@@ -18,10 +18,7 @@ import { FormField } from "@/components/forms/FormField";
 import { FormSwitch } from "@/components/forms/FormSwitch";
 import { IconPicker } from "@/components/icons/IconPicker";
 
-import {
-  createMenuItemAction,
-  updateMenuItemAction,
-} from "@/app/actions/menu";
+import { createMenuItemAction, updateMenuItemAction } from "@/app/actions/menu";
 import {
   menuItemDefaultValues,
   menuItemSchema,
@@ -34,6 +31,7 @@ type MenuItemDialogProps =
   | {
       mode: "create";
       parents: ParentOption[];
+      location?: "HEADER" | "FOOTER";
       defaultParentId?: string;
       triggerLabel?: string;
     }
@@ -44,6 +42,7 @@ type MenuItemDialogProps =
       parents: ParentOption[];
       /** Alt menüsü olan öğe başka öğenin altına taşınamaz */
       hasChildren: boolean;
+      location?: "HEADER" | "FOOTER";
     };
 
 function MenuItemForm({
@@ -74,7 +73,7 @@ function MenuItemForm({
     setSubmitError(null);
     const result =
       props.mode === "create"
-        ? await createMenuItemAction(values)
+        ? await createMenuItemAction(values, props.location ?? "HEADER")
         : await updateMenuItemAction(props.itemId, values);
 
     if (!result.success) {
@@ -131,26 +130,28 @@ function MenuItemForm({
         required
       />
 
-      <label className="flex flex-col gap-2 text-sm font-medium">
-        Üst Menü
-        <select
-          {...register("parentId")}
-          disabled={parentLocked}
-          className="min-h-11 rounded-xl border border-border bg-surface px-3 text-sm disabled:opacity-60"
-        >
-          <option value="">— Üst seviye —</option>
-          {parentOptions.map((parent) => (
-            <option key={parent.id} value={parent.id}>
-              {parent.label}
-            </option>
-          ))}
-        </select>
-        {parentLocked && (
-          <span className="text-xs font-normal text-muted-foreground">
-            Alt menüsü olan bir öğe başka bir menünün altına taşınamaz.
-          </span>
-        )}
-      </label>
+      {props.location !== "FOOTER" && (
+        <label className="flex flex-col gap-2 text-sm font-medium">
+          Üst Menü
+          <select
+            {...register("parentId")}
+            disabled={parentLocked}
+            className="min-h-11 rounded-xl border border-border bg-surface px-3 text-sm disabled:opacity-60"
+          >
+            <option value="">— Üst seviye —</option>
+            {parentOptions.map((parent) => (
+              <option key={parent.id} value={parent.id}>
+                {parent.label}
+              </option>
+            ))}
+          </select>
+          {parentLocked && (
+            <span className="text-xs font-normal text-muted-foreground">
+              Alt menüsü olan bir öğe başka bir menünün altına taşınamaz.
+            </span>
+          )}
+        </label>
+      )}
 
       <FormSwitch
         name="visible"
@@ -206,7 +207,11 @@ export function MenuItemDialog(props: MenuItemDialogProps) {
           type="button"
           variant={props.defaultParentId ? "outline" : "default"}
           onClick={openDialog}
-          className={props.defaultParentId ? "h-8 gap-1.5 px-3 text-xs" : "min-h-11 gap-2 px-5 font-semibold"}
+          className={
+            props.defaultParentId
+              ? "h-8 gap-1.5 px-3 text-xs"
+              : "min-h-11 gap-2 px-5 font-semibold"
+          }
         >
           <Plus className={props.defaultParentId ? "size-3.5" : "size-4"} />
           {props.triggerLabel ?? "Yeni Menü Öğesi"}
@@ -227,7 +232,11 @@ export function MenuItemDialog(props: MenuItemDialogProps) {
         <DialogContent className="p-6 sm:max-w-lg sm:p-8">
           <DialogHeader>
             <DialogTitle className="text-xl">
-              {props.mode === "create" ? "Yeni Menü Öğesi" : "Menü Öğesini Düzenle"}
+              {props.mode === "create"
+                ? props.location === "FOOTER"
+                  ? "Yeni Footer Linki"
+                  : "Yeni Menü Linki"
+                : "Menü Linkini Düzenle"}
             </DialogTitle>
             <DialogDescription>
               Menüde görünecek başlığı ve bağlantıyı girin.

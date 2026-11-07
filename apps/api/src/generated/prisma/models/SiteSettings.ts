@@ -32,13 +32,19 @@ export type SiteSettingsMinAggregateOutputType = {
   faviconUrl: string | null
   primaryColor: string | null
   secondaryColor: string | null
-  backgroundType: $Enums.BackgroundType | null
   backgroundColor: string | null
   backgroundImage: string | null
+  headerBackgroundColor: string | null
+  headerBackgroundImage: string | null
+  headerButtonText: string | null
+  headerButtonHref: string | null
   homeBackgroundColor: string | null
   homeBackgroundImage: string | null
   metaTitle: string | null
   metaDescription: string | null
+  metaKeywords: string | null
+  ogImageUrl: string | null
+  allowIndexing: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,13 +57,19 @@ export type SiteSettingsMaxAggregateOutputType = {
   faviconUrl: string | null
   primaryColor: string | null
   secondaryColor: string | null
-  backgroundType: $Enums.BackgroundType | null
   backgroundColor: string | null
   backgroundImage: string | null
+  headerBackgroundColor: string | null
+  headerBackgroundImage: string | null
+  headerButtonText: string | null
+  headerButtonHref: string | null
   homeBackgroundColor: string | null
   homeBackgroundImage: string | null
   metaTitle: string | null
   metaDescription: string | null
+  metaKeywords: string | null
+  ogImageUrl: string | null
+  allowIndexing: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -70,13 +82,19 @@ export type SiteSettingsCountAggregateOutputType = {
   faviconUrl: number
   primaryColor: number
   secondaryColor: number
-  backgroundType: number
   backgroundColor: number
   backgroundImage: number
+  headerBackgroundColor: number
+  headerBackgroundImage: number
+  headerButtonText: number
+  headerButtonHref: number
   homeBackgroundColor: number
   homeBackgroundImage: number
   metaTitle: number
   metaDescription: number
+  metaKeywords: number
+  ogImageUrl: number
+  allowIndexing: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -91,13 +109,19 @@ export type SiteSettingsMinAggregateInputType = {
   faviconUrl?: true
   primaryColor?: true
   secondaryColor?: true
-  backgroundType?: true
   backgroundColor?: true
   backgroundImage?: true
+  headerBackgroundColor?: true
+  headerBackgroundImage?: true
+  headerButtonText?: true
+  headerButtonHref?: true
   homeBackgroundColor?: true
   homeBackgroundImage?: true
   metaTitle?: true
   metaDescription?: true
+  metaKeywords?: true
+  ogImageUrl?: true
+  allowIndexing?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -110,13 +134,19 @@ export type SiteSettingsMaxAggregateInputType = {
   faviconUrl?: true
   primaryColor?: true
   secondaryColor?: true
-  backgroundType?: true
   backgroundColor?: true
   backgroundImage?: true
+  headerBackgroundColor?: true
+  headerBackgroundImage?: true
+  headerButtonText?: true
+  headerButtonHref?: true
   homeBackgroundColor?: true
   homeBackgroundImage?: true
   metaTitle?: true
   metaDescription?: true
+  metaKeywords?: true
+  ogImageUrl?: true
+  allowIndexing?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -129,13 +159,19 @@ export type SiteSettingsCountAggregateInputType = {
   faviconUrl?: true
   primaryColor?: true
   secondaryColor?: true
-  backgroundType?: true
   backgroundColor?: true
   backgroundImage?: true
+  headerBackgroundColor?: true
+  headerBackgroundImage?: true
+  headerButtonText?: true
+  headerButtonHref?: true
   homeBackgroundColor?: true
   homeBackgroundImage?: true
   metaTitle?: true
   metaDescription?: true
+  metaKeywords?: true
+  ogImageUrl?: true
+  allowIndexing?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -221,13 +257,19 @@ export type SiteSettingsGroupByOutputType = {
   faviconUrl: string | null
   primaryColor: string
   secondaryColor: string
-  backgroundType: $Enums.BackgroundType
   backgroundColor: string
   backgroundImage: string | null
+  headerBackgroundColor: string | null
+  headerBackgroundImage: string | null
+  headerButtonText: string | null
+  headerButtonHref: string | null
   homeBackgroundColor: string | null
   homeBackgroundImage: string | null
   metaTitle: string | null
   metaDescription: string | null
+  metaKeywords: string | null
+  ogImageUrl: string | null
+  allowIndexing: boolean
   createdAt: Date
   updatedAt: Date
   _count: SiteSettingsCountAggregateOutputType | null
@@ -261,13 +303,19 @@ export type SiteSettingsWhereInput = {
   faviconUrl?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   primaryColor?: Prisma.StringFilter<"SiteSettings"> | string
   secondaryColor?: Prisma.StringFilter<"SiteSettings"> | string
-  backgroundType?: Prisma.EnumBackgroundTypeFilter<"SiteSettings"> | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFilter<"SiteSettings"> | string
   backgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerBackgroundColor?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerBackgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerButtonText?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerButtonHref?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   homeBackgroundColor?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   homeBackgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  metaKeywords?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  ogImageUrl?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  allowIndexing?: Prisma.BoolFilter<"SiteSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
 }
@@ -280,13 +328,19 @@ export type SiteSettingsOrderByWithRelationInput = {
   faviconUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   primaryColor?: Prisma.SortOrder
   secondaryColor?: Prisma.SortOrder
-  backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerBackgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerBackgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerButtonText?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerButtonHref?: Prisma.SortOrderInput | Prisma.SortOrder
   homeBackgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
   homeBackgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaKeywords?: Prisma.SortOrderInput | Prisma.SortOrder
+  ogImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  allowIndexing?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -302,13 +356,19 @@ export type SiteSettingsWhereUniqueInput = Prisma.AtLeast<{
   faviconUrl?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   primaryColor?: Prisma.StringFilter<"SiteSettings"> | string
   secondaryColor?: Prisma.StringFilter<"SiteSettings"> | string
-  backgroundType?: Prisma.EnumBackgroundTypeFilter<"SiteSettings"> | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFilter<"SiteSettings"> | string
   backgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerBackgroundColor?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerBackgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerButtonText?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  headerButtonHref?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   homeBackgroundColor?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   homeBackgroundImage?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  metaKeywords?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  ogImageUrl?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  allowIndexing?: Prisma.BoolFilter<"SiteSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
 }, "id">
@@ -321,13 +381,19 @@ export type SiteSettingsOrderByWithAggregationInput = {
   faviconUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   primaryColor?: Prisma.SortOrder
   secondaryColor?: Prisma.SortOrder
-  backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerBackgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerBackgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerButtonText?: Prisma.SortOrderInput | Prisma.SortOrder
+  headerButtonHref?: Prisma.SortOrderInput | Prisma.SortOrder
   homeBackgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
   homeBackgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaKeywords?: Prisma.SortOrderInput | Prisma.SortOrder
+  ogImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  allowIndexing?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SiteSettingsCountOrderByAggregateInput
@@ -346,13 +412,19 @@ export type SiteSettingsScalarWhereWithAggregatesInput = {
   faviconUrl?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   primaryColor?: Prisma.StringWithAggregatesFilter<"SiteSettings"> | string
   secondaryColor?: Prisma.StringWithAggregatesFilter<"SiteSettings"> | string
-  backgroundType?: Prisma.EnumBackgroundTypeWithAggregatesFilter<"SiteSettings"> | $Enums.BackgroundType
   backgroundColor?: Prisma.StringWithAggregatesFilter<"SiteSettings"> | string
   backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  headerBackgroundColor?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  headerBackgroundImage?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  headerButtonText?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  headerButtonHref?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   homeBackgroundColor?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   homeBackgroundImage?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   metaTitle?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   metaDescription?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  metaKeywords?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  ogImageUrl?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  allowIndexing?: Prisma.BoolWithAggregatesFilter<"SiteSettings"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSettings"> | Date | string
 }
@@ -365,13 +437,19 @@ export type SiteSettingsCreateInput = {
   faviconUrl?: string | null
   primaryColor?: string
   secondaryColor?: string
-  backgroundType?: $Enums.BackgroundType
   backgroundColor?: string
   backgroundImage?: string | null
+  headerBackgroundColor?: string | null
+  headerBackgroundImage?: string | null
+  headerButtonText?: string | null
+  headerButtonHref?: string | null
   homeBackgroundColor?: string | null
   homeBackgroundImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  metaKeywords?: string | null
+  ogImageUrl?: string | null
+  allowIndexing?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -384,13 +462,19 @@ export type SiteSettingsUncheckedCreateInput = {
   faviconUrl?: string | null
   primaryColor?: string
   secondaryColor?: string
-  backgroundType?: $Enums.BackgroundType
   backgroundColor?: string
   backgroundImage?: string | null
+  headerBackgroundColor?: string | null
+  headerBackgroundImage?: string | null
+  headerButtonText?: string | null
+  headerButtonHref?: string | null
   homeBackgroundColor?: string | null
   homeBackgroundImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  metaKeywords?: string | null
+  ogImageUrl?: string | null
+  allowIndexing?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -403,13 +487,19 @@ export type SiteSettingsUpdateInput = {
   faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
   secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
-  backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -422,13 +512,19 @@ export type SiteSettingsUncheckedUpdateInput = {
   faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
   secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
-  backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -441,13 +537,19 @@ export type SiteSettingsCreateManyInput = {
   faviconUrl?: string | null
   primaryColor?: string
   secondaryColor?: string
-  backgroundType?: $Enums.BackgroundType
   backgroundColor?: string
   backgroundImage?: string | null
+  headerBackgroundColor?: string | null
+  headerBackgroundImage?: string | null
+  headerButtonText?: string | null
+  headerButtonHref?: string | null
   homeBackgroundColor?: string | null
   homeBackgroundImage?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  metaKeywords?: string | null
+  ogImageUrl?: string | null
+  allowIndexing?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -460,13 +562,19 @@ export type SiteSettingsUpdateManyMutationInput = {
   faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
   secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
-  backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -479,13 +587,19 @@ export type SiteSettingsUncheckedUpdateManyInput = {
   faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
   secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
-  backgroundType?: Prisma.EnumBackgroundTypeFieldUpdateOperationsInput | $Enums.BackgroundType
   backgroundColor?: Prisma.StringFieldUpdateOperationsInput | string
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headerButtonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   homeBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -498,13 +612,19 @@ export type SiteSettingsCountOrderByAggregateInput = {
   faviconUrl?: Prisma.SortOrder
   primaryColor?: Prisma.SortOrder
   secondaryColor?: Prisma.SortOrder
-  backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  headerBackgroundColor?: Prisma.SortOrder
+  headerBackgroundImage?: Prisma.SortOrder
+  headerButtonText?: Prisma.SortOrder
+  headerButtonHref?: Prisma.SortOrder
   homeBackgroundColor?: Prisma.SortOrder
   homeBackgroundImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  metaKeywords?: Prisma.SortOrder
+  ogImageUrl?: Prisma.SortOrder
+  allowIndexing?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -517,13 +637,19 @@ export type SiteSettingsMaxOrderByAggregateInput = {
   faviconUrl?: Prisma.SortOrder
   primaryColor?: Prisma.SortOrder
   secondaryColor?: Prisma.SortOrder
-  backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  headerBackgroundColor?: Prisma.SortOrder
+  headerBackgroundImage?: Prisma.SortOrder
+  headerButtonText?: Prisma.SortOrder
+  headerButtonHref?: Prisma.SortOrder
   homeBackgroundColor?: Prisma.SortOrder
   homeBackgroundImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  metaKeywords?: Prisma.SortOrder
+  ogImageUrl?: Prisma.SortOrder
+  allowIndexing?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -536,13 +662,19 @@ export type SiteSettingsMinOrderByAggregateInput = {
   faviconUrl?: Prisma.SortOrder
   primaryColor?: Prisma.SortOrder
   secondaryColor?: Prisma.SortOrder
-  backgroundType?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  headerBackgroundColor?: Prisma.SortOrder
+  headerBackgroundImage?: Prisma.SortOrder
+  headerButtonText?: Prisma.SortOrder
+  headerButtonHref?: Prisma.SortOrder
   homeBackgroundColor?: Prisma.SortOrder
   homeBackgroundImage?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  metaKeywords?: Prisma.SortOrder
+  ogImageUrl?: Prisma.SortOrder
+  allowIndexing?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -555,8 +687,8 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type EnumBackgroundTypeFieldUpdateOperationsInput = {
-  set?: $Enums.BackgroundType
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -573,13 +705,19 @@ export type SiteSettingsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   faviconUrl?: boolean
   primaryColor?: boolean
   secondaryColor?: boolean
-  backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  headerBackgroundColor?: boolean
+  headerBackgroundImage?: boolean
+  headerButtonText?: boolean
+  headerButtonHref?: boolean
   homeBackgroundColor?: boolean
   homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
+  metaKeywords?: boolean
+  ogImageUrl?: boolean
+  allowIndexing?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -592,13 +730,19 @@ export type SiteSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   faviconUrl?: boolean
   primaryColor?: boolean
   secondaryColor?: boolean
-  backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  headerBackgroundColor?: boolean
+  headerBackgroundImage?: boolean
+  headerButtonText?: boolean
+  headerButtonHref?: boolean
   homeBackgroundColor?: boolean
   homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
+  metaKeywords?: boolean
+  ogImageUrl?: boolean
+  allowIndexing?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -611,13 +755,19 @@ export type SiteSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   faviconUrl?: boolean
   primaryColor?: boolean
   secondaryColor?: boolean
-  backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  headerBackgroundColor?: boolean
+  headerBackgroundImage?: boolean
+  headerButtonText?: boolean
+  headerButtonHref?: boolean
   homeBackgroundColor?: boolean
   homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
+  metaKeywords?: boolean
+  ogImageUrl?: boolean
+  allowIndexing?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -630,18 +780,24 @@ export type SiteSettingsSelectScalar = {
   faviconUrl?: boolean
   primaryColor?: boolean
   secondaryColor?: boolean
-  backgroundType?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  headerBackgroundColor?: boolean
+  headerBackgroundImage?: boolean
+  headerButtonText?: boolean
+  headerButtonHref?: boolean
   homeBackgroundColor?: boolean
   homeBackgroundImage?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
+  metaKeywords?: boolean
+  ogImageUrl?: boolean
+  allowIndexing?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundType" | "backgroundColor" | "backgroundImage" | "homeBackgroundColor" | "homeBackgroundImage" | "metaTitle" | "metaDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
+export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundColor" | "backgroundImage" | "headerBackgroundColor" | "headerBackgroundImage" | "headerButtonText" | "headerButtonHref" | "homeBackgroundColor" | "homeBackgroundImage" | "metaTitle" | "metaDescription" | "metaKeywords" | "ogImageUrl" | "allowIndexing" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
 
 export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SiteSettings"
@@ -654,13 +810,19 @@ export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     faviconUrl: string | null
     primaryColor: string
     secondaryColor: string
-    backgroundType: $Enums.BackgroundType
     backgroundColor: string
     backgroundImage: string | null
+    headerBackgroundColor: string | null
+    headerBackgroundImage: string | null
+    headerButtonText: string | null
+    headerButtonHref: string | null
     homeBackgroundColor: string | null
     homeBackgroundImage: string | null
     metaTitle: string | null
     metaDescription: string | null
+    metaKeywords: string | null
+    ogImageUrl: string | null
+    allowIndexing: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["siteSettings"]>
@@ -1093,13 +1255,19 @@ export interface SiteSettingsFieldRefs {
   readonly faviconUrl: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly primaryColor: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly secondaryColor: Prisma.FieldRef<"SiteSettings", 'String'>
-  readonly backgroundType: Prisma.FieldRef<"SiteSettings", 'BackgroundType'>
   readonly backgroundColor: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly backgroundImage: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly headerBackgroundColor: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly headerBackgroundImage: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly headerButtonText: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly headerButtonHref: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly homeBackgroundColor: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly homeBackgroundImage: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly metaTitle: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly metaDescription: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly metaKeywords: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly ogImageUrl: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly allowIndexing: Prisma.FieldRef<"SiteSettings", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"SiteSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SiteSettings", 'DateTime'>
 }

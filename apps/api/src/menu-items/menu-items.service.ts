@@ -6,6 +6,7 @@ import {
 
 import { assertSameIds } from '../common/reorder.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import type { MenuLocation } from '../generated/prisma/enums.js';
 
 import type { CreateMenuItemDto } from './dto/create-menu-item.dto.js';
 import type { UpdateMenuItemDto } from './dto/update-menu-item.dto.js';
@@ -60,8 +61,16 @@ export class MenuItemsService {
   }
 
   async create(dto: CreateMenuItemDto) {
+    const location = dto.location ?? 'HEADER';
+
     if (dto.parentId) {
-      await this.ensureValidParent(dto.parentId);
+      if (location === 'FOOTER') {
+        throw new BadRequestException('Footer linkleri tek seviyelidir.');
+      }
+      const parent = await this.ensureValidParent(dto.parentId);
+      if (parent.location !== location) {
+        throw new BadRequestException('Üst menü aynı konumda olmalı.');
+      }
     }
 
     const total = await this.prisma.menuItem.count();
@@ -73,7 +82,7 @@ export class MenuItemsService {
 
     // Varsayılan: aynı seviyenin en sonuna ekle
     const siblings = await this.prisma.menuItem.count({
-      where: { parentId: dto.parentId ?? null },
+      where: { parentId: dto.parentId ?? null, location },
     });
 
     return this.prisma.menuItem.create({
@@ -84,12 +93,13 @@ export class MenuItemsService {
         order: dto.order ?? siblings,
         visible: dto.visible ?? true,
         parentId: dto.parentId ?? null,
+        location,
       },
     });
   }
 
   async update(id: string, dto: UpdateMenuItemDto) {
-    await this.ensureExists(id);
+    const item = await this.ensureExists(id);
 
     if (dto.parentId !== undefined) {
       if (dto.parentId === id) {
@@ -97,7 +107,13 @@ export class MenuItemsService {
       }
 
       if (dto.parentId !== null) {
-        await this.ensureValidParent(dto.parentId);
+        if (item.location === 'FOOTER') {
+          throw new BadRequestException('Footer linkleri tek seviyelidir.');
+        }
+        const parent = await this.ensureValidParent(dto.parentId);
+        if (parent.location !== item.location) {
+          throw new BadRequestException('Üst menü aynı konumda olmalı.');
+        }
         await this.ensureNoCycle(id, dto.parentId);
 
         // Alt menüsü olan bir öğe başka bir öğenin altına taşınamaz
@@ -137,10 +153,15 @@ export class MenuItemsService {
     });
   }
 
-  // Aynı üst menünün altındaki öğeleri sırala (parentId = null → üst seviye)
-  async reorder(parentId: string | null, ids: string[]) {
+  // Aynı konum + aynı üst menünün altındaki öğeleri sırala
+  // (parentId = null → üst seviye)
+  async reorder(
+    location: MenuLocation,
+    parentId: string | null,
+    ids: string[],
+  ) {
     const siblings = await this.prisma.menuItem.findMany({
-      where: { parentId },
+      where: { parentId, location },
       select: { id: true },
     });
 

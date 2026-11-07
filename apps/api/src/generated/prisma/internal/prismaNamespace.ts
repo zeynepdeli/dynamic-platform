@@ -404,6 +404,7 @@ export const ModelName = {
   HeroSlide: 'HeroSlide',
   Media: 'Media',
   FooterSettings: 'FooterSettings',
+  ContactMessage: 'ContactMessage',
   SocialLink: 'SocialLink',
   Section: 'Section',
   SectionItem: 'SectionItem'
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "siteSettings" | "page" | "user" | "menuItem" | "heroSlide" | "media" | "footerSettings" | "socialLink" | "section" | "sectionItem"
+    modelProps: "siteSettings" | "page" | "user" | "menuItem" | "heroSlide" | "media" | "footerSettings" | "contactMessage" | "socialLink" | "section" | "sectionItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -944,6 +945,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ContactMessage: {
+      payload: Prisma.$ContactMessagePayload<ExtArgs>
+      fields: Prisma.ContactMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContactMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContactMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.ContactMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContactMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        findMany: {
+          args: Prisma.ContactMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>[]
+        }
+        create: {
+          args: Prisma.ContactMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        createMany: {
+          args: Prisma.ContactMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContactMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.ContactMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        update: {
+          args: Prisma.ContactMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ContactMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContactMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContactMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.ContactMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.ContactMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContactMessage>
+        }
+        groupBy: {
+          args: Prisma.ContactMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContactMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactMessageCountAggregateOutputType> | number
+        }
+      }
+    }
     SocialLink: {
       payload: Prisma.$SocialLinkPayload<ExtArgs>
       fields: Prisma.SocialLinkFieldRefs
@@ -1213,13 +1288,19 @@ export const SiteSettingsScalarFieldEnum = {
   faviconUrl: 'faviconUrl',
   primaryColor: 'primaryColor',
   secondaryColor: 'secondaryColor',
-  backgroundType: 'backgroundType',
   backgroundColor: 'backgroundColor',
   backgroundImage: 'backgroundImage',
+  headerBackgroundColor: 'headerBackgroundColor',
+  headerBackgroundImage: 'headerBackgroundImage',
+  headerButtonText: 'headerButtonText',
+  headerButtonHref: 'headerButtonHref',
   homeBackgroundColor: 'homeBackgroundColor',
   homeBackgroundImage: 'homeBackgroundImage',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
+  metaKeywords: 'metaKeywords',
+  ogImageUrl: 'ogImageUrl',
+  allowIndexing: 'allowIndexing',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1252,6 +1333,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   passwordHash: 'passwordHash',
+  passwordChangedAt: 'passwordChangedAt',
   role: 'role',
   active: 'active',
   createdAt: 'createdAt',
@@ -1266,6 +1348,7 @@ export const MenuItemScalarFieldEnum = {
   label: 'label',
   href: 'href',
   icon: 'icon',
+  location: 'location',
   order: 'order',
   visible: 'visible',
   parentId: 'parentId',
@@ -1315,11 +1398,27 @@ export const FooterSettingsScalarFieldEnum = {
   phone: 'phone',
   address: 'address',
   enabled: 'enabled',
+  backgroundColor: 'backgroundColor',
+  backgroundImage: 'backgroundImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type FooterSettingsScalarFieldEnum = (typeof FooterSettingsScalarFieldEnum)[keyof typeof FooterSettingsScalarFieldEnum]
+
+
+export const ContactMessageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  subject: 'subject',
+  message: 'message',
+  read: 'read',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
 
 
 export const SocialLinkScalarFieldEnum = {
@@ -1369,6 +1468,7 @@ export const SectionItemScalarFieldEnum = {
   buttonText: 'buttonText',
   buttonHref: 'buttonHref',
   backgroundColor: 'backgroundColor',
+  backgroundImage: 'backgroundImage',
   order: 'order',
   active: 'active',
   createdAt: 'createdAt',
@@ -1423,16 +1523,9 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'BackgroundType'
+ * Reference to a field of type 'Boolean'
  */
-export type EnumBackgroundTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BackgroundType'>
-    
-
-
-/**
- * Reference to a field of type 'BackgroundType[]'
- */
-export type ListEnumBackgroundTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BackgroundType[]'>
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1451,13 +1544,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
  * Reference to a field of type 'UserRole'
  */
 export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
@@ -1468,6 +1554,20 @@ export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'UserRole[]'
  */
 export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MenuLocation'
+ */
+export type EnumMenuLocationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MenuLocation'>
+    
+
+
+/**
+ * Reference to a field of type 'MenuLocation[]'
+ */
+export type ListEnumMenuLocationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MenuLocation[]'>
     
 
 
@@ -1670,6 +1770,7 @@ export type GlobalOmitConfig = {
   heroSlide?: Prisma.HeroSlideOmit
   media?: Prisma.MediaOmit
   footerSettings?: Prisma.FooterSettingsOmit
+  contactMessage?: Prisma.ContactMessageOmit
   socialLink?: Prisma.SocialLinkOmit
   section?: Prisma.SectionOmit
   sectionItem?: Prisma.SectionItemOmit

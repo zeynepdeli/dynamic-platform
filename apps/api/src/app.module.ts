@@ -14,6 +14,7 @@ import { SiteBootstrapModule } from './site-bootstrap/site-bootstrap.module.js';
 import { validateEnv } from './config/env.validation.js';
 import { SectionsModule } from './sections/sections.module.js';
 import { SocialLinksModule } from './social-links/social-links.module.js';
+import { ContactMessagesModule } from './contact-messages/contact-messages.module.js';
 
 @Module({
   imports: [
@@ -32,6 +33,12 @@ import { SocialLinksModule } from './social-links/social-links.module.js';
         ttl: 60000,
         limit: 100,
       },
+      {
+        // Saatlik üst sınır (iletişim formu gibi uçlar daha sıkı ayarlar)
+        name: 'long',
+        ttl: 3_600_000,
+        limit: 3000,
+      },
     ]),
 
     PrismaModule,
@@ -45,6 +52,7 @@ import { SocialLinksModule } from './social-links/social-links.module.js';
     SiteBootstrapModule,
     SectionsModule,
     SocialLinksModule,
+    ContactMessagesModule,
   ],
   providers: [
     {

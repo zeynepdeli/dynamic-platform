@@ -1,5 +1,6 @@
 import {
   Body,
+  Patch,
   Controller,
   Get,
   HttpCode,
@@ -14,6 +15,7 @@ import { Throttle } from '@nestjs/throttler';
 
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
+import { ChangePasswordDto } from './dto/change-password.dto.js';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard.js';
 
 @Controller('auth')
@@ -40,6 +42,19 @@ export class AuthController {
   })
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  // Kaba kuvvete karşı sıkı sınır
+  @Patch('password')
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  changePassword(@Req() request: Request, @Body() dto: ChangePasswordDto) {
+    const user = request.user as { id: string };
+    return this.authService.changePassword(
+      user.id,
+      dto.currentPassword,
+      dto.newPassword,
+    );
   }
 
   @Get('me')

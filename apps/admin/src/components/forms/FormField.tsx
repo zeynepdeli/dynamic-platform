@@ -26,6 +26,7 @@ type FormFieldProps<T extends FieldValues> = {
   type?: React.HTMLInputTypeAttribute;
   disabled?: boolean;
   required?: boolean;
+  autoComplete?: string;
 };
 
 export function FormField<T extends FieldValues>({
@@ -38,6 +39,7 @@ export function FormField<T extends FieldValues>({
   type = "text",
   disabled = false,
   required = false,
+  autoComplete,
 }: FormFieldProps<T>) {
   const id = String(name).replace(/\./g, "-");
   const errorId = `${id}-error`;
@@ -59,6 +61,7 @@ export function FormField<T extends FieldValues>({
         type={type}
         placeholder={placeholder}
         disabled={disabled}
+        autoComplete={autoComplete}
         aria-invalid={!!error}
         aria-required={required}
         aria-describedby={

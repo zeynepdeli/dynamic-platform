@@ -12,9 +12,10 @@ datasource db {
   provider = "postgresql"
 }
 
-enum BackgroundType {
-  COLOR
-  IMAGE
+// Menünün sitedeki yeri
+enum MenuLocation {
+  HEADER
+  FOOTER
 }
 
 model SiteSettings {
@@ -29,9 +30,15 @@ model SiteSettings {
   primaryColor   String @default("#183350")
   secondaryColor String @default("#346872")
 
-  backgroundType  BackgroundType @default(COLOR)
-  backgroundColor String         @default("#FFFFFF")
+  // Site arka planı: renk her zaman, fotoğraf varsa rengin üstünde
+  backgroundColor String  @default("#FFFFFF")
   backgroundImage String?
+
+  // Header: arka plan (boşsa ana renk) + isteğe bağlı buton
+  headerBackgroundColor String?
+  headerBackgroundImage String?
+  headerButtonText      String?
+  headerButtonHref      String?
 
   // Ana sayfaya özel arka plan (boşsa genel arka plan)
   homeBackgroundColor String?
@@ -39,6 +46,11 @@ model SiteSettings {
 
   metaTitle       String?
   metaDescription String?
+  metaKeywords    String?
+  // Paylaşımlarda görünen varsayılan görsel (OpenGraph)
+  ogImageUrl      String?
+  // false: tüm site arama motorlarına kapalı (yapım aşaması)
+  allowIndexing   Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,6 +88,8 @@ model User {
   id           String   @id @default(uuid())
   email        String   @unique
   passwordHash String
+  // Bu tarihten önce verilen oturumlar geçersiz (şifre değişince)
+  passwordChangedAt DateTime?
   role         UserRole @default(USER)
   active       Boolean  @default(true)
 
@@ -91,6 +105,9 @@ model MenuItem {
   // Whitelist anahtarı (common/icons.ts → MENU_ICON_KEYS). Boş = ikonsuz
   icon  String?
 
+  // HEADER: üst menü (2 seviye) · FOOTER: footer linkleri (tek seviye)
+  location MenuLocation @default(HEADER)
+
   order   Int     @default(0)
   visible Boolean @default(true)
 
@@ -101,7 +118,7 @@ model MenuItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([parentId, order])
+  @@index([location, parentId, order])
 }
 
 model HeroSlide {
@@ -150,8 +167,29 @@ model FooterSettings {
   address      String?
   enabled      Boolean @default(true)
 
+  backgroundColor String?
+  backgroundImage String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Sitedeki iletişim formundan gelen mesajlar
+model ContactMessage {
+  id String @id @default(uuid())
+
+  name    String
+  email   String
+  phone   String?
+  subject String?
+  message String
+
+  read Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([read, createdAt])
+  @@index([createdAt])
 }
 
 // Footer'daki sosyal medya bağlantıları (ikon + adres, sıralanabilir)
@@ -233,6 +271,7 @@ model SectionItem {
   buttonHref String?
 
   backgroundColor String? // Karta özel renk (#RRGGBB), boşsa bölüm/tema rengi
+  backgroundImage String? // Karta özel arka plan fotoğrafı
 
   order  Int     @default(0)
   active Boolean @default(true)

@@ -58,6 +58,7 @@ export const ModelName = {
   HeroSlide: 'HeroSlide',
   Media: 'Media',
   FooterSettings: 'FooterSettings',
+  ContactMessage: 'ContactMessage',
   SocialLink: 'SocialLink',
   Section: 'Section',
   SectionItem: 'SectionItem'
@@ -87,13 +88,19 @@ export const SiteSettingsScalarFieldEnum = {
   faviconUrl: 'faviconUrl',
   primaryColor: 'primaryColor',
   secondaryColor: 'secondaryColor',
-  backgroundType: 'backgroundType',
   backgroundColor: 'backgroundColor',
   backgroundImage: 'backgroundImage',
+  headerBackgroundColor: 'headerBackgroundColor',
+  headerBackgroundImage: 'headerBackgroundImage',
+  headerButtonText: 'headerButtonText',
+  headerButtonHref: 'headerButtonHref',
   homeBackgroundColor: 'homeBackgroundColor',
   homeBackgroundImage: 'homeBackgroundImage',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
+  metaKeywords: 'metaKeywords',
+  ogImageUrl: 'ogImageUrl',
+  allowIndexing: 'allowIndexing',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -126,6 +133,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   passwordHash: 'passwordHash',
+  passwordChangedAt: 'passwordChangedAt',
   role: 'role',
   active: 'active',
   createdAt: 'createdAt',
@@ -140,6 +148,7 @@ export const MenuItemScalarFieldEnum = {
   label: 'label',
   href: 'href',
   icon: 'icon',
+  location: 'location',
   order: 'order',
   visible: 'visible',
   parentId: 'parentId',
@@ -189,11 +198,27 @@ export const FooterSettingsScalarFieldEnum = {
   phone: 'phone',
   address: 'address',
   enabled: 'enabled',
+  backgroundColor: 'backgroundColor',
+  backgroundImage: 'backgroundImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type FooterSettingsScalarFieldEnum = (typeof FooterSettingsScalarFieldEnum)[keyof typeof FooterSettingsScalarFieldEnum]
+
+
+export const ContactMessageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  subject: 'subject',
+  message: 'message',
+  read: 'read',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
 
 
 export const SocialLinkScalarFieldEnum = {
@@ -243,6 +268,7 @@ export const SectionItemScalarFieldEnum = {
   buttonText: 'buttonText',
   buttonHref: 'buttonHref',
   backgroundColor: 'backgroundColor',
+  backgroundImage: 'backgroundImage',
   order: 'order',
   active: 'active',
   createdAt: 'createdAt',

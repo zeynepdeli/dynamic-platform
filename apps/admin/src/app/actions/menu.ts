@@ -11,6 +11,10 @@ import {
 const uuid = z.uuid();
 const idList = z.array(z.uuid()).max(100);
 const isUuid = (v: unknown): v is string => uuid.safeParse(v).success;
+const locationSchema = z.enum(["HEADER", "FOOTER"]);
+type MenuLocation = z.infer<typeof locationSchema>;
+const pathFor = (l: MenuLocation) =>
+  l === "FOOTER" ? "/areas/footer" : "/areas/header";
 
 function payload(v: MenuItemFormValues) {
   return {
@@ -24,18 +28,22 @@ function payload(v: MenuItemFormValues) {
 
 export async function createMenuItemAction(
   values: MenuItemFormValues,
+  location: MenuLocation = "HEADER",
 ): Promise<ActionResult> {
   const parsed = menuItemSchema.safeParse(values);
-  if (!parsed.success) return invalid();
+  const loc = locationSchema.safeParse(location);
+  if (!parsed.success || !loc.success) return invalid();
 
   const { parentId, ...rest } = payload(parsed.data);
+  // Footer linkleri tek seviyelidir
+  const parent = loc.data === "FOOTER" ? null : parentId;
 
   return sendToApi(
     "/admin/menu-items",
     "POST",
-    { ...rest, ...(parentId ? { parentId } : {}) },
+    { ...rest, location: loc.data, ...(parent ? { parentId: parent } : {}) },
     "Menü öğesi oluşturulamadı.",
-    "/areas/header",
+    pathFor(loc.data),
   );
 }
 
@@ -87,15 +95,18 @@ export async function deleteMenuItemAction(id: string): Promise<ActionResult> {
 export async function reorderMenuItemsAction(
   parentId: string | null,
   ids: string[],
+  location: MenuLocation = "HEADER",
 ): Promise<ActionResult> {
   if (parentId !== null && !isUuid(parentId)) return invalid();
   if (!idList.safeParse(ids).success) return invalid();
+  const loc = locationSchema.safeParse(location);
+  if (!loc.success) return invalid();
 
   return sendToApi(
     "/admin/menu-items/reorder",
     "PATCH",
-    { ids, ...(parentId ? { parentId } : {}) },
+    { ids, location: loc.data, ...(parentId ? { parentId } : {}) },
     "Sıralama kaydedilemedi.",
-    "/areas/header",
+    pathFor(loc.data),
   );
 }

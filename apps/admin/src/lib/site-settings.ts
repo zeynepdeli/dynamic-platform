@@ -1,7 +1,6 @@
 import "server-only";
 
 import { adminFetch } from "@/lib/api";
-import type { AppearanceFormValues } from "@/lib/validations/appearance.schema";
 
 export type SiteSettings = {
   siteName: string;
@@ -10,13 +9,19 @@ export type SiteSettings = {
   faviconUrl: string | null;
   primaryColor: string;
   secondaryColor: string;
-  backgroundType: "COLOR" | "IMAGE";
   backgroundColor: string;
   backgroundImage: string | null;
   homeBackgroundColor: string | null;
   homeBackgroundImage: string | null;
+  headerBackgroundColor: string | null;
+  headerBackgroundImage: string | null;
+  headerButtonText: string | null;
+  headerButtonHref: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  metaKeywords: string | null;
+  ogImageUrl: string | null;
+  allowIndexing: boolean;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -29,19 +34,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   return (await response.json()) as SiteSettings;
 }
 
-/** API'den gelen null değerleri form için boş string'e çevirir */
-export function toAppearanceFormValues(s: SiteSettings): AppearanceFormValues {
-  return {
-    siteName: s.siteName,
-    description: s.description ?? "",
-    logoUrl: s.logoUrl ?? "",
-    faviconUrl: s.faviconUrl ?? "",
-    primaryColor: s.primaryColor,
-    secondaryColor: s.secondaryColor,
-    backgroundType: s.backgroundType,
-    backgroundColor: s.backgroundColor,
-    backgroundImage: s.backgroundImage ?? "",
-    metaTitle: s.metaTitle ?? "",
-    metaDescription: s.metaDescription ?? "",
-  };
+/** API'deki null değerleri form için boş metne çevirir */
+export function pickSettings<K extends keyof SiteSettings>(s: SiteSettings, keys: K[]) {
+  return Object.fromEntries(keys.map((k) => [k, s[k] ?? ""])) as Record<K, string | boolean>;
 }

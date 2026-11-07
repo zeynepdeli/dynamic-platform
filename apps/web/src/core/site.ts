@@ -55,8 +55,13 @@ export async function getHome() {
 }
 
 /** Düz menü listesini 2 seviyeli ağaca çevirir */
-export function buildMenuTree(items: MenuItem[]): MenuNode[] {
-  const sorted = [...items].sort((a, b) => a.order - b.order);
+export function buildMenuTree(
+  items: MenuItem[],
+  location: MenuItem["location"] = "HEADER",
+): MenuNode[] {
+  const sorted = items
+    .filter((item) => (item.location ?? "HEADER") === location)
+    .sort((a, b) => a.order - b.order);
   return sorted
     .filter((item) => item.parentId === null)
     .map((root) => ({

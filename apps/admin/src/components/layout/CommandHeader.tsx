@@ -5,45 +5,39 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
-  Bell,
   Blocks,
   ChevronDown,
   CircleUserRound,
   Images,
+  Inbox,
   LayoutDashboard,
   LogOut,
   Menu,
-  Search,
+  UserCog,
   X,
 } from "lucide-react";
 
 import { logoutAdmin } from "@/app/actions";
 
-// Tek yönetim yeri: içerik Site Haritası'ndan, görseller Medya'dan
+// Üst menü: Dashboard (sitenin tüm parçaları), gelen mesajlar, medya
 const navigation = [
-  {
-    label: "Site Haritası",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    label: "Medya",
-    href: "/media",
-    icon: Images,
-  },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Gelen Mesajlar", href: "/messages", icon: Inbox },
+  { label: "Medya", href: "/media", icon: Images },
 ] as const;
 
-export default function CommandHeader() {
+export default function CommandHeader({ unread = 0 }: { unread?: number }) {
   const pathname = usePathname();
 
-  return <HeaderContent key={pathname} pathname={pathname} />;
+  return <HeaderContent key={pathname} pathname={pathname} unread={unread} />;
 }
 
 type HeaderContentProps = {
   pathname: string;
+  unread: number;
 };
 
-function HeaderContent({ pathname }: HeaderContentProps) {
+function HeaderContent({ pathname, unread }: HeaderContentProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -183,6 +177,11 @@ function HeaderContent({ pathname }: HeaderContentProps) {
                   />
 
                   <span>{item.label}</span>
+                  {item.href === "/messages" && unread > 0 && (
+                    <span className="rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-bold leading-none text-white" aria-label={`${unread} okunmamış`}>
+                      {unread > 99 ? "99+" : unread}
+                    </span>
+                  )}
                 </Link>
               );
             })}
@@ -190,28 +189,6 @@ function HeaderContent({ pathname }: HeaderContentProps) {
 
           {/* Sağ araçlar */}
           <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-            {/* Arama */}
-            <button
-              type="button"
-              aria-label="Arama (yakında)"
-              title="Arama yakında"
-              disabled
-              className="hidden size-10 items-center justify-center rounded-xl text-muted-foreground opacity-50 sm:flex"
-            >
-              <Search size={19} />
-            </button>
-
-            {/* Bildirimler */}
-            <button
-              type="button"
-              aria-label="Bildirimler (yakında)"
-              title="Bildirimler yakında"
-              disabled
-              className="hidden size-10 items-center justify-center rounded-xl text-muted-foreground opacity-50 sm:flex"
-            >
-              <Bell size={19} />
-            </button>
-
             {/* Profil menüsü */}
             <div ref={profileRef} className="relative">
               <button
@@ -251,12 +228,20 @@ function HeaderContent({ pathname }: HeaderContentProps) {
                       </p>
 
                       <p className="text-xs text-muted-foreground">
-                        Dynamic Platform · ADMIN
+                        Yönetici
                       </p>
                     </div>
                   </div>
 
-                  <form action={logoutAdmin} className="mt-2">
+                  <Link
+                    href="/account"
+                    className="mt-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-foreground transition-colors hover:bg-surface-muted"
+                  >
+                    <UserCog size={17} />
+                    Hesap Ayarları
+                  </Link>
+
+                  <form action={logoutAdmin}>
                     <button
                       type="submit"
                       className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"

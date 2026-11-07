@@ -58,7 +58,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/menu", destination: "/areas/header", permanent: false },
       { source: "/settings", destination: "/areas/footer", permanent: false },
-      { source: "/appearance", destination: "/areas/general", permanent: false },
+      { source: "/appearance", destination: "/areas/theme", permanent: false },
+      { source: "/areas/general", destination: "/areas/seo", permanent: false },
       { source: "/hero-slides", destination: "/pages/home/slider", permanent: false },
       { source: "/pages", destination: "/dashboard", permanent: false },
     ];
