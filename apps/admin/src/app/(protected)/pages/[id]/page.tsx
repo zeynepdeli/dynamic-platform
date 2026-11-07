@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DeletePageDialog } from "@/components/pages/DeletePageDialog";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Home, LayoutGrid } from "lucide-react";
 import { z } from "zod";
@@ -72,11 +73,14 @@ export default async function PageEditor({ params }: PageEditorProps) {
                 )}
               </h1>
               <p className="text-sm text-muted-foreground">
-                Sayfanın tüm alanları aşağıda. Üstteki çubukla bölümler arasında geçebilir, web görünümünü en alttan açabilirsiniz.
+                Bu sayfaya ait her şey burada. Header, footer ve renkler Site Haritası&apos;ndaki ortak alanlardan düzenlenir.
               </p>
             </div>
           </div>
         </div>
+        {!isHome && (
+          <DeletePageDialog pageId={(page as Page).id} pageTitle={title} redirectTo="/dashboard" />
+        )}
       </div>
 
       <VisualPageEditor

@@ -32,7 +32,7 @@ export async function createSocialLinkAction(
     "POST",
     payload(parsed.data),
     "Bağlantı eklenemedi.",
-    "/settings",
+    "/areas/footer",
   );
 }
 
@@ -48,7 +48,7 @@ export async function updateSocialLinkAction(
     "PATCH",
     payload(parsed.data),
     "Bağlantı güncellenemedi.",
-    "/settings",
+    "/areas/footer",
   );
 }
 
@@ -59,7 +59,7 @@ export async function deleteSocialLinkAction(id: string): Promise<ActionResult> 
     "DELETE",
     undefined,
     "Bağlantı silinemedi.",
-    "/settings",
+    "/areas/footer",
   );
 }
 
@@ -73,6 +73,6 @@ export async function reorderSocialLinksAction(ids: string[]): Promise<ActionRes
     "PATCH",
     { ids: parsed.data },
     "Sıralama kaydedilemedi.",
-    "/settings",
+    "/areas/footer",
   );
 }

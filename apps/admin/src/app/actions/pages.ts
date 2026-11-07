@@ -112,7 +112,7 @@ export async function createPageAction(
       };
     }
 
-    revalidatePath("/pages");
+    revalidatePath("/dashboard");
 
     return { success: true };
   } catch {
@@ -180,7 +180,7 @@ export async function updatePageAction(
       };
     }
 
-    revalidatePath("/pages");
+    revalidatePath("/dashboard");
     revalidatePath(`/pages/${id}`);
 
     return { success: true };
@@ -302,7 +302,7 @@ export async function deletePageAction(
       };
     }
 
-    revalidatePath("/pages");
+    revalidatePath("/dashboard");
 
     return { success: true };
   } catch {
@@ -381,7 +381,7 @@ export async function restorePageAction(id: string): Promise<PageActionResult> {
       };
     }
 
-    revalidatePath("/pages");
+    revalidatePath("/dashboard");
     revalidatePath("/pages/trash");
 
     return { success: true };

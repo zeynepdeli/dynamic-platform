@@ -7,6 +7,7 @@ import {
   useState,
   useTransition,
 } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowDown,
@@ -23,18 +24,11 @@ import {
 
 import { ConfirmDeleteDialog } from "@/components/common/ConfirmDeleteDialog";
 import { swapIds } from "@/components/common/OrderButtons";
-import { MenuItemDialog } from "@/components/menu/MenuItemDialog";
-import { MenuTree } from "@/components/menu/MenuTree";
-import {
-  HeaderBrandingForm,
-  type Branding,
-} from "@/components/outline/HeaderBlock";
+import type { Branding } from "@/components/outline/HeaderBlock";
 import { InlineItems } from "@/components/outline/InlineItems";
 import { PageInfoForm } from "@/components/outline/PageInfoForm";
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
 import { SectionForm } from "@/components/sections/SectionForm";
-import { FooterForm } from "@/components/settings/FooterForm";
-import { SocialLinksEditor } from "@/components/settings/SocialLinksEditor";
 import type { SocialLink } from "@/lib/validations/social-link.schema";
 import { CanvasBlock } from "@/components/visual/CanvasBlock";
 import { BackgroundForm } from "@/components/visual/panels/BackgroundForm";
@@ -73,10 +67,8 @@ import {
 } from "@/lib/validations/section.schema";
 
 type Selection =
-  | "header"
   | "hero"
   | "page"
-  | "footer"
   | "new"
   | "background"
   | `s:${string}`;
@@ -113,8 +105,6 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
   );
 
   // Kaydedilmemiş canlı değerler (yalnızca seçili blok için)
-  const [brandingDraft, setBrandingDraft] = useState<Branding | null>(null);
-  const [footerDraft, setFooterDraft] = useState<FooterFormValues | null>(null);
   const [sectionDrafts, setSectionDrafts] = useState<
     Record<string, SectionFormValues>
   >({});
@@ -159,8 +149,8 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     return () => observer.disconnect();
   }, [sections.length, showNew]);
 
-  const branding = brandingDraft ?? props.branding;
-  const footer = footerDraft ?? props.footer;
+  const branding = props.branding;
+  const footer = props.footer;
   const background = backgroundDraft ?? props.background;
   const pageBgColor = safeColor(background.backgroundColor) ?? theme.background;
   const pageBgImage = safeImage(background.backgroundImage, theme.mediaBaseUrl);
@@ -202,31 +192,6 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
 
   // ───────────── Sağ panel ─────────────
   function renderPanel(selected: Selection) {
-    if (selected === "header") {
-      return (
-        <Panel title="Header" hint="Logo, site adı ve menü" shared>
-          <HeaderBrandingForm
-            initialValues={props.branding}
-            mediaBaseUrl={theme.mediaBaseUrl}
-            onValuesChange={setBrandingDraft}
-          />
-          <div className="mt-8 space-y-4 border-t border-border pt-6">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-sm font-semibold">Menü</p>
-              <MenuItemDialog
-                mode="create"
-                parents={props.menuTree.map((n) => ({
-                  id: n.id,
-                  label: n.label,
-                }))}
-              />
-            </div>
-            <MenuTree tree={props.menuTree} />
-          </div>
-        </Panel>
-      );
-    }
-
     if (selected === "hero") {
       return (
         <Panel
@@ -271,22 +236,6 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
           hint="Başlık, adres, içerik, SEO ve yayın durumu"
         >
           <PageInfoForm pageId={pageId} initialData={props.pageInfo} />
-        </Panel>
-      );
-    }
-
-    if (selected === "footer") {
-      return (
-        <Panel title="Footer" hint="İletişim, sosyal medya, telif" shared>
-          <div className="grid gap-8 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <FooterForm
-              initialValues={props.footer}
-              onValuesChange={setFooterDraft}
-            />
-            <div className="h-fit rounded-2xl border border-border bg-card p-6">
-              <SocialLinksEditor links={props.socialLinks} />
-            </div>
-          </div>
         </Panel>
       );
     }
@@ -466,7 +415,6 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
     shared?: boolean;
     icon?: React.ReactNode;
   }[] = [
-    { id: "header", label: "Header", shared: true },
     isHome
       ? { id: "hero", label: "Slider" }
       : { id: "page", label: "Sayfa Bilgileri" },
@@ -475,7 +423,6 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
       label: sectionTitle(section),
       hidden: !section.active,
     })),
-    { id: "footer", label: "Footer", shared: true },
   ];
 
   return (
@@ -688,11 +635,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                     className="absolute inset-0 -z-10 size-full object-cover"
                   />
                 )}
-                <CanvasBlock
-                  label="Header · ortak"
-                  selected={selected === "header"}
-                  onSelect={() => selectAndScroll("header")}
-                >
+                <SharedPreviewBlock href="/areas/header" label="Header">
                   <PreviewHeader
                     theme={theme}
                     siteName={branding.siteName}
@@ -704,7 +647,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                       hasChildren: n.children.length > 0,
                     }))}
                   />
-                </CanvasBlock>
+                </SharedPreviewBlock>
 
                 {isHome ? (
                   <CanvasBlock
@@ -799,23 +742,43 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                   </button>
                 )}
 
-                <CanvasBlock
-                  label="Footer · ortak"
-                  selected={selected === "footer"}
-                  onSelect={() => selectAndScroll("footer")}
-                >
+                <SharedPreviewBlock href="/areas/footer" label="Footer">
                   <PreviewFooter
                     theme={theme}
                     siteName={branding.siteName}
                     values={footer}
                     socialLinks={props.socialLinks}
                   />
-                </CanvasBlock>
+                </SharedPreviewBlock>
               </div>
             </div>
           </>
         )}
       </section>
+    </div>
+  );
+}
+
+/** Önizlemede ortak alan (Header/Footer): burada düzenlenmez, kendi ekranına götürür */
+function SharedPreviewBlock({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="group/shared relative">
+      {children}
+      <Link
+        href={href}
+        className="absolute right-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-1.5 rounded-lg bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#183350] opacity-0 shadow-md ring-1 ring-black/10 transition group-hover/shared:opacity-100 focus-visible:opacity-100"
+      >
+        <Link2 className="size-3.5" />
+        {label} ortak alandır · Düzenle
+      </Link>
     </div>
   );
 }

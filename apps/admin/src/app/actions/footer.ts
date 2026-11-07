@@ -27,6 +27,6 @@ export async function updateFooterAction(
       address: emptyToNull(v.address),
     },
     "Ayarlar kaydedilemedi.",
-    "/settings",
+    "/areas/footer",
   );
 }

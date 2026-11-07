@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLiveValues } from "@/lib/hooks/use-live-values";
 import { useForm } from "react-hook-form";
-import { CheckCircle2, Loader2, Palette, Save } from "lucide-react";
+import { CheckCircle2, Loader2, Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/forms/FormField";
@@ -92,13 +91,7 @@ export function HeaderBrandingForm({
             Kaydedildi
           </span>
         )}
-        <Link
-          href="/appearance"
-          className="mr-auto inline-flex items-center gap-1.5 text-sm font-medium text-[#346872] hover:underline"
-        >
-          <Palette className="size-4" />
-          Renkler ve arka plan
-        </Link>
+        <span className="mr-auto" />
         <Button
           type="submit"
           disabled={isSubmitting || !isDirty}

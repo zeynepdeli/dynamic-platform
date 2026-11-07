@@ -42,7 +42,7 @@ export async function createHeroSlideAction(
     "POST",
     body,
     "Slider oluşturulamadı.",
-    "/hero-slides",
+    "/pages/home",
   );
 }
 
@@ -60,7 +60,7 @@ export async function updateHeroSlideAction(
     "PATCH",
     payload(parsed.data),
     "Slider güncellenemedi.",
-    "/hero-slides",
+    "/pages/home",
   );
 }
 
@@ -75,7 +75,7 @@ export async function setHeroSlideActiveAction(
     "PATCH",
     { active },
     "Slider güncellenemedi.",
-    "/hero-slides",
+    "/pages/home",
   );
 }
 
@@ -87,7 +87,7 @@ export async function deleteHeroSlideAction(id: string): Promise<ActionResult> {
     "DELETE",
     undefined,
     "Slider silinemedi.",
-    "/hero-slides",
+    "/pages/home",
   );
 }
 
@@ -101,6 +101,6 @@ export async function reorderHeroSlidesAction(
     "PATCH",
     { ids },
     "Sıralama kaydedilemedi.",
-    "/hero-slides",
+    "/pages/home",
   );
 }

@@ -25,11 +25,10 @@ export async function updateAppearanceAction(
 
   const v = parsed.data;
 
-  // Yalnızca bilinen alanları gönder (fazladan alan sızmaz)
+  // Yalnızca bilinen alanları gönder (fazladan alan sızmaz).
+  // Site adı ve logo yalnızca Header ekranından değişir (tek kaynak).
   const payload = {
-    siteName: v.siteName,
     description: emptyToNull(v.description),
-    logoUrl: emptyToNull(v.logoUrl),
     faviconUrl: emptyToNull(v.faviconUrl),
     primaryColor: v.primaryColor,
     secondaryColor: v.secondaryColor,
@@ -53,7 +52,7 @@ export async function updateAppearanceAction(
       };
     }
 
-    revalidatePath("/appearance");
+    revalidatePath("/areas/general");
     return { success: true };
   } catch (error) {
     return {

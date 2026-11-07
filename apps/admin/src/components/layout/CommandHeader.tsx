@@ -9,21 +9,17 @@ import {
   Blocks,
   ChevronDown,
   CircleUserRound,
-  Files,
   Images,
   LayoutDashboard,
-  ListTree,
   LogOut,
   Menu,
-  Palette,
-  PanelsTopLeft,
   Search,
-  Settings2,
   X,
 } from "lucide-react";
 
 import { logoutAdmin } from "@/app/actions";
 
+// Tek yönetim yeri: içerik Site Haritası'ndan, görseller Medya'dan
 const navigation = [
   {
     label: "Site Haritası",
@@ -31,34 +27,9 @@ const navigation = [
     icon: LayoutDashboard,
   },
   {
-    label: "Sayfalar",
-    href: "/pages",
-    icon: Files,
-  },
-  {
-    label: "Menüler",
-    href: "/menu",
-    icon: ListTree,
-  },
-  {
-    label: "Slider",
-    href: "/hero-slides",
-    icon: PanelsTopLeft,
-  },
-  {
-    label: "Görünüm",
-    href: "/appearance",
-    icon: Palette,
-  },
-  {
     label: "Medya",
     href: "/media",
     icon: Images,
-  },
-  {
-    label: "Ayarlar",
-    href: "/settings",
-    icon: Settings2,
   },
 ] as const;
 

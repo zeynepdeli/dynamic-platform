@@ -53,6 +53,16 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  // Eski adresler → tek yönetim yeri (yer imleri bozulmasın)
+  async redirects() {
+    return [
+      { source: "/menu", destination: "/areas/header", permanent: false },
+      { source: "/settings", destination: "/areas/footer", permanent: false },
+      { source: "/appearance", destination: "/areas/general", permanent: false },
+      { source: "/hero-slides", destination: "/pages/home", permanent: false },
+      { source: "/pages", destination: "/dashboard", permanent: false },
+    ];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
