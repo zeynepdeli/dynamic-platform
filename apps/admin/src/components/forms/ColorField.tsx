@@ -21,6 +21,8 @@ type ColorFieldProps<T extends FieldValues> = {
   label: string;
   control: Control<T>;
   description?: string;
+  /** Boş bırakılabilir mi? (boş = tema/otomatik renk) */
+  allowEmpty?: boolean;
 };
 
 // Renk seçici + elle yazılabilen #RRGGBB alanı (ikisi senkron)
@@ -29,6 +31,7 @@ export function ColorField<T extends FieldValues>({
   label,
   control,
   description,
+  allowEmpty = false,
 }: ColorFieldProps<T>) {
   const id = String(name).replace(/\./g, "-");
   const errorId = `${id}-error`;
@@ -46,14 +49,26 @@ export function ColorField<T extends FieldValues>({
             <FieldLabel htmlFor={id}>{label}</FieldLabel>
 
             <div className="flex items-center gap-3">
-              <input
-                type="color"
-                aria-label={`${label} seçici`}
-                // Geçersiz değer yazılırken seçici bozulmasın
-                value={isValid ? value.toLowerCase() : "#000000"}
-                onChange={(event) => field.onChange(event.target.value)}
-                className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-border bg-transparent p-1"
-              />
+              {allowEmpty && value === "" ? (
+                // Boş = tema/otomatik renk. Siyah göstermek yanıltıcı olurdu.
+                <button
+                  type="button"
+                  onClick={() => field.onChange("#ffffff")}
+                  aria-label={`${label} için renk seç`}
+                  className="flex h-11 w-14 shrink-0 items-center justify-center rounded-lg border border-dashed border-border text-lg text-muted-foreground hover:bg-surface-muted"
+                >
+                  +
+                </button>
+              ) : (
+                <input
+                  type="color"
+                  aria-label={`${label} seçici`}
+                  // Geçersiz değer yazılırken seçici bozulmasın
+                  value={isValid ? value.toLowerCase() : "#000000"}
+                  onChange={(event) => field.onChange(event.target.value)}
+                  className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-border bg-transparent p-1"
+                />
+              )}
 
               <Input
                 id={id}
@@ -63,13 +78,25 @@ export function ColorField<T extends FieldValues>({
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 maxLength={7}
-                placeholder="#183350"
+                placeholder={allowEmpty ? "Otomatik" : "#183350"}
                 spellCheck={false}
                 autoComplete="off"
                 aria-invalid={!!fieldState.error}
                 aria-describedby={fieldState.error ? errorId : undefined}
-                className="font-mono uppercase"
+                className="font-mono uppercase placeholder:normal-case"
               />
+
+              {allowEmpty && value !== "" && (
+                <button
+                  type="button"
+                  onClick={() => field.onChange("")}
+                  aria-label={`${label} temizle`}
+                  title="Temizle (otomatik renge dön)"
+                  className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-surface-muted hover:text-foreground"
+                >
+                  ×
+                </button>
+              )}
             </div>
 
             {description && !fieldState.error && (

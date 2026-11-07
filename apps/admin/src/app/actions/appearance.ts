@@ -3,7 +3,9 @@
 import { revalidatePath } from "next/cache";
 
 import { ApiError, adminFetch, apiErrorMessage } from "@/lib/api";
-import { emptyToNull } from "@/lib/validations/common";
+import { z } from "zod";
+
+import { emptyToNull, imageUrlSchema } from "@/lib/validations/common";
 import {
   appearanceSchema,
   type AppearanceFormValues,
@@ -60,6 +62,48 @@ export async function updateAppearanceAction(
         error instanceof ApiError
           ? error.message
           : "Beklenmeyen bir hata oluştu.",
+    };
+  }
+}
+
+// Header bloğu için: yalnızca site adı ve logo (diğer ayarlara dokunmaz)
+// (refine içeren şemada .pick() kullanılamaz; alanlar ayrıca tanımlanır)
+const brandingSchema = z.object({
+  siteName: z.string().trim().min(1, "Site adı boş olamaz.").max(150),
+  logoUrl: imageUrlSchema,
+});
+
+export async function updateBrandingAction(values: {
+  siteName: string;
+  logoUrl: string;
+}): Promise<ActionResult> {
+  const parsed = brandingSchema.safeParse(values);
+  if (!parsed.success) {
+    return { success: false, error: "Form bilgilerini kontrol edin." };
+  }
+
+  try {
+    const response = await adminFetch("/admin/site-settings", {
+      method: "PATCH",
+      body: JSON.stringify({
+        siteName: parsed.data.siteName,
+        logoUrl: emptyToNull(parsed.data.logoUrl),
+      }),
+    });
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: apiErrorMessage(response.status, "Kaydedilemedi."),
+      };
+    }
+
+    revalidatePath("/", "layout");
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof ApiError ? error.message : "Beklenmeyen bir hata oluştu.",
     };
   }
 }

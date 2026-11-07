@@ -26,7 +26,7 @@ import { logoutAdmin } from "@/app/actions";
 
 const navigation = [
   {
-    label: "Genel Bakış",
+    label: "Site Haritası",
     href: "/dashboard",
     icon: LayoutDashboard,
   },

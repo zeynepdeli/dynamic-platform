@@ -22,6 +22,35 @@ import type { SectionType } from "@/lib/validations/section.schema";
  * kontrolü her zaman API'de yapılır.
  */
 
+/** Bölüm formundaki alanlar */
+export type SectionField =
+  | "title"
+  | "subtitle"
+  | "body"
+  | "backgroundColor"
+  | "textColor"
+  | "backgroundImage"
+  | "buttonText"
+  | "buttonHref"
+  | "columns";
+
+/** Kart formundaki alanlar */
+export type ItemField =
+  | "title"
+  | "description"
+  | "imageUrl"
+  | "icon"
+  | "backgroundColor"
+  | "buttonText"
+  | "buttonHref";
+
+/**
+ * Alan adlarını tasarıma göre değiştir ya da gizle:
+ *   { backgroundImage: "Vizyon Ana Görsel", textColor: false }
+ * string → alanın admin'deki adı, false → alan gizlenir.
+ */
+export type FieldConfig<F extends string> = Partial<Record<F, string | false>>;
+
 export type TemplateSection = {
   /** Frontend'in bölümü bulduğu anahtar. Sayfa içinde benzersiz olmalı. */
   key: string;
@@ -32,9 +61,17 @@ export type TemplateSection = {
   hint?: string;
   /** true (varsayılan): silinemez, tipi ve anahtarı değiştirilemez */
   locked?: boolean;
+  /** Bölüm alanlarının adları / gizlenecek alanlar */
+  fields?: FieldConfig<SectionField>;
+  /** Kart alanlarının adları / gizlenecek alanlar (Kart bölümlerinde) */
+  itemFields?: FieldConfig<ItemField>;
+  /** Kartlara verilecek ad (ör. "Değer", "Hizmet"). Varsayılan: "Kart" */
+  itemLabel?: string;
 };
 
 export type PageTemplate = {
+  /** Dashboard'da sayfa kartının altında görünen açıklama */
+  description?: string;
   sections: TemplateSection[];
   /** Şablon dışında serbest bölüm eklenebilsin mi? (varsayılan: true) */
   allowExtraSections?: boolean;
@@ -56,11 +93,29 @@ export const pageTemplates: Record<string, PageTemplate> = {
   // },
   //
   // hakkimizda: {
+  //   description: "Vizyon, misyon ve değerlerimiz",
   //   allowExtraSections: false,
   //   sections: [
-  //     { key: "vizyon", label: "Vizyonumuz", type: "IMAGE_TEXT" },
+  //     {
+  //       key: "vizyon",
+  //       label: "Vizyonumuz",
+  //       type: "IMAGE_TEXT",
+  //       // Alan adları tasarıma göre; gereksizler gizli
+  //       fields: {
+  //         backgroundImage: "Vizyon Ana Görsel",
+  //         body: "Vizyon Metni",
+  //         subtitle: false,
+  //         textColor: false,
+  //       },
+  //     },
   //     { key: "misyon", label: "Misyonumuz", type: "IMAGE_TEXT" },
-  //     { key: "degerler", label: "Değerlerimiz", type: "CARDS" },
+  //     {
+  //       key: "degerler",
+  //       label: "Değerlerimiz",
+  //       type: "CARDS",
+  //       itemLabel: "Değer",
+  //       itemFields: { imageUrl: "Mini Görsel", buttonText: false, buttonHref: false },
+  //     },
   //   ],
   // },
 };
