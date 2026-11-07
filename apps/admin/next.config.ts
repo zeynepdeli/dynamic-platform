@@ -59,7 +59,7 @@ const nextConfig: NextConfig = {
       { source: "/menu", destination: "/areas/header", permanent: false },
       { source: "/settings", destination: "/areas/footer", permanent: false },
       { source: "/appearance", destination: "/areas/general", permanent: false },
-      { source: "/hero-slides", destination: "/pages/home", permanent: false },
+      { source: "/hero-slides", destination: "/pages/home/slider", permanent: false },
       { source: "/pages", destination: "/dashboard", permanent: false },
     ];
   },
