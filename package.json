@@ -2,9 +2,21 @@
   "name": "dynamic-platform",
   "version": "1.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "dev:api": "pnpm --filter api start:dev",
+    "dev:admin": "pnpm --filter admin dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm --filter api test",
+    "test:e2e": "playwright test",
+    "typecheck": "pnpm -r exec tsc --noEmit"
+  },
   "engines": {
     "node": ">=24 <25"
   },
-  "packageManager": "pnpm@10.34.5"
+  "packageManager": "pnpm@10.34.5",
+  "devDependencies": {
+    "@playwright/test": "^1.65.0"
+  }
 }
