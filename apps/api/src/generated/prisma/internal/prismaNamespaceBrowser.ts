@@ -58,6 +58,7 @@ export const ModelName = {
   HeroSlide: 'HeroSlide',
   Media: 'Media',
   FooterSettings: 'FooterSettings',
+  RefreshSession: 'RefreshSession',
   ContactMessage: 'ContactMessage',
   SocialLink: 'SocialLink',
   Section: 'Section',
@@ -101,6 +102,7 @@ export const SiteSettingsScalarFieldEnum = {
   metaKeywords: 'metaKeywords',
   ogImageUrl: 'ogImageUrl',
   allowIndexing: 'allowIndexing',
+  gaMeasurementId: 'gaMeasurementId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -184,6 +186,7 @@ export const MediaScalarFieldEnum = {
   mimeType: 'mimeType',
   size: 'size',
   url: 'url',
+  alt: 'alt',
   createdAt: 'createdAt'
 } as const
 
@@ -205,6 +208,19 @@ export const FooterSettingsScalarFieldEnum = {
 } as const
 
 export type FooterSettingsScalarFieldEnum = (typeof FooterSettingsScalarFieldEnum)[keyof typeof FooterSettingsScalarFieldEnum]
+
+
+export const RefreshSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  absoluteExpiresAt: 'absoluteExpiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RefreshSessionScalarFieldEnum = (typeof RefreshSessionScalarFieldEnum)[keyof typeof RefreshSessionScalarFieldEnum]
 
 
 export const ContactMessageScalarFieldEnum = {

@@ -1,8 +1,16 @@
 "use server";
 
 import { cookies } from "next/headers";
-import type { LoginResponse, AdminUser } from "@/lib/auth";
+import type { AdminUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import {
+  ACCESS_COOKIE,
+  REFRESH_COOKIE,
+  REFRESH_MAX_AGE,
+  accessMaxAge,
+  cookieOptions,
+  isTokenPair,
+} from "@/lib/session-cookies";
 
 export type LoginResult = {
   success: boolean;
@@ -39,7 +47,10 @@ export async function loginAdmin(
       };
     }
 
-    const data = (await response.json()) as LoginResponse;
+    const data: unknown = await response.json();
+    if (!isTokenPair(data)) {
+      return { success: false, error: "Sunucu beklenmeyen bir yanıt verdi." };
+    }
 
     // Kullanıcının ADMIN yetkisini backend üzerinden doğrula.
     const profileResponse = await fetch(`${apiUrl}/auth/me`, {
@@ -67,13 +78,16 @@ export async function loginAdmin(
 
     const cookieStore = await cookies();
 
-    cookieStore.set("admin_session", data.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-      maxAge: data.expiresIn,
-    });
+    cookieStore.set(
+      ACCESS_COOKIE,
+      data.accessToken,
+      cookieOptions(accessMaxAge(data.expiresIn)),
+    );
+    cookieStore.set(
+      REFRESH_COOKIE,
+      data.refreshToken,
+      cookieOptions(REFRESH_MAX_AGE),
+    );
 
     return { success: true };
   } catch {
@@ -86,8 +100,20 @@ export async function loginAdmin(
 
 export async function logoutAdmin(): Promise<void> {
   const cookieStore = await cookies();
+  const refreshToken = cookieStore.get(REFRESH_COOKIE)?.value;
 
-  cookieStore.delete("admin_session");
+  // Sunucudaki oturumu da kapat (çerez çalınmış olsa bile işe yaramaz)
+  if (refreshToken && process.env.API_URL) {
+    await fetch(`${process.env.API_URL}/auth/logout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+      cache: "no-store",
+    }).catch(() => undefined);
+  }
+
+  cookieStore.delete(ACCESS_COOKIE);
+  cookieStore.delete(REFRESH_COOKIE);
 
   redirect("/login");
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@/components/site/Analytics";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { getSite } from "@/core/site";
@@ -66,6 +67,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer footer={footer} settings={settings} socialLinks={socialLinks} menuItems={menuItems} />
+        <Analytics measurementId={settings.gaMeasurementId} />
       </body>
     </html>
   );

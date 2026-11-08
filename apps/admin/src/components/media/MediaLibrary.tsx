@@ -1,5 +1,7 @@
 "use client";
 
+import { mediaSrc } from "@/lib/media-src";
+import { MediaAltField } from "./MediaAltField";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Copy, ImageIcon, Loader2, Upload } from "lucide-react";
@@ -134,8 +136,8 @@ export function MediaLibrary({ files, mediaBaseUrl }: MediaLibraryProps) {
               <div className="relative flex aspect-square items-center justify-center bg-surface-muted">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={`${mediaBaseUrl}${file.url}`}
-                  alt={file.originalName}
+                  src={mediaSrc(file.url, mediaBaseUrl)}
+                  alt={file.alt || file.originalName}
                   loading="lazy"
                   className="size-full object-contain"
                 />
@@ -148,12 +150,16 @@ export function MediaLibrary({ files, mediaBaseUrl }: MediaLibraryProps) {
 
               <div className="space-y-2 p-3">
                 {/* Dosya adı kullanıcıdan gelir: React metni kaçışlar (XSS yok) */}
-                <p className="truncate text-sm font-medium" title={file.originalName}>
+                <p
+                  className="truncate text-sm font-medium"
+                  title={file.originalName}
+                >
                   {file.originalName}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {formatSize(file.size)}
                 </p>
+                <MediaAltField id={file.id} initial={file.alt ?? ""} />
 
                 <div className="flex items-center gap-2">
                   <Button

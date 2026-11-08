@@ -103,6 +103,11 @@ export class UpdateSiteSettingsDto {
   @IsBoolean()
   allowIndexing?: boolean;
 
+  // Yalnızca GA4 ölçüm kimliği; script/HTML kabul edilmez
+  @ValidateIf(notNull)
+  @Matches(/^G-[A-Z0-9]{4,15}$/, { message: 'Ölçüm kimliği G-XXXXXXX biçiminde olmalı.' })
+  gaMeasurementId?: string | null;
+
   // ───── Ana sayfaya özel arka plan (null = genel arka plan) ─────
   @ValidateIf(notNull)
   @Matches(HEX_COLOR_REGEX, { message: HEX_COLOR_MESSAGE })

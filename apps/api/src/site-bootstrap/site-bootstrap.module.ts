@@ -7,6 +7,7 @@ import { SiteBootstrapController } from './site-bootstrap.controller.js';
 import { SiteBootstrapService } from './site-bootstrap.service.js';
 import { SectionsModule } from '../sections/sections.module.js';
 import { SocialLinksModule } from '../social-links/social-links.module.js';
+import { MediaModule } from '../media/media.module.js';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SocialLinksModule } from '../social-links/social-links.module.js';
     FooterSettingsModule,
     SectionsModule,
     SocialLinksModule,
+    MediaModule,
   ],
   controllers: [SiteBootstrapController],
   providers: [SiteBootstrapService],

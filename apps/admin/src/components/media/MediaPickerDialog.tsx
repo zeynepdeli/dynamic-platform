@@ -1,5 +1,6 @@
 "use client";
 
+import { mediaSrc } from "@/lib/media-src";
 import { useState, useTransition } from "react";
 import { Check, ImageIcon, Images, Loader2 } from "lucide-react";
 
@@ -99,7 +100,7 @@ export function MediaPickerDialog({
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={`${mediaBaseUrl}${file.url}`}
+                        src={mediaSrc(file.url, mediaBaseUrl)}
                         alt=""
                         loading="lazy"
                         className="size-full object-contain p-1"

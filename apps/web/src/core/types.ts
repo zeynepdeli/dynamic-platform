@@ -20,6 +20,7 @@ export type SiteSettings = {
   metaKeywords: string | null;
   ogImageUrl: string | null;
   allowIndexing: boolean;
+  gaMeasurementId: string | null;
 };
 
 export type MenuItem = {
@@ -115,4 +116,6 @@ export type SiteBootstrap = {
   footer: FooterSettings;
   homeSections: Section[];
   socialLinks: SocialLink[];
+  /** Görsel adresi → açıklama (admin → Medya) */
+  mediaAlts: Record<string, string>;
 };

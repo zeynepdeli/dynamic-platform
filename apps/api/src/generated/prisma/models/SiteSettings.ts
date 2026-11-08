@@ -45,6 +45,7 @@ export type SiteSettingsMinAggregateOutputType = {
   metaKeywords: string | null
   ogImageUrl: string | null
   allowIndexing: boolean | null
+  gaMeasurementId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -70,6 +71,7 @@ export type SiteSettingsMaxAggregateOutputType = {
   metaKeywords: string | null
   ogImageUrl: string | null
   allowIndexing: boolean | null
+  gaMeasurementId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -95,6 +97,7 @@ export type SiteSettingsCountAggregateOutputType = {
   metaKeywords: number
   ogImageUrl: number
   allowIndexing: number
+  gaMeasurementId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -122,6 +125,7 @@ export type SiteSettingsMinAggregateInputType = {
   metaKeywords?: true
   ogImageUrl?: true
   allowIndexing?: true
+  gaMeasurementId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -147,6 +151,7 @@ export type SiteSettingsMaxAggregateInputType = {
   metaKeywords?: true
   ogImageUrl?: true
   allowIndexing?: true
+  gaMeasurementId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -172,6 +177,7 @@ export type SiteSettingsCountAggregateInputType = {
   metaKeywords?: true
   ogImageUrl?: true
   allowIndexing?: true
+  gaMeasurementId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -270,6 +276,7 @@ export type SiteSettingsGroupByOutputType = {
   metaKeywords: string | null
   ogImageUrl: string | null
   allowIndexing: boolean
+  gaMeasurementId: string | null
   createdAt: Date
   updatedAt: Date
   _count: SiteSettingsCountAggregateOutputType | null
@@ -316,6 +323,7 @@ export type SiteSettingsWhereInput = {
   metaKeywords?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   ogImageUrl?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   allowIndexing?: Prisma.BoolFilter<"SiteSettings"> | boolean
+  gaMeasurementId?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
 }
@@ -341,6 +349,7 @@ export type SiteSettingsOrderByWithRelationInput = {
   metaKeywords?: Prisma.SortOrderInput | Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   allowIndexing?: Prisma.SortOrder
+  gaMeasurementId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -369,6 +378,7 @@ export type SiteSettingsWhereUniqueInput = Prisma.AtLeast<{
   metaKeywords?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   ogImageUrl?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   allowIndexing?: Prisma.BoolFilter<"SiteSettings"> | boolean
+  gaMeasurementId?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
 }, "id">
@@ -394,6 +404,7 @@ export type SiteSettingsOrderByWithAggregationInput = {
   metaKeywords?: Prisma.SortOrderInput | Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   allowIndexing?: Prisma.SortOrder
+  gaMeasurementId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SiteSettingsCountOrderByAggregateInput
@@ -425,6 +436,7 @@ export type SiteSettingsScalarWhereWithAggregatesInput = {
   metaKeywords?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   ogImageUrl?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   allowIndexing?: Prisma.BoolWithAggregatesFilter<"SiteSettings"> | boolean
+  gaMeasurementId?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSettings"> | Date | string
 }
@@ -450,6 +462,7 @@ export type SiteSettingsCreateInput = {
   metaKeywords?: string | null
   ogImageUrl?: string | null
   allowIndexing?: boolean
+  gaMeasurementId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -475,6 +488,7 @@ export type SiteSettingsUncheckedCreateInput = {
   metaKeywords?: string | null
   ogImageUrl?: string | null
   allowIndexing?: boolean
+  gaMeasurementId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -500,6 +514,7 @@ export type SiteSettingsUpdateInput = {
   metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -525,6 +540,7 @@ export type SiteSettingsUncheckedUpdateInput = {
   metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -550,6 +566,7 @@ export type SiteSettingsCreateManyInput = {
   metaKeywords?: string | null
   ogImageUrl?: string | null
   allowIndexing?: boolean
+  gaMeasurementId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -575,6 +592,7 @@ export type SiteSettingsUpdateManyMutationInput = {
   metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -600,6 +618,7 @@ export type SiteSettingsUncheckedUpdateManyInput = {
   metaKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -625,6 +644,7 @@ export type SiteSettingsCountOrderByAggregateInput = {
   metaKeywords?: Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrder
   allowIndexing?: Prisma.SortOrder
+  gaMeasurementId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -650,6 +670,7 @@ export type SiteSettingsMaxOrderByAggregateInput = {
   metaKeywords?: Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrder
   allowIndexing?: Prisma.SortOrder
+  gaMeasurementId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -675,6 +696,7 @@ export type SiteSettingsMinOrderByAggregateInput = {
   metaKeywords?: Prisma.SortOrder
   ogImageUrl?: Prisma.SortOrder
   allowIndexing?: Prisma.SortOrder
+  gaMeasurementId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -718,6 +740,7 @@ export type SiteSettingsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   metaKeywords?: boolean
   ogImageUrl?: boolean
   allowIndexing?: boolean
+  gaMeasurementId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -743,6 +766,7 @@ export type SiteSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   metaKeywords?: boolean
   ogImageUrl?: boolean
   allowIndexing?: boolean
+  gaMeasurementId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -768,6 +792,7 @@ export type SiteSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   metaKeywords?: boolean
   ogImageUrl?: boolean
   allowIndexing?: boolean
+  gaMeasurementId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -793,11 +818,12 @@ export type SiteSettingsSelectScalar = {
   metaKeywords?: boolean
   ogImageUrl?: boolean
   allowIndexing?: boolean
+  gaMeasurementId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundColor" | "backgroundImage" | "headerBackgroundColor" | "headerBackgroundImage" | "headerButtonText" | "headerButtonHref" | "homeBackgroundColor" | "homeBackgroundImage" | "metaTitle" | "metaDescription" | "metaKeywords" | "ogImageUrl" | "allowIndexing" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
+export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundColor" | "backgroundImage" | "headerBackgroundColor" | "headerBackgroundImage" | "headerButtonText" | "headerButtonHref" | "homeBackgroundColor" | "homeBackgroundImage" | "metaTitle" | "metaDescription" | "metaKeywords" | "ogImageUrl" | "allowIndexing" | "gaMeasurementId" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
 
 export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SiteSettings"
@@ -823,6 +849,7 @@ export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     metaKeywords: string | null
     ogImageUrl: string | null
     allowIndexing: boolean
+    gaMeasurementId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["siteSettings"]>
@@ -1268,6 +1295,7 @@ export interface SiteSettingsFieldRefs {
   readonly metaKeywords: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly ogImageUrl: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly allowIndexing: Prisma.FieldRef<"SiteSettings", 'Boolean'>
+  readonly gaMeasurementId: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly createdAt: Prisma.FieldRef<"SiteSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SiteSettings", 'DateTime'>
 }

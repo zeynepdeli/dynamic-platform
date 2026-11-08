@@ -22,6 +22,7 @@ export type SiteSettings = {
   metaKeywords: string | null;
   ogImageUrl: string | null;
   allowIndexing: boolean;
+  gaMeasurementId: string | null;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {

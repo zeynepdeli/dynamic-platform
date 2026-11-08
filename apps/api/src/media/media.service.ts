@@ -1,16 +1,15 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { mkdir, rename, unlink, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
 
 import { PrismaService } from '../prisma/prisma.service.js';
 import { MediaFileValidatorService } from './media-file-validator.service.js';
+import { MEDIA_STORAGE, type MediaStorage } from './storage/media-storage.js';
 
 export type MediaUploadInput = {
   originalName: string;
@@ -21,11 +20,10 @@ export type MediaUploadInput = {
 export class MediaService {
   private readonly logger = new Logger(MediaService.name);
 
-  private readonly storageDirectory = join(process.cwd(), 'storage', 'media');
-
   constructor(
     private readonly prisma: PrismaService,
     private readonly fileValidator: MediaFileValidatorService,
+    @Inject(MEDIA_STORAGE) private readonly storage: MediaStorage,
   ) {}
 
   // En fazla bu kadar kayıt döner (yanıt boyutu / DoS sınırı)
@@ -108,24 +106,19 @@ export class MediaService {
     ];
 
     return new Set(
-      urls.filter((url): url is string => !!url && url.startsWith('/media/')),
+      // Yerel (/media/...) ve Cloudinary adresleri
+      urls.filter((url): url is string => !!url),
     );
   }
 
   async upload(input: MediaUploadInput) {
     const validated = await this.fileValidator.validate(input.buffer);
 
-    const storageKey = `${randomUUID()}.${validated.extension}`;
-    const filePath = join(this.storageDirectory, storageKey);
-    const url = `/media/${storageKey}`;
-
-    await mkdir(this.storageDirectory, {
-      recursive: true,
-    });
-
-    await writeFile(filePath, validated.buffer, {
-      flag: 'wx',
-      mode: 0o600,
+    const { storageKey, url } = await this.storage.save({
+      id: randomUUID(),
+      extension: validated.extension,
+      buffer: validated.buffer,
+      mimeType: validated.mimeType,
     });
 
     try {
@@ -139,26 +132,37 @@ export class MediaService {
         },
       });
     } catch (error) {
-      try {
-        await unlink(filePath);
-      } catch (cleanupError) {
+      // Kayıt oluşmadıysa yüklenen dosyayı geri al
+      await this.storage.remove(storageKey).catch((cleanupError: unknown) =>
         this.logger.error(
-          `Yükleme başarısız oldu ve medya dosyası temizlenemedi: ${storageKey}`,
-          cleanupError instanceof Error
-            ? cleanupError.stack
-            : String(cleanupError),
-        );
-      }
-
+          `Yükleme başarısız oldu ve dosya temizlenemedi: ${storageKey}`,
+          cleanupError instanceof Error ? cleanupError.stack : String(cleanupError),
+        ),
+      );
       throw error;
     }
   }
 
-  async remove(id: string) {
-    const media = await this.prisma.media.findUnique({
-      where: { id },
-    });
+  /** Görsel açıklaması (alt metni) */
+  async updateAlt(id: string, alt: string | null) {
+    const media = await this.prisma.media.findUnique({ where: { id }, select: { id: true } });
+    if (!media) throw new NotFoundException('Medya dosyası bulunamadı.');
+    return this.prisma.media.update({ where: { id }, data: { alt: alt?.trim() || null } });
+  }
 
+  /** Sitede görselin açıklamasını bulmak için adres → alt eşlemesi */
+  async findAltMap(): Promise<Record<string, string>> {
+    const rows = await this.prisma.media.findMany({
+      where: { alt: { not: null } },
+      select: { url: true, alt: true },
+      orderBy: { createdAt: 'desc' },
+      take: 2000,
+    });
+    return Object.fromEntries(rows.map((r) => [r.url, r.alt as string]));
+  }
+
+  async remove(id: string) {
+    const media = await this.prisma.media.findUnique({ where: { id } });
     if (!media) {
       throw new NotFoundException('Medya dosyası bulunamadı.');
     }
@@ -171,63 +175,18 @@ export class MediaService {
       );
     }
 
-    const filePath = join(this.storageDirectory, media.storageKey);
-    const temporaryPath = `${filePath}.${randomUUID()}.deleting`;
-
-    let fileMoved = false;
-
+    // Önce kayıt: dosya silinemezse sitede kırık kayıt kalmaz, yalnızca
+    // sahipsiz bir dosya kalır (loglanır).
+    await this.prisma.media.delete({ where: { id } });
     try {
-      await rename(filePath, temporaryPath);
-      fileMoved = true;
+      await this.storage.remove(media.storageKey);
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
-        throw error;
-      }
+      this.logger.error(
+        `Medya kaydı silindi ama dosya silinemedi: ${media.storageKey}`,
+        error instanceof Error ? error.stack : String(error),
+      );
     }
 
-    try {
-      await this.prisma.media.delete({
-        where: { id },
-      });
-    } catch (error) {
-      if (fileMoved) {
-        try {
-          await rename(temporaryPath, filePath);
-        } catch (restoreError) {
-          this.logger.error(
-            `Medya dosyası geri yüklenemedi. Medya ID: ${id}. Geçici dosya: ${temporaryPath}`,
-            restoreError instanceof Error
-              ? restoreError.stack
-              : String(restoreError),
-          );
-
-          throw new InternalServerErrorException(
-            'Medya silme işlemi başarısız oldu ve dosya geri yüklenemedi.',
-          );
-        }
-      }
-
-      throw error;
-    }
-
-    if (fileMoved) {
-      try {
-        await unlink(temporaryPath);
-      } catch (error) {
-        this.logger.error(
-          `Medya veritabanından silindi ancak geçici dosya temizlenemedi: ${temporaryPath}`,
-          error instanceof Error ? error.stack : String(error),
-        );
-
-        throw new InternalServerErrorException(
-          'Medya kaydı silindi ancak dosya temizleme işlemi tamamlanamadı.',
-        );
-      }
-    }
-
-    return {
-      id: media.id,
-      deleted: true,
-    };
+    return { id: media.id, deleted: true };
   }
 }

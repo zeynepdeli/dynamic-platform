@@ -1,5 +1,6 @@
 import { readableTextColor, safeColor, safeImageSrc } from "@/core/safe";
 import type { Section } from "@/core/types";
+import { altFor } from "@/core/site";
 
 import { CardIcon } from "./icons";
 import { SectionButton } from "./SectionButton";
@@ -14,13 +15,14 @@ const GRID: Record<number, string> = {
 };
 
 // ✏️ MÜŞTERİYE ÖZEL: Kart ızgarası tasarımı
-export function CardsSection({ section }: { section: Section }) {
+export async function CardsSection({ section }: { section: Section }) {
+  const alts = await Promise.all(section.items.map((item) => altFor(item.imageUrl)));
   return (
     <SectionShell section={section}>
       <PlainText text={section.body} className="mb-10 max-w-3xl" />
 
       <ul className={`grid gap-6 ${GRID[section.columns] ?? GRID[3]}`}>
-        {section.items.map((item) => {
+        {section.items.map((item, index) => {
           const image = safeImageSrc(item.imageUrl);
           const bg = safeColor(item.backgroundColor);
           const bgImage = safeImageSrc(item.backgroundImage);
@@ -37,7 +39,7 @@ export function CardsSection({ section }: { section: Section }) {
               )}
               {image && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={image} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                <img src={image} alt={alts[index]} loading="lazy" className="aspect-[4/3] w-full object-cover" />
               )}
               <div className="flex flex-1 flex-col gap-3 p-6">
                 <CardIcon name={item.icon} className="size-8 text-secondary" />

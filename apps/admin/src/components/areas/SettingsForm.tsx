@@ -1,5 +1,6 @@
 "use client";
 
+import { useUnsavedChanges } from "@/lib/hooks/use-unsaved-changes";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Control, type UseFormRegister, type FieldErrors } from "react-hook-form";
@@ -67,6 +68,9 @@ export function SettingsForm({
     resolver: zodResolver(settingsSchemas[group] as never),
     defaultValues: initialValues,
   });
+
+  // Kaydetmeden çıkılırsa uyar
+  useUnsavedChanges(isDirty && !isSubmitting);
 
   async function submit(values: AnySettingsValues) {
     setError(null);

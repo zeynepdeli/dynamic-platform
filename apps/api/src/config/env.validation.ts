@@ -21,8 +21,29 @@ const envSchema = z
 
     // API önünde kaç adet güvenilir proxy var (0 = yok).
     TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
+
+    // Görsellerin saklanacağı yer: local (sunucu diski) | cloudinary
+    MEDIA_STORAGE: z.enum(['local', 'cloudinary']).default('local'),
+    CLOUDINARY_CLOUD_NAME: z
+      .string()
+      .regex(/^[a-z0-9_-]{1,64}$/i, 'CLOUDINARY_CLOUD_NAME geçersiz')
+      .optional(),
+    CLOUDINARY_API_KEY: z.string().regex(/^\d{6,20}$/, 'CLOUDINARY_API_KEY geçersiz').optional(),
+    CLOUDINARY_API_SECRET: z.string().min(10).optional(),
+    CLOUDINARY_FOLDER: z
+      .string()
+      .regex(/^[a-z0-9_-]{1,64}$/i, 'CLOUDINARY_FOLDER yalnızca harf, rakam, - ve _ içerebilir')
+      .default('dynamic-platform'),
   })
   .superRefine((env, ctx) => {
+    if (env.MEDIA_STORAGE === 'cloudinary') {
+      for (const key of ['CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'] as const) {
+        if (!env[key]) {
+          ctx.addIssue({ code: 'custom', path: [key], message: `MEDIA_STORAGE=cloudinary için ${key} zorunludur` });
+        }
+      }
+    }
+
     if (
       env.NODE_ENV === 'production' &&
       !env.FRONTEND_URL.startsWith('https://')

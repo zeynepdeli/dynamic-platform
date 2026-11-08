@@ -51,6 +51,8 @@ model SiteSettings {
   ogImageUrl      String?
   // false: tüm site arama motorlarına kapalı (yapım aşaması)
   allowIndexing   Boolean @default(true)
+  // Google Analytics 4 ölçüm kimliği (yalnızca G-XXXXXXX; serbest kod YOK)
+  gaMeasurementId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -90,6 +92,8 @@ model User {
   passwordHash String
   // Bu tarihten önce verilen oturumlar geçersiz (şifre değişince)
   passwordChangedAt DateTime?
+
+  sessions RefreshSession[]
   role         UserRole @default(USER)
   active       Boolean  @default(true)
 
@@ -153,6 +157,9 @@ model Media {
 
   url String
 
+  // Görselin açıklaması (erişilebilirlik ve SEO için <img alt>)
+  alt String?
+
   createdAt DateTime @default(now())
 
   @@index([createdAt])
@@ -172,6 +179,28 @@ model FooterSettings {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Yönetici oturumları: kısa ömürlü JWT + dönen (rotating) yenileme anahtarı.
+// Anahtarın kendisi değil SHA-256 özeti saklanır.
+model RefreshSession {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokenHash String @unique
+
+  // Kullanılmadan geçebilecek süre (her yenilemede uzar)
+  expiresAt         DateTime
+  // Hiçbir şekilde aşılamayan üst sınır
+  absoluteExpiresAt DateTime
+  // Yenilenince/çıkış yapılınca dolar; tekrar kullanılırsa çalınma şüphesi
+  revokedAt         DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 // Sitedeki iletişim formundan gelen mesajlar
