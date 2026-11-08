@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ImageIcon, MapPin, PlayCircle } from "lucide-react";
 
 import type { FooterFormValues } from "@/lib/validations/footer.schema";
 import type { SocialLink } from "@/lib/validations/social-link.schema";
@@ -240,6 +240,83 @@ export function PreviewSection({
         <div className={`space-y-4 ${isCta ? "mx-auto flex max-w-xl flex-col items-center" : ""}`}>
           {heading}
           {values.body && <p className="max-w-2xl whitespace-pre-line text-sm leading-7 opacity-90">{values.body}</p>}
+
+          {values.type === "FAQ" && (
+            <div className="divide-y divide-current/15 rounded-xl border border-current/15 bg-white/60 text-neutral-900">
+              {items.length === 0 && <p className="p-4 text-xs opacity-60">Henüz soru yok</p>}
+              {items.map((item, i) => (
+                <div key={item.id} className={`p-4 ${item.active ? "" : "opacity-40"}`}>
+                  <p className="flex items-center justify-between text-sm font-semibold">
+                    {item.title}
+                    <ChevronDown className={`size-4 ${i === 0 ? "rotate-180" : ""}`} />
+                  </p>
+                  {i === 0 && item.description && <p className="mt-2 whitespace-pre-line text-xs leading-5 opacity-75">{item.description}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {values.type === "GALLERY" && (
+            <div className={`grid gap-3 pt-2 ${GRID[values.columns] ?? GRID[3]}`}>
+              {items.length === 0 && <p className="text-xs opacity-60">Henüz görsel yok</p>}
+              {items.map((item) => {
+                const src = image(item.imageUrl, theme.mediaBaseUrl);
+                return (
+                  <figure key={item.id} className={item.active ? "" : "opacity-40"}>
+                    {src ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={src} alt="" className="aspect-square w-full rounded-lg object-cover" />
+                    ) : (
+                      <div className="flex aspect-square items-center justify-center rounded-lg bg-black/5">
+                        <ImageIcon className="size-5 opacity-40" />
+                      </div>
+                    )}
+                    {item.title && <figcaption className="mt-1 text-xs opacity-75">{item.title}</figcaption>}
+                  </figure>
+                );
+              })}
+            </div>
+          )}
+
+          {values.type === "STATS" && (
+            <div className={`grid gap-4 pt-2 text-center ${GRID[values.columns] ?? GRID[3]}`}>
+              {items.length === 0 && <p className="text-xs opacity-60">Henüz sayı yok</p>}
+              {items.map((item) => (
+                <div key={item.id} className={item.active ? "" : "opacity-40"}>
+                  <p className="text-3xl font-bold" style={{ color: values.textColor ? undefined : theme.secondary }}>{item.title}</p>
+                  {item.description && <p className="text-xs opacity-75">{item.description}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {values.type === "VIDEO" && (
+            <div className="flex aspect-video w-full max-w-2xl items-center justify-center rounded-xl bg-black text-white/80">
+              <span className="flex items-center gap-2 text-sm">
+                <PlayCircle className="size-8" />
+                {values.videoUrl ? "Video" : "Video adresi girilmedi"}
+              </span>
+            </div>
+          )}
+
+          {values.type === "MAP" && (
+            <div className="flex aspect-[16/7] w-full items-center justify-center rounded-xl bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200">
+              <span className="flex items-center gap-2 text-sm">
+                <MapPin className="size-5" />
+                {values.mapAddress || "Adres girilmedi"}
+              </span>
+            </div>
+          )}
+
+          {values.type === "CONTACT_FORM" && (
+            <div className="grid max-w-2xl gap-3 rounded-xl bg-white/70 p-5 text-neutral-500 ring-1 ring-black/5 sm:grid-cols-2">
+              {["Adınız", "E-posta", "Telefon", "Konu"].map((f) => (
+                <div key={f} className="h-9 rounded-lg border border-neutral-200 px-3 text-xs leading-9">{f}</div>
+              ))}
+              <div className="h-20 rounded-lg border border-neutral-200 px-3 pt-2 text-xs sm:col-span-2">Mesajınız</div>
+              <span className="w-fit rounded-lg px-4 py-2 text-xs font-semibold" style={{ backgroundColor: theme.secondary, color: readable(theme.secondary) }}>Gönder</span>
+            </div>
+          )}
 
           {values.type === "CARDS" && (
             <div className={`grid gap-4 pt-2 ${GRID[values.columns] ?? GRID[3]}`}>

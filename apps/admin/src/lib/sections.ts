@@ -36,6 +36,8 @@ export type Section = {
   buttonText: string | null;
   buttonHref: string | null;
   columns: number;
+  videoUrl: string | null;
+  mapAddress: string | null;
   order: number;
   active: boolean;
   items: SectionItem[];
@@ -70,6 +72,8 @@ export function toSectionFormValues(section: Section): SectionFormValues {
     buttonText: section.buttonText ?? "",
     buttonHref: section.buttonHref ?? "",
     columns: section.columns,
+    videoUrl: section.videoUrl ?? "",
+    mapAddress: section.mapAddress ?? "",
     active: section.active,
   };
 }

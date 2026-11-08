@@ -49,6 +49,8 @@ export type SectionMinAggregateOutputType = {
   textColor: string | null
   buttonText: string | null
   buttonHref: string | null
+  videoUrl: string | null
+  mapAddress: string | null
   columns: number | null
   order: number | null
   active: boolean | null
@@ -69,6 +71,8 @@ export type SectionMaxAggregateOutputType = {
   textColor: string | null
   buttonText: string | null
   buttonHref: string | null
+  videoUrl: string | null
+  mapAddress: string | null
   columns: number | null
   order: number | null
   active: boolean | null
@@ -89,6 +93,8 @@ export type SectionCountAggregateOutputType = {
   textColor: number
   buttonText: number
   buttonHref: number
+  videoUrl: number
+  mapAddress: number
   columns: number
   order: number
   active: number
@@ -121,6 +127,8 @@ export type SectionMinAggregateInputType = {
   textColor?: true
   buttonText?: true
   buttonHref?: true
+  videoUrl?: true
+  mapAddress?: true
   columns?: true
   order?: true
   active?: true
@@ -141,6 +149,8 @@ export type SectionMaxAggregateInputType = {
   textColor?: true
   buttonText?: true
   buttonHref?: true
+  videoUrl?: true
+  mapAddress?: true
   columns?: true
   order?: true
   active?: true
@@ -161,6 +171,8 @@ export type SectionCountAggregateInputType = {
   textColor?: true
   buttonText?: true
   buttonHref?: true
+  videoUrl?: true
+  mapAddress?: true
   columns?: true
   order?: true
   active?: true
@@ -268,6 +280,8 @@ export type SectionGroupByOutputType = {
   textColor: string | null
   buttonText: string | null
   buttonHref: string | null
+  videoUrl: string | null
+  mapAddress: string | null
   columns: number
   order: number
   active: boolean
@@ -311,6 +325,8 @@ export type SectionWhereInput = {
   textColor?: Prisma.StringNullableFilter<"Section"> | string | null
   buttonText?: Prisma.StringNullableFilter<"Section"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"Section"> | string | null
+  videoUrl?: Prisma.StringNullableFilter<"Section"> | string | null
+  mapAddress?: Prisma.StringNullableFilter<"Section"> | string | null
   columns?: Prisma.IntFilter<"Section"> | number
   order?: Prisma.IntFilter<"Section"> | number
   active?: Prisma.BoolFilter<"Section"> | boolean
@@ -333,6 +349,8 @@ export type SectionOrderByWithRelationInput = {
   textColor?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonText?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonHref?: Prisma.SortOrderInput | Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
@@ -359,6 +377,8 @@ export type SectionWhereUniqueInput = Prisma.AtLeast<{
   textColor?: Prisma.StringNullableFilter<"Section"> | string | null
   buttonText?: Prisma.StringNullableFilter<"Section"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"Section"> | string | null
+  videoUrl?: Prisma.StringNullableFilter<"Section"> | string | null
+  mapAddress?: Prisma.StringNullableFilter<"Section"> | string | null
   columns?: Prisma.IntFilter<"Section"> | number
   order?: Prisma.IntFilter<"Section"> | number
   active?: Prisma.BoolFilter<"Section"> | boolean
@@ -381,6 +401,8 @@ export type SectionOrderByWithAggregationInput = {
   textColor?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonText?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonHref?: Prisma.SortOrderInput | Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
@@ -409,6 +431,8 @@ export type SectionScalarWhereWithAggregatesInput = {
   textColor?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
   buttonText?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
   buttonHref?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
+  videoUrl?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
+  mapAddress?: Prisma.StringNullableWithAggregatesFilter<"Section"> | string | null
   columns?: Prisma.IntWithAggregatesFilter<"Section"> | number
   order?: Prisma.IntWithAggregatesFilter<"Section"> | number
   active?: Prisma.BoolWithAggregatesFilter<"Section"> | boolean
@@ -428,6 +452,8 @@ export type SectionCreateInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -450,6 +476,8 @@ export type SectionUncheckedCreateInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -470,6 +498,8 @@ export type SectionUpdateInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -492,6 +522,8 @@ export type SectionUncheckedUpdateInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -513,6 +545,8 @@ export type SectionCreateManyInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -532,6 +566,8 @@ export type SectionUpdateManyMutationInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -552,6 +588,8 @@ export type SectionUncheckedUpdateManyInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -587,6 +625,8 @@ export type SectionCountOrderByAggregateInput = {
   textColor?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  mapAddress?: Prisma.SortOrder
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
@@ -612,6 +652,8 @@ export type SectionMaxOrderByAggregateInput = {
   textColor?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  mapAddress?: Prisma.SortOrder
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
@@ -632,6 +674,8 @@ export type SectionMinOrderByAggregateInput = {
   textColor?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  mapAddress?: Prisma.SortOrder
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
@@ -721,6 +765,8 @@ export type SectionCreateWithoutPageInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -741,6 +787,8 @@ export type SectionUncheckedCreateWithoutPageInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -791,6 +839,8 @@ export type SectionScalarWhereInput = {
   textColor?: Prisma.StringNullableFilter<"Section"> | string | null
   buttonText?: Prisma.StringNullableFilter<"Section"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"Section"> | string | null
+  videoUrl?: Prisma.StringNullableFilter<"Section"> | string | null
+  mapAddress?: Prisma.StringNullableFilter<"Section"> | string | null
   columns?: Prisma.IntFilter<"Section"> | number
   order?: Prisma.IntFilter<"Section"> | number
   active?: Prisma.BoolFilter<"Section"> | boolean
@@ -810,6 +860,8 @@ export type SectionCreateWithoutItemsInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -831,6 +883,8 @@ export type SectionUncheckedCreateWithoutItemsInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -866,6 +920,8 @@ export type SectionUpdateWithoutItemsInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -887,6 +943,8 @@ export type SectionUncheckedUpdateWithoutItemsInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -906,6 +964,8 @@ export type SectionCreateManyPageInput = {
   textColor?: string | null
   buttonText?: string | null
   buttonHref?: string | null
+  videoUrl?: string | null
+  mapAddress?: string | null
   columns?: number
   order?: number
   active?: boolean
@@ -925,6 +985,8 @@ export type SectionUpdateWithoutPageInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -945,6 +1007,8 @@ export type SectionUncheckedUpdateWithoutPageInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -965,6 +1029,8 @@ export type SectionUncheckedUpdateManyWithoutPageInput = {
   textColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1016,6 +1082,8 @@ export type SectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   textColor?: boolean
   buttonText?: boolean
   buttonHref?: boolean
+  videoUrl?: boolean
+  mapAddress?: boolean
   columns?: boolean
   order?: boolean
   active?: boolean
@@ -1039,6 +1107,8 @@ export type SectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   textColor?: boolean
   buttonText?: boolean
   buttonHref?: boolean
+  videoUrl?: boolean
+  mapAddress?: boolean
   columns?: boolean
   order?: boolean
   active?: boolean
@@ -1060,6 +1130,8 @@ export type SectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   textColor?: boolean
   buttonText?: boolean
   buttonHref?: boolean
+  videoUrl?: boolean
+  mapAddress?: boolean
   columns?: boolean
   order?: boolean
   active?: boolean
@@ -1081,6 +1153,8 @@ export type SectionSelectScalar = {
   textColor?: boolean
   buttonText?: boolean
   buttonHref?: boolean
+  videoUrl?: boolean
+  mapAddress?: boolean
   columns?: boolean
   order?: boolean
   active?: boolean
@@ -1088,7 +1162,7 @@ export type SectionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "key" | "type" | "title" | "subtitle" | "body" | "backgroundColor" | "backgroundImage" | "textColor" | "buttonText" | "buttonHref" | "columns" | "order" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["section"]>
+export type SectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "key" | "type" | "title" | "subtitle" | "body" | "backgroundColor" | "backgroundImage" | "textColor" | "buttonText" | "buttonHref" | "videoUrl" | "mapAddress" | "columns" | "order" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["section"]>
 export type SectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.Section$pageArgs<ExtArgs>
   items?: boolean | Prisma.Section$itemsArgs<ExtArgs>
@@ -1120,6 +1194,8 @@ export type $SectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     textColor: string | null
     buttonText: string | null
     buttonHref: string | null
+    videoUrl: string | null
+    mapAddress: string | null
     columns: number
     order: number
     active: boolean
@@ -1562,6 +1638,8 @@ export interface SectionFieldRefs {
   readonly textColor: Prisma.FieldRef<"Section", 'String'>
   readonly buttonText: Prisma.FieldRef<"Section", 'String'>
   readonly buttonHref: Prisma.FieldRef<"Section", 'String'>
+  readonly videoUrl: Prisma.FieldRef<"Section", 'String'>
+  readonly mapAddress: Prisma.FieldRef<"Section", 'String'>
   readonly columns: Prisma.FieldRef<"Section", 'Int'>
   readonly order: Prisma.FieldRef<"Section", 'Int'>
   readonly active: Prisma.FieldRef<"Section", 'Boolean'>

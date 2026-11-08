@@ -64,7 +64,17 @@ export type SocialLink = {
   url: string;
 };
 
-export type SectionType = "CARDS" | "TEXT" | "IMAGE_TEXT" | "CTA";
+export type SectionType =
+  | "CARDS"
+  | "TEXT"
+  | "IMAGE_TEXT"
+  | "CTA"
+  | "FAQ"
+  | "GALLERY"
+  | "VIDEO"
+  | "MAP"
+  | "STATS"
+  | "CONTACT_FORM";
 
 export type SectionItem = {
   id: string;
@@ -91,6 +101,8 @@ export type Section = {
   buttonText: string | null;
   buttonHref: string | null;
   columns: number;
+  videoUrl: string | null;
+  mapAddress: string | null;
   items: SectionItem[];
 };
 

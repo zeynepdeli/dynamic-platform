@@ -73,6 +73,8 @@ function sectionPayload(v: SectionFormValues) {
     buttonText: emptyToNull(v.buttonText),
     buttonHref: emptyToNull(v.buttonHref),
     columns: v.columns,
+    videoUrl: v.type === "VIDEO" ? emptyToNull(v.videoUrl) : null,
+    mapAddress: v.type === "MAP" ? emptyToNull(v.mapAddress) : null,
     active: v.active,
   };
 }

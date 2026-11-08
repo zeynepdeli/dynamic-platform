@@ -1,5 +1,6 @@
 "use client";
 
+import { ITEM_CONFIG, hasItems } from "@/lib/section-types";
 import {
   useCallback,
   useMemo,
@@ -257,7 +258,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
         >
           <div
             className={
-              selectedSection.type === "CARDS"
+              hasItems(selectedSection.type)
                 ? "grid gap-10 2xl:grid-cols-2"
                 : ""
             }
@@ -285,14 +286,14 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                 return null;
               }}
             />
-            {selectedSection.type === "CARDS" && (
+            {hasItems(selectedSection.type) && (
               <div className="border-t border-border pt-6 2xl:border-l 2xl:border-t-0 2xl:pl-10 2xl:pt-0">
                 <InlineItems
                   sectionId={selectedSection.id}
                   items={selectedSection.items}
                   mediaBaseUrl={theme.mediaBaseUrl}
-                  itemLabel={template?.itemLabel ?? "Kart"}
-                  fields={template?.itemFields}
+                  itemLabel={template?.itemLabel ?? ITEM_CONFIG[selectedSection.type]?.label ?? "Kart"}
+                  fields={template?.itemFields ?? ITEM_CONFIG[selectedSection.type]?.fields}
                 />
               </div>
             )}

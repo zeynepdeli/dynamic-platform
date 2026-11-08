@@ -16,8 +16,10 @@ import { ImageUploadField } from "@/components/forms/ImageUploadField";
 
 import type { FieldConfig, SectionField } from "@/brand/page-templates";
 import { fieldLabel } from "@/lib/field-config";
+import { SECTION_FIELDS_BY_TYPE, hasColumns } from "@/lib/section-types";
 import {
   SECTION_TYPES,
+  SECTION_TYPE_HINTS,
   SECTION_TYPE_LABELS,
   sectionDefaultValues,
   sectionSchema,
@@ -96,8 +98,9 @@ export function SectionForm({
     }
   }
 
+  // Türün varsayılanları + şablondaki tanımlar (şablon kazanır)
   const label = (name: SectionField, fallback: string) =>
-    fieldLabel(fields, name, fallback);
+    fieldLabel({ ...SECTION_FIELDS_BY_TYPE[type], ...fields }, name, fallback);
 
   const titleLabel = label("title", "Başlık");
   const subtitleLabel = label("subtitle", "Alt Başlık");
@@ -123,7 +126,7 @@ export function SectionForm({
           <div
             role="radiogroup"
             aria-label="Bölüm tipi"
-            className="grid grid-cols-2 gap-2 sm:grid-cols-4"
+            className="grid grid-cols-2 gap-2 sm:grid-cols-3 @3xl:grid-cols-5"
           >
             {SECTION_TYPES.map((option) => {
               const active = type === option;
@@ -134,13 +137,14 @@ export function SectionForm({
                   role="radio"
                   aria-checked={active}
                   onClick={() => setValue("type", option, { shouldDirty: true })}
-                  className={`rounded-xl border px-3 py-3 text-sm font-medium transition ${
+                  className={`rounded-xl border px-3 py-2.5 text-left transition ${
                     active
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-border hover:bg-surface-muted"
                   }`}
                 >
-                  {SECTION_TYPE_LABELS[option]}
+                  <span className="block text-sm font-semibold">{SECTION_TYPE_LABELS[option]}</span>
+                  <span className="block text-[11px] leading-4 opacity-70">{SECTION_TYPE_HINTS[option]}</span>
                 </button>
               );
             })}
@@ -170,6 +174,30 @@ export function SectionForm({
         />
       )}
 
+      {type === "VIDEO" && (
+        <FormField
+          name="videoUrl"
+          label="Video Adresi"
+          placeholder="https://www.youtube.com/watch?v=..."
+          description="YouTube veya Vimeo'daki videonun adresini yapıştırın."
+          register={register}
+          error={errors.videoUrl}
+          required
+        />
+      )}
+
+      {type === "MAP" && (
+        <FormField
+          name="mapAddress"
+          label="Adres"
+          placeholder="Atatürk Cad. No:1, Kadıköy, İstanbul"
+          description="Haritada bu adres gösterilir (Google Haritalar'da aranır)."
+          register={register}
+          error={errors.mapAddress}
+          required
+        />
+      )}
+
       {imageLabel && (
         <ImageUploadField
           name="backgroundImage"
@@ -179,7 +207,7 @@ export function SectionForm({
         />
       )}
 
-      {type === "CARDS" && columnsLabel && (
+      {hasColumns(type) && columnsLabel && (
         <div className="space-y-2">
           <p className="text-sm font-medium">{columnsLabel}</p>
           <div role="radiogroup" aria-label={columnsLabel} className="flex gap-2">

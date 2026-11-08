@@ -278,6 +278,8 @@ export const SectionScalarFieldEnum = {
   textColor: 'textColor',
   buttonText: 'buttonText',
   buttonHref: 'buttonHref',
+  videoUrl: 'videoUrl',
+  mapAddress: 'mapAddress',
   columns: 'columns',
   order: 'order',
   active: 'active',
