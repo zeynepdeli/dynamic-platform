@@ -41,6 +41,7 @@ export function ModuleSectionPanel({
     return (
       <InlineItems
         sectionId={section.id}
+        sectionType={section.type}
         items={section.items}
         mediaBaseUrl={mediaBaseUrl}
         itemLabel={entry.itemLabel ?? ITEM_CONFIG[section.type]?.label ?? "Öğe"}

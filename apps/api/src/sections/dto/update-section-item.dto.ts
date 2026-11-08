@@ -25,7 +25,6 @@ export class UpdateSectionItemDto {
   @IsOptional()
   @IsString()
   @MaxLength(200)
-  @Matches(/\S/, { message: 'Kart başlığı boş olamaz.' })
   title?: string;
 
   @ValidateIf(notNull)

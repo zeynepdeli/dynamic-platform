@@ -21,10 +21,11 @@ import {
 export const ICON_NAME_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export class CreateSectionItemDto {
+  // Galeride alt yazı isteğe bağlı; diğer türlerde zorunluluğu servis denetler
+  @IsOptional()
   @IsString()
   @MaxLength(200)
-  @Matches(/\S/, { message: 'Kart başlığı boş olamaz.' })
-  title!: string;
+  title?: string;
 
   @IsOptional()
   @IsString()
