@@ -42,6 +42,8 @@ const publicSectionSelect = {
   buttonText: true,
   buttonHref: true,
   columns: true,
+  videoUrl: true,
+  mapAddress: true,
   items: {
     where: { active: true },
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
@@ -135,6 +137,8 @@ export class SectionsService {
           key: dto.key,
           type: dto.type,
           title: dto.title,
+          videoUrl: dto.videoUrl ?? null,
+          mapAddress: dto.mapAddress?.trim() || null,
           subtitle: dto.subtitle,
           body: dto.body,
           backgroundColor: dto.backgroundColor,

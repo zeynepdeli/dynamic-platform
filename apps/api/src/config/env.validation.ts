@@ -43,6 +43,9 @@ const envSchema = z
     SMTP_USER: z.string().optional(),
     SMTP_PASS: z.string().optional(),
     MAIL_FROM: z.string().email('MAIL_FROM geçerli bir e-posta olmalıdır').optional(),
+
+    // Web sitesi ↔ API ortak gizli anahtar (iletişim formunda ziyaretçi IP'si için)
+    WEB_API_SECRET: z.string().min(32, 'WEB_API_SECRET en az 32 karakter olmalıdır').optional(),
   })
   .superRefine((env, ctx) => {
     if (env.SMTP_HOST && !env.MAIL_FROM) {

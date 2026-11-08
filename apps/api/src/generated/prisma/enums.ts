@@ -29,7 +29,13 @@ export const SectionType = {
   CARDS: 'CARDS',
   TEXT: 'TEXT',
   IMAGE_TEXT: 'IMAGE_TEXT',
-  CTA: 'CTA'
+  CTA: 'CTA',
+  FAQ: 'FAQ',
+  GALLERY: 'GALLERY',
+  VIDEO: 'VIDEO',
+  MAP: 'MAP',
+  STATS: 'STATS',
+  CONTACT_FORM: 'CONTACT_FORM'
 } as const
 
 export type SectionType = (typeof SectionType)[keyof typeof SectionType]

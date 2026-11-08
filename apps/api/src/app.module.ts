@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PagesModule } from './pages/pages.module.js';
@@ -13,6 +13,7 @@ import { FooterSettingsModule } from './footer-settings/footer-settings.module.j
 import { SiteBootstrapModule } from './site-bootstrap/site-bootstrap.module.js';
 import { validateEnv } from './config/env.validation.js';
 import { SectionsModule } from './sections/sections.module.js';
+import { AppThrottlerGuard } from './common/app-throttler.guard.js';
 import { SocialLinksModule } from './social-links/social-links.module.js';
 import { ContactMessagesModule } from './contact-messages/contact-messages.module.js';
 import { MailModule } from './mail/mail.module.js';
@@ -61,7 +62,7 @@ import { UsersModule } from './users/users.module.js';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: AppThrottlerGuard,
     },
   ],
 })

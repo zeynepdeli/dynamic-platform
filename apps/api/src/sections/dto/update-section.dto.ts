@@ -18,6 +18,9 @@ import {
   IsImageUrl,
   SECTION_KEY_MESSAGE,
   SECTION_KEY_REGEX,
+  SINGLE_LINE_REGEX,
+  VIDEO_URL_MESSAGE,
+  VIDEO_URL_REGEX,
 } from '../../common/validators.js';
 import { SectionType } from '../../generated/prisma/enums.js';
 
@@ -73,6 +76,18 @@ export class UpdateSectionDto {
   @MaxLength(500)
   @Matches(INTERNAL_PATH_REGEX, { message: INTERNAL_PATH_MESSAGE })
   buttonHref?: string | null;
+
+  @ValidateIf((_, v: unknown) => v != null)
+  @IsString()
+  @MaxLength(300)
+  @Matches(VIDEO_URL_REGEX, { message: VIDEO_URL_MESSAGE })
+  videoUrl?: string | null;
+
+  @ValidateIf((_, v: unknown) => v != null)
+  @IsString()
+  @MaxLength(300)
+  @Matches(SINGLE_LINE_REGEX, { message: 'Adres tek satır olmalı.' })
+  mapAddress?: string | null;
 
   @IsOptional()
   @IsInt()

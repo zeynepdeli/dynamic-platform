@@ -69,3 +69,14 @@ export const SECTION_KEY_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export const SECTION_KEY_MESSAGE =
   'Anahtar yalnızca küçük harf, rakam ve tire içerebilir (ör. vizyon).';
+
+/**
+ * Yalnızca YouTube ve Vimeo video adresleri (iframe'e serbest adres girilemez).
+ * Desteklenen: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID, vimeo.com/ID
+ */
+export const VIDEO_URL_REGEX =
+  /^https:\/\/(?:(?:www\.|m\.)?youtube\.com\/(?:watch\?v=|shorts\/|embed\/)[A-Za-z0-9_-]{11}(?:[&?][A-Za-z0-9_=&%.-]*)?|youtu\.be\/[A-Za-z0-9_-]{11}(?:\?[A-Za-z0-9_=&%.-]*)?|(?:www\.|player\.)?vimeo\.com\/(?:video\/)?\d{6,12})$/;
+export const VIDEO_URL_MESSAGE = 'Yalnızca YouTube veya Vimeo video adresi girilebilir.';
+
+// Tek satır, kontrol karakteri yok
+export const SINGLE_LINE_REGEX = /^[^\u0000-\u001f\u007f]*$/;

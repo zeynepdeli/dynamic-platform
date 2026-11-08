@@ -264,6 +264,12 @@ enum SectionType {
   TEXT // Başlık + düz metin
   IMAGE_TEXT // Yanda görsel, yanda metin
   CTA // Çağrı alanı (başlık + buton)
+  FAQ // Sıkça sorulan sorular (öğe: soru + cevap)
+  GALLERY // Galeri (öğe: görsel + alt yazı)
+  VIDEO // YouTube / Vimeo videosu
+  MAP // Adres + harita
+  STATS // Sayılar (öğe: "500+" + açıklama)
+  CONTACT_FORM // İletişim formu (mesajlar → Gelen Mesajlar)
 }
 
 model Section {
@@ -290,6 +296,10 @@ model Section {
   buttonHref String?
 
   // Kart ızgarası kaç sütun olsun (masaüstü)
+  // VIDEO: YouTube/Vimeo adresi · MAP: haritada gösterilecek adres
+  videoUrl   String?
+  mapAddress String?
+
   columns Int @default(3)
 
   order  Int     @default(0)
