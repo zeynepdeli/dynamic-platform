@@ -10,7 +10,7 @@
     "lint": "pnpm -r lint",
     "test": "pnpm --filter api test",
     "test:e2e": "playwright test",
-    "typecheck": "pnpm -r exec tsc --noEmit"
+    "typecheck": "pnpm -r typecheck"
   },
   "engines": {
     "node": ">=24 <25"
