@@ -15,6 +15,8 @@ import { validateEnv } from './config/env.validation.js';
 import { SectionsModule } from './sections/sections.module.js';
 import { SocialLinksModule } from './social-links/social-links.module.js';
 import { ContactMessagesModule } from './contact-messages/contact-messages.module.js';
+import { MailModule } from './mail/mail.module.js';
+import { UsersModule } from './users/users.module.js';
 
 @Module({
   imports: [
@@ -53,6 +55,8 @@ import { ContactMessagesModule } from './contact-messages/contact-messages.modul
     SectionsModule,
     SocialLinksModule,
     ContactMessagesModule,
+    MailModule,
+    UsersModule,
   ],
   providers: [
     {

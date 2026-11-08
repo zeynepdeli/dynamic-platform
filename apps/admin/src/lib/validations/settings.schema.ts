@@ -55,6 +55,9 @@ export const settingsSchemas = {
       .refine((v) => v === "" || /^G-[A-Z0-9]{4,15}$/.test(v), "Ölçüm kimliği G-XXXXXXX biçiminde olmalı."),
   }),
   footer: footerSchema,
+  notify: z.object({
+    notifyEmail: z.union([z.literal(""), z.email("Geçerli bir e-posta girin.").max(254)]),
+  }),
 } as const;
 
 export type SettingsGroup = keyof typeof settingsSchemas;

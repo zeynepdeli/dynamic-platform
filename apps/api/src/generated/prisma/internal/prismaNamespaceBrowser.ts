@@ -59,6 +59,7 @@ export const ModelName = {
   Media: 'Media',
   FooterSettings: 'FooterSettings',
   RefreshSession: 'RefreshSession',
+  PasswordResetToken: 'PasswordResetToken',
   ContactMessage: 'ContactMessage',
   SocialLink: 'SocialLink',
   Section: 'Section',
@@ -103,6 +104,7 @@ export const SiteSettingsScalarFieldEnum = {
   ogImageUrl: 'ogImageUrl',
   allowIndexing: 'allowIndexing',
   gaMeasurementId: 'gaMeasurementId',
+  notifyEmail: 'notifyEmail',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -221,6 +223,18 @@ export const RefreshSessionScalarFieldEnum = {
 } as const
 
 export type RefreshSessionScalarFieldEnum = (typeof RefreshSessionScalarFieldEnum)[keyof typeof RefreshSessionScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
 export const ContactMessageScalarFieldEnum = {

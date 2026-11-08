@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { LockKeyhole, ArrowRight, LoaderCircle } from "lucide-react";
 import { loginAdmin } from "@/app/actions";
 
 export default function LoginPage() {
   const router = useRouter();
+  const resetDone = useSearchParams().get("sifre") === "yenilendi";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,6 +68,12 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {resetDone && (
+            <p role="status" className="mb-5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-700">
+              Şifreniz yenilendi. Yeni şifrenizle giriş yapabilirsiniz.
+            </p>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label
@@ -89,12 +97,14 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="mb-2 block text-sm font-medium text-foreground"
-              >
-                Şifre
-              </label>
+              <div className="mb-2 flex items-center justify-between">
+                <label htmlFor="password" className="block text-sm font-medium text-foreground">
+                  Şifre
+                </label>
+                <Link href="/forgot-password" className="text-xs font-medium text-[#346872] hover:underline">
+                  Şifremi unuttum
+                </Link>
+              </div>
 
               <input
                 id="password"

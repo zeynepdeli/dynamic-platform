@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { MailService } from '../mail/mail.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import type { CreateContactMessageDto } from './dto/contact-message.dto.js';
@@ -16,7 +17,10 @@ const clean = (v: string | undefined) => {
 
 @Injectable()
 export class ContactMessagesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mail: MailService,
+  ) {}
 
   async create(dto: CreateContactMessageDto) {
     // Bot: başarılı gibi davran ama kaydetme (botu uyarmamak için)
@@ -33,8 +37,36 @@ export class ContactMessagesService {
     });
 
     await this.trim();
+    await this.notify(dto);
     // Kaydedilen veri ziyaretçiye geri döndürülmez
     return { success: true };
+  }
+
+  /** Yeni mesaj bildirimi (admin → Gelen Mesajlar → bildirim adresi) */
+  private async notify(dto: CreateContactMessageDto) {
+    if (!this.mail.configured) return;
+    const settings = await this.prisma.siteSettings.findUnique({
+      where: { id: 'main' },
+      select: { notifyEmail: true, siteName: true },
+    });
+    if (!settings?.notifyEmail) return;
+    this.mail.sendInBackground({
+      to: settings.notifyEmail,
+      replyTo: dto.email.trim(),
+      subject: `${settings.siteName}: yeni iletişim mesajı — ${dto.name.trim()}`,
+      text: [
+        `Ad: ${dto.name.trim()}`,
+        `E-posta: ${dto.email.trim()}`,
+        dto.phone?.trim() ? `Telefon: ${dto.phone.trim()}` : null,
+        dto.subject?.trim() ? `Konu: ${dto.subject.trim()}` : null,
+        '',
+        dto.message.trim(),
+        '',
+        '— Yanıtlamak için bu e-postayı yanıtlayın. Tüm mesajlar yönetim panelinde: Gelen Mesajlar.',
+      ]
+        .filter((l) => l !== null)
+        .join('\n'),
+    });
   }
 
   findAll() {

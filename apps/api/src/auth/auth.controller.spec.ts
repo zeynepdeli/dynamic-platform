@@ -4,6 +4,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
+import { PasswordResetService } from './password-reset.service.js';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -16,6 +17,7 @@ describe('AuthController', () => {
         { provide: AuthService, useValue: authService },
         { provide: JwtService, useValue: {} },
         { provide: PrismaService, useValue: {} },
+        { provide: PasswordResetService, useValue: {} },
       ],
     }).compile();
 
