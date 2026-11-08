@@ -54,6 +54,9 @@ model SiteSettings {
   // Google Analytics 4 ölçüm kimliği (yalnızca G-XXXXXXX; serbest kod YOK)
   gaMeasurementId String?
 
+  // Yeni iletişim mesajı gelince bildirim gönderilecek adres
+  notifyEmail String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -93,7 +96,8 @@ model User {
   // Bu tarihten önce verilen oturumlar geçersiz (şifre değişince)
   passwordChangedAt DateTime?
 
-  sessions RefreshSession[]
+  sessions    RefreshSession[]
+  resetTokens PasswordResetToken[]
   role         UserRole @default(USER)
   active       Boolean  @default(true)
 
@@ -201,6 +205,21 @@ model RefreshSession {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+// "Şifremi unuttum" bağlantıları: tek kullanımlık, 30 dk, yalnızca özet saklanır
+model PasswordResetToken {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 // Sitedeki iletişim formundan gelen mesajlar

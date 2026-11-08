@@ -34,8 +34,21 @@ const envSchema = z
       .string()
       .regex(/^[a-z0-9_-]{1,64}$/i, 'CLOUDINARY_FOLDER yalnızca harf, rakam, - ve _ içerebilir')
       .default('dynamic-platform'),
+
+    // ───── E-posta (SMTP) — boşsa e-posta gönderilmez ─────
+    SMTP_HOST: z.string().min(1).optional(),
+    SMTP_PORT: z.coerce.number().int().min(1).max(65535).default(587),
+    // true: 465 (SSL) · false: 587 (STARTTLS)
+    SMTP_SECURE: z.enum(['true', 'false']).default('false'),
+    SMTP_USER: z.string().optional(),
+    SMTP_PASS: z.string().optional(),
+    MAIL_FROM: z.string().email('MAIL_FROM geçerli bir e-posta olmalıdır').optional(),
   })
   .superRefine((env, ctx) => {
+    if (env.SMTP_HOST && !env.MAIL_FROM) {
+      ctx.addIssue({ code: 'custom', path: ['MAIL_FROM'], message: 'SMTP_HOST tanımlıysa MAIL_FROM zorunludur' });
+    }
+
     if (env.MEDIA_STORAGE === 'cloudinary') {
       for (const key of ['CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'] as const) {
         if (!env[key]) {

@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   UserCog,
+  Users,
   X,
 } from "lucide-react";
 
@@ -239,6 +240,14 @@ function HeaderContent({ pathname, unread }: HeaderContentProps) {
                   >
                     <UserCog size={17} />
                     Hesap Ayarları
+                  </Link>
+
+                  <Link
+                    href="/users"
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-foreground transition-colors hover:bg-surface-muted"
+                  >
+                    <Users size={17} />
+                    Yöneticiler
                   </Link>
 
                   <form action={logoutAdmin}>

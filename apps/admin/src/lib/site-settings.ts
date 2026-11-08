@@ -23,6 +23,7 @@ export type SiteSettings = {
   ogImageUrl: string | null;
   allowIndexing: boolean;
   gaMeasurementId: string | null;
+  notifyEmail: string | null;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {

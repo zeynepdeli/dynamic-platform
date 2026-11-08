@@ -13,6 +13,7 @@ const PATHS: Record<SettingsGroup, string> = {
   theme: "/areas/theme",
   seo: "/areas/seo",
   footer: "/areas/footer",
+  notify: "/messages",
 };
 
 // Boş bırakılabilen (null'a çevrilen) alanlar dışındakiler olduğu gibi gider

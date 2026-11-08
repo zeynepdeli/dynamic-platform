@@ -8,10 +8,16 @@ import {
   MinLength,
 } from 'class-validator';
 
+// Tek satırlık alanlarda satır sonu / kontrol karakteri olmaz
+// (e-posta başlıklarına sızma ve sahte satır eklemeye karşı)
+const SINGLE_LINE = /^[^\u0000-\u001f\u007f]*$/;
+const SINGLE_LINE_MESSAGE = 'Bu alan tek satır olmalı.';
+
 export class CreateContactMessageDto {
   @IsString()
   @MinLength(2)
   @MaxLength(100)
+  @Matches(SINGLE_LINE, { message: SINGLE_LINE_MESSAGE })
   name!: string;
 
   @IsEmail({}, { message: 'Geçerli bir e-posta girin.' })
@@ -27,6 +33,7 @@ export class CreateContactMessageDto {
   @IsOptional()
   @IsString()
   @MaxLength(150)
+  @Matches(SINGLE_LINE, { message: SINGLE_LINE_MESSAGE })
   subject?: string;
 
   @IsString()

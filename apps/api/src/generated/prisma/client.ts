@@ -82,6 +82,11 @@ export type FooterSettings = Prisma.FooterSettingsModel
  */
 export type RefreshSession = Prisma.RefreshSessionModel
 /**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
  * Model ContactMessage
  * 
  */

@@ -61,8 +61,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Statik dosyalar ve giriş sayfası hariç
+  // Statik dosyalar, giriş ve şifre sıfırlama sayfaları hariç
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|login|.*\\.(?:png|jpg|svg|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|login|forgot-password|reset-password|.*\\.(?:png|jpg|svg|webp|ico)$).*)",
   ],
 };

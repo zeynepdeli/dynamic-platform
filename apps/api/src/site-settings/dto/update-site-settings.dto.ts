@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsEmail,
   IsString,
   Matches,
   MaxLength,
@@ -107,6 +108,12 @@ export class UpdateSiteSettingsDto {
   @ValidateIf(notNull)
   @Matches(/^G-[A-Z0-9]{4,15}$/, { message: 'Ölçüm kimliği G-XXXXXXX biçiminde olmalı.' })
   gaMeasurementId?: string | null;
+
+  // Yeni iletişim mesajı bildirimi
+  @ValidateIf(notNull)
+  @IsEmail({}, { message: 'Geçerli bir e-posta girin.' })
+  @MaxLength(254)
+  notifyEmail?: string | null;
 
   // ───── Ana sayfaya özel arka plan (null = genel arka plan) ─────
   @ValidateIf(notNull)
