@@ -403,7 +403,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
           type="button"
           aria-expanded={showPreview}
           onClick={() => setShowPreview((v) => !v)}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card px-5 py-4 text-sm font-semibold text-[#183350] shadow-sm transition hover:bg-surface-muted"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card px-5 py-4 text-sm font-semibold text-(--brand-primary) shadow-sm transition hover:bg-surface-muted"
         >
           <MonitorSmartphone className="size-4" />
           {showPreview
@@ -604,7 +604,7 @@ function SharedPreviewBlock({
       {children}
       <Link
         href={href}
-        className="absolute right-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-1.5 rounded-lg bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#183350] opacity-0 shadow-md ring-1 ring-black/10 transition group-hover/shared:opacity-100 focus-visible:opacity-100"
+        className="absolute right-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center gap-1.5 rounded-lg bg-white/95 px-3 py-1.5 text-xs font-semibold text-(--brand-primary) opacity-0 shadow-md ring-1 ring-black/10 transition group-hover/shared:opacity-100 focus-visible:opacity-100"
       >
         <Link2 className="size-3.5" />
         {label} ortak alandır · Düzenle
@@ -642,7 +642,7 @@ function Panel({
     <section className="rounded-2xl border border-border bg-card shadow-sm">
       <header className="flex flex-wrap items-start gap-3 border-b border-border p-5 sm:px-7">
         <div className="min-w-0 flex-1">
-          <h2 className="flex flex-wrap items-center gap-2 text-xl font-bold tracking-tight text-[#183350]">
+          <h2 className="brand-heading flex flex-wrap items-center gap-2 text-xl font-bold tracking-tight text-(--brand-primary)">
             {title}
             {locked && (
               <Lock
@@ -655,7 +655,7 @@ function Panel({
             <p className="mt-0.5 text-sm text-muted-foreground">{hint}</p>
           )}
           {shared && (
-            <p className="mt-3 flex items-center gap-1.5 rounded-lg bg-[#346872]/10 px-3 py-2 text-xs font-medium text-[#346872]">
+            <p className="mt-3 flex items-center gap-1.5 rounded-lg bg-(--brand-accent)/10 px-3 py-2 text-xs font-medium text-(--brand-accent)">
               <Link2 className="size-3.5" />
               Bu alan tüm sayfalarda ortaktır; değişiklik her sayfayı etkiler.
             </p>

@@ -47,7 +47,7 @@ export default async function DashboardPage() {
         actions={
           <Link
             href="/pages/new"
-            className="inline-flex items-center gap-2 rounded-full bg-[#183350] px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-[#183350]/90"
+            className="inline-flex items-center gap-2 rounded-full bg-(--brand-primary) px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-(--brand-primary)/90"
           >
             <Plus className="size-4" />
             Yeni Sayfa
@@ -86,7 +86,7 @@ export default async function DashboardPage() {
       ))}
 
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-6">
-        <Link href="/pages/trash" className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-[#346872]">
+        <Link href="/pages/trash" className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-(--brand-accent)">
           <Trash2 className="size-4" />
           Çöp kutusu
         </Link>
@@ -163,7 +163,7 @@ function PageGroup({
       {template.allowExtraSections && (
         <Link
           href={`${basePath}/yeni-bolum`}
-          className="flex min-h-28 items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-4 text-sm font-semibold text-[#346872] transition hover:border-[#346872]/50 hover:bg-surface"
+          className="flex min-h-28 items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-4 text-sm font-semibold text-(--brand-accent) transition hover:border-(--brand-accent)/50 hover:bg-surface"
         >
           <Plus className="size-4" />
           Yeni bölüm
@@ -192,8 +192,8 @@ function Group({
     <section className="space-y-4">
       <header className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-3">
         <div>
-          {eyebrow && <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#346872]">{eyebrow}</p>}
-          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-2xl font-bold tracking-tight text-[#183350]">
+          {eyebrow && <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-(--brand-accent)">{eyebrow}</p>}
+          <h2 className="brand-heading mt-1 flex flex-wrap items-center gap-2 text-2xl font-bold tracking-tight text-(--brand-primary)">
             {GroupIcon && <GroupIcon className="size-5" />}
             {title}
             {badge}
@@ -224,13 +224,13 @@ function Tile({
   return (
     <Link
       href={href}
-      className="group flex min-h-28 items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#346872]/40 hover:shadow-md"
+      className="group flex min-h-28 items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-(--brand-accent)/40 hover:shadow-md"
     >
-      <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-[#183350]/10 text-[#183350] transition group-hover:bg-[#183350] group-hover:text-white">
+      <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-(--brand-primary)/10 text-(--brand-primary) transition group-hover:bg-(--brand-primary) group-hover:text-white">
         {number ? <span className="text-sm font-bold">{number}</span> : <TileIcon className="size-5" />}
       </span>
       <span className="min-w-0">
-        <span className="flex flex-wrap items-center gap-1.5 text-base font-bold text-[#183350]">
+        <span className="flex flex-wrap items-center gap-1.5 text-base font-bold text-(--brand-primary)">
           <span className="truncate">{title}</span>
           {badge}
         </span>

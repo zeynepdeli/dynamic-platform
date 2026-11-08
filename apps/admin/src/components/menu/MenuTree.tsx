@@ -227,7 +227,7 @@ function MenuIconBadge({ icon }: { icon: string | null }) {
   if (!entry) return null;
   return (
     <span
-      className="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-[#183350]/10 text-[#183350]"
+      className="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-(--brand-primary)/10 text-(--brand-primary)"
       title={entry.label}
     >
       <entry.Icon className="size-3.5" />

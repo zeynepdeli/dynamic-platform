@@ -6,7 +6,7 @@ export function AuthCard({ title, description, children }: { title: string; desc
     <main className="flex min-h-screen items-center justify-center bg-background px-5 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-[#183350] text-white shadow-lg">
+          <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-(--brand-primary) text-white shadow-lg">
             <KeyRound size={24} strokeWidth={1.7} />
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">{title}</h1>

@@ -16,7 +16,7 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
       ) : (
         <div className="space-y-4 text-sm">
           <p role="alert" className="text-destructive">Bağlantı geçersiz.</p>
-          <Link href="/forgot-password" className="font-medium text-[#346872] hover:underline">Yeni bağlantı iste</Link>
+          <Link href="/forgot-password" className="font-medium text-(--brand-accent) hover:underline">Yeni bağlantı iste</Link>
         </div>
       )}
     </AuthCard>

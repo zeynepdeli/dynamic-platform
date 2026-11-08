@@ -29,7 +29,7 @@ export function ForgotPasswordForm() {
         <p role="status" className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm leading-6 text-emerald-800">
           {message}
         </p>
-        <Link href="/login" className="inline-flex items-center gap-2 text-sm font-medium text-[#346872] hover:underline">
+        <Link href="/login" className="inline-flex items-center gap-2 text-sm font-medium text-(--brand-accent) hover:underline">
           <ArrowLeft className="size-4" />
           Girişe dön
         </Link>
@@ -48,16 +48,16 @@ export function ForgotPasswordForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-[#346872] focus:ring-2 focus:ring-[#346872]/20"
+          className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-(--brand-accent) focus:ring-2 focus:ring-(--brand-accent)/20"
           placeholder="ornek@site.com"
         />
       </div>
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <button type="submit" disabled={loading || !email.trim()} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#183350] text-sm font-semibold text-white transition hover:bg-[#183350]/90 disabled:opacity-60">
+      <button type="submit" disabled={loading || !email.trim()} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-(--brand-primary) text-sm font-semibold text-white transition hover:bg-(--brand-primary)/90 disabled:opacity-60">
         {loading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
         Sıfırlama bağlantısı gönder
       </button>
-      <Link href="/login" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-[#346872]">
+      <Link href="/login" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-(--brand-accent)">
         <ArrowLeft className="size-4" />
         Girişe dön
       </Link>

@@ -94,8 +94,8 @@ export function MediaPickerDialog({
                         setOpen(false);
                       }}
                       aria-label={`${file.name || "Görsel"} seç`}
-                      className={`group relative block aspect-square w-full overflow-hidden rounded-xl border bg-surface-muted transition hover:ring-2 hover:ring-[#346872] ${
-                        isCurrent ? "ring-2 ring-[#183350]" : "border-border"
+                      className={`group relative block aspect-square w-full overflow-hidden rounded-xl border bg-surface-muted transition hover:ring-2 hover:ring-(--brand-accent) ${
+                        isCurrent ? "ring-2 ring-(--brand-primary)" : "border-border"
                       }`}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -106,7 +106,7 @@ export function MediaPickerDialog({
                         className="size-full object-contain p-1"
                       />
                       {isCurrent && (
-                        <span className="absolute right-1.5 top-1.5 rounded-full bg-[#183350] p-1 text-white">
+                        <span className="absolute right-1.5 top-1.5 rounded-full bg-(--brand-primary) p-1 text-white">
                           <Check className="size-3" />
                         </span>
                       )}

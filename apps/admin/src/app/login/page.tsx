@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { BRAND } from "@/brand/brand";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LockKeyhole, ArrowRight, LoaderCircle } from "lucide-react";
 import { loginAdmin } from "@/app/actions";
@@ -44,16 +45,21 @@ export default function LoginPage() {
     <main className="flex min-h-screen items-center justify-center bg-background px-5 py-12">
       <div className="w-full max-w-md">
         <div className="mb-9 text-center">
-          <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
-            <LockKeyhole size={25} strokeWidth={1.7} />
-          </div>
+          {BRAND.logo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={BRAND.logo} alt="" className="mx-auto mb-5 h-14 w-auto max-w-48 object-contain" />
+          ) : (
+            <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
+              <LockKeyhole size={25} strokeWidth={1.7} />
+            </div>
+          )}
 
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-            Command Center
+          <h1 className="brand-heading text-3xl font-semibold tracking-tight text-foreground">
+            {BRAND.name}
           </h1>
 
-          <p className="mt-3 text-sm text-muted">
-            Yönetim merkezine hoş geldiniz.
+          <p className="mt-3 text-sm text-muted-foreground">
+            {BRAND.tagline}
           </p>
         </div>
 
@@ -63,7 +69,7 @@ export default function LoginPage() {
               Yönetici Girişi
             </h2>
 
-            <p className="mt-2 text-sm text-muted">
+            <p className="mt-2 text-sm text-muted-foreground">
               Devam etmek için hesabınıza giriş yapın.
             </p>
           </div>
@@ -101,7 +107,7 @@ export default function LoginPage() {
                 <label htmlFor="password" className="block text-sm font-medium text-foreground">
                   Şifre
                 </label>
-                <Link href="/forgot-password" className="text-xs font-medium text-[#346872] hover:underline">
+                <Link href="/forgot-password" className="text-xs font-medium text-(--brand-accent) hover:underline">
                   Şifremi unuttum
                 </Link>
               </div>
@@ -147,8 +153,8 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="mt-7 text-center text-xs text-muted">
-          Dynamic Platform · Secure Administration
+        <p className="mt-7 text-center text-xs text-muted-foreground">
+          {BRAND.name} · Güvenli Yönetim
         </p>
       </div>
     </main>

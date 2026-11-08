@@ -137,8 +137,8 @@ function IconTile({
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`flex w-full flex-col items-center gap-1.5 rounded-xl border p-3 text-[11px] transition hover:border-[#346872] hover:bg-surface-muted ${
-        selected ? "border-[#183350] bg-[#183350]/5 ring-1 ring-[#183350]" : "border-border"
+      className={`flex w-full flex-col items-center gap-1.5 rounded-xl border p-3 text-[11px] transition hover:border-(--brand-accent) hover:bg-surface-muted ${
+        selected ? "border-(--brand-primary) bg-(--brand-primary)/5 ring-1 ring-(--brand-primary)" : "border-border"
       }`}
     >
       {icon}
