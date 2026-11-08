@@ -2,14 +2,17 @@
 
 import { z } from "zod";
 
+import { clientIpHeaders } from "@/lib/client-ip-headers";
+
 type Result = { success: true; message?: string } | { success: false; error: string };
 
 async function post(path: string, body: unknown): Promise<Response | null> {
   const apiUrl = process.env.API_URL;
   if (!apiUrl) return null;
+  const extra = await clientIpHeaders();
   return fetch(`${apiUrl}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...extra },
     body: JSON.stringify(body),
     cache: "no-store",
     redirect: "error",

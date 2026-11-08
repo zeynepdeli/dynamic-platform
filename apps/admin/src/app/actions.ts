@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { clientIpHeaders } from "@/lib/client-ip-headers";
 import type { AdminUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import {
@@ -35,10 +36,18 @@ export async function loginAdmin(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(await clientIpHeaders()),
       },
       body: JSON.stringify({ email, password }),
       cache: "no-store",
     });
+
+    if (response.status === 429) {
+      return {
+        success: false,
+        error: "Çok fazla deneme yapıldı. Lütfen bir dakika sonra tekrar deneyin.",
+      };
+    }
 
     if (!response.ok) {
       return {

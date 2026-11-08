@@ -3,13 +3,12 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { BRAND } from "@/brand/brand";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { LockKeyhole, ArrowRight, LoaderCircle } from "lucide-react";
 import { loginAdmin } from "@/app/actions";
 
-export default function LoginPage() {
+export function LoginForm({ resetDone }: { resetDone: boolean }) {
   const router = useRouter();
-  const resetDone = useSearchParams().get("sifre") === "yenilendi";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

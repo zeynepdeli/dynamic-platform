@@ -1,3 +1,4 @@
+import "./zod-locale";
 import { z } from "zod";
 
 import { imageUrlSchema, optionalHexColorSchema } from "./common";

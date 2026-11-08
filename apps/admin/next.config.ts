@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -37,6 +38,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Docker için küçük, bağımsız çıktı (.next/standalone)
+  output: "standalone",
+  // Monorepo: bağımlılıklar kök node_modules'ta
+  outputFileTracingRoot: path.join(import.meta.dirname, "../.."),
   poweredByHeader: false,
   experimental: {
     serverActions: {
