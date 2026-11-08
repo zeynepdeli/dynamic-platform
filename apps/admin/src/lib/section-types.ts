@@ -5,6 +5,12 @@ import type { SectionType } from "@/lib/validations/section.schema";
 export const ITEM_TYPES: readonly SectionType[] = ["CARDS", "FAQ", "GALLERY", "STATS"];
 export const hasItems = (type: SectionType) => ITEM_TYPES.includes(type);
 
+/**
+ * Yalnızca modüllerde (SSS, İletişim, Galeri) kullanılan türler: "Yeni bölüm"
+ * seçicisinde gösterilmez (karışıklık olmasın). Şablonlarda kullanılabilir.
+ */
+export const MODULE_ONLY_TYPES: readonly SectionType[] = ["FAQ", "GALLERY", "MAP", "CONTACT_FORM"];
+
 /** Izgara sütunu seçilebilen türler */
 export const hasColumns = (type: SectionType) => ["CARDS", "GALLERY", "STATS"].includes(type);
 

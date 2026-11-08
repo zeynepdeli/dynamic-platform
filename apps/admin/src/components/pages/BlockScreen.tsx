@@ -17,6 +17,7 @@ import { getAdminHeroSlides, toHeroSlideFormValues } from "@/lib/hero-slides";
 import { getMediaBaseUrl } from "@/lib/media-base-url";
 import { buildMenuTree, getAdminMenuItems } from "@/lib/menu";
 import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
+import { moduleBySlug } from "@/brand/modules";
 import { getAdminPageById, type Page } from "@/lib/pages";
 import { getAdminSections, toSectionFormValues, toSectionItemFormValues } from "@/lib/sections";
 import { getSiteSettings } from "@/lib/site-settings";
@@ -37,6 +38,10 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
 
   const page = isHome ? null : ((await getAdminPageById(id)) as Page | null);
   if (!isHome && !page) notFound();
+
+  // Modül sayfaları (SSS, İletişim, Galeri) yalnızca kendi ekranından yönetilir
+  const mod = page ? moduleBySlug(page.slug) : undefined;
+  if (mod) redirect(`/modules/${mod.key}`);
   const pageId = page?.id ?? null;
 
   const [sections, settings, menuItems, footer, slides, pageForm, socialLinks] = await Promise.all([

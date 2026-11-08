@@ -1,3 +1,4 @@
+import { moduleBySlug } from "@/brand/modules";
 import { pageTemplates, type TemplateSection } from "@/brand/page-templates";
 import type { Section } from "@/lib/sections";
 import { SECTION_KEY_REGEX } from "@/lib/validations/section.schema";
@@ -35,9 +36,10 @@ export function resolveTemplate(
   templateKey: string,
   sections: Section[],
 ): ResolvedTemplate {
+  // Önce brand şablonu, yoksa modülün (SSS, İletişim, Galeri) şablonu
   const template = Object.hasOwn(pageTemplates, templateKey)
     ? pageTemplates[templateKey]
-    : undefined;
+    : moduleBySlug(templateKey)?.template;
 
   if (!template) {
     return {

@@ -21,6 +21,8 @@ import {
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
 import { DeletePageDialog } from "@/components/pages/DeletePageDialog";
 import { AreaHeader } from "@/components/areas/AreaShell";
+import { MODULES, moduleBySlug } from "@/brand/modules";
+import { MODULE_ICONS } from "@/components/modules/module-icons";
 import { getUnreadCount } from "@/lib/contact-messages";
 import { getAdminPages, type Page } from "@/lib/pages";
 import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
@@ -31,7 +33,12 @@ type Icon = React.ComponentType<{ className?: string }>;
 
 /** Site Haritası: sitenin her parçası ayrı bir kutucuk; her biri kendi ekranında düzenlenir */
 export default async function DashboardPage() {
-  const [pages, unread] = await Promise.all([getAdminPages(), getUnreadCount()]);
+  const [allPages, unread] = await Promise.all([
+    getAdminPages(),
+    getUnreadCount(),
+  ]);
+  // Modül sayfaları (SSS, İletişim, Galeri) yalnızca Modüller grubunda görünür
+  const pages = allPages.filter((p) => !moduleBySlug(p.slug));
   const [homeSections, ...pageSections] = await Promise.all([
     getAdminSections(null),
     ...pages.map((p) => getAdminSections(p.id)),
@@ -56,21 +63,87 @@ export default async function DashboardPage() {
       />
 
       <Group eyebrow="Tüm sayfalarda ortak" title="Site Geneli">
-        <Tile href="/areas/header" icon={PanelTop} title="Header Yönetimi" description="Site adı, logo, arka plan, buton, menü linkleri" />
-        <Tile href="/areas/footer" icon={PanelBottom} title="Footer Yönetimi" description="Marka, iletişim, linkler, sosyal medya, telif" />
-        <Tile href="/areas/background" icon={Wallpaper} title="Site Arka Planı" description="Tüm sayfaların varsayılan rengi ve fotoğrafı" />
-        <Tile href="/areas/theme" icon={Palette} title="Tema Renkleri" description="Ana renk ve ikincil renk" />
-        <Tile href="/areas/seo" icon={SearchCode} title="SEO Yönetimi" description="Başlık, açıklama, favicon, paylaşım görseli" />
+        <Tile
+          href="/areas/header"
+          icon={PanelTop}
+          title="Header Yönetimi"
+          description="Site adı, logo, arka plan, buton, menü linkleri"
+        />
+        <Tile
+          href="/areas/footer"
+          icon={PanelBottom}
+          title="Footer Yönetimi"
+          description="Marka, iletişim, linkler, sosyal medya, telif"
+        />
+        <Tile
+          href="/areas/background"
+          icon={Wallpaper}
+          title="Site Arka Planı"
+          description="Tüm sayfaların varsayılan rengi ve fotoğrafı"
+        />
+        <Tile
+          href="/areas/theme"
+          icon={Palette}
+          title="Tema Renkleri"
+          description="Ana renk ve ikincil renk"
+        />
+        <Tile
+          href="/areas/seo"
+          icon={SearchCode}
+          title="SEO Yönetimi"
+          description="Başlık, açıklama, favicon, paylaşım görseli"
+        />
         <Tile
           href="/messages"
           icon={Inbox}
           title="Gelen Mesajlar"
           description="İletişim formundan gelenler"
-          badge={unread > 0 && <span className="rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-bold text-white">{unread} yeni</span>}
+          badge={
+            unread > 0 && (
+              <span className="rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-bold text-white">
+                {unread} yeni
+              </span>
+            )
+          }
         />
       </Group>
 
-      <PageGroup title="Ana Sayfa" icon={Home} basePath={`/pages/${HOME_TEMPLATE_KEY}`} sections={homeSections} templateKey={HOME_TEMPLATE_KEY} pageId={null} />
+      <Group eyebrow="Kendi ekranı olan sayfalar" title="Modüller">
+        {MODULES.map((mod) => {
+          const page = allPages.find((p) => p.slug === mod.slug);
+          return (
+            <Tile
+              key={mod.key}
+              href={`/modules/${mod.key}`}
+              icon={MODULE_ICONS[mod.icon]}
+              title={mod.title}
+              description={
+                page ? `${mod.description} · /${mod.slug}` : mod.description
+              }
+              badge={
+                !page ? (
+                  <span className="rounded-full bg-neutral-500/10 px-2 py-0.5 text-[11px] font-semibold text-neutral-600">
+                    Kurulmadı
+                  </span>
+                ) : !page.published ? (
+                  <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+                    Taslak
+                  </span>
+                ) : null
+              }
+            />
+          );
+        })}
+      </Group>
+
+      <PageGroup
+        title="Ana Sayfa"
+        icon={Home}
+        basePath={`/pages/${HOME_TEMPLATE_KEY}`}
+        sections={homeSections}
+        templateKey={HOME_TEMPLATE_KEY}
+        pageId={null}
+      />
 
       {pages.map((page, i) => (
         <PageGroup
@@ -86,7 +159,10 @@ export default async function DashboardPage() {
       ))}
 
       <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-6">
-        <Link href="/pages/trash" className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-(--brand-accent)">
+        <Link
+          href="/pages/trash"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-(--brand-accent)"
+        >
           <Trash2 className="size-4" />
           Çöp kutusu
         </Link>
@@ -113,7 +189,8 @@ function PageGroup({
   page?: Page;
 }) {
   const template = resolveTemplate(templateKey, sections);
-  const label = (s: Section) => (s.key && template.byKey[s.key]?.label) || s.title || "(Başlıksız bölüm)";
+  const label = (s: Section) =>
+    (s.key && template.byKey[s.key]?.label) || s.title || "(Başlıksız bölüm)";
 
   return (
     <Group
@@ -123,14 +200,37 @@ function PageGroup({
       badge={
         page &&
         !page.published && (
-          <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">Taslak</span>
+          <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+            Taslak
+          </span>
         )
       }
-      action={page && <DeletePageDialog pageId={page.id} pageTitle={page.title} />}
+      action={
+        page && <DeletePageDialog pageId={page.id} pageTitle={page.title} />
+      }
     >
-      {page && <Tile href={`${basePath}/bilgiler`} icon={Info} title="Sayfa Bilgileri" description="Başlık, adres, yayın durumu, sayfa SEO'su" />}
-      <Tile href={`${basePath}/arka-plan`} icon={PaintBucket} title="Sayfa Arka Planı" description="Yalnızca bu sayfanın rengi ve fotoğrafı" />
-      {!page && <Tile href={`${basePath}/slider`} icon={PanelsTopLeft} title="Hero Slider" description="En üstteki kayan görseller (en fazla 5)" />}
+      {page && (
+        <Tile
+          href={`${basePath}/bilgiler`}
+          icon={Info}
+          title="Sayfa Bilgileri"
+          description="Başlık, adres, yayın durumu, sayfa SEO'su"
+        />
+      )}
+      <Tile
+        href={`${basePath}/arka-plan`}
+        icon={PaintBucket}
+        title="Sayfa Arka Planı"
+        description="Yalnızca bu sayfanın rengi ve fotoğrafı"
+      />
+      {!page && (
+        <Tile
+          href={`${basePath}/slider`}
+          icon={PanelsTopLeft}
+          title="Hero Slider"
+          description="En üstteki kayan görseller (en fazla 5)"
+        />
+      )}
 
       {sections.map((section, i) => (
         <Tile
@@ -152,9 +252,13 @@ function PageGroup({
       ))}
 
       {template.missing.map((entry) => (
-        <div key={entry.key} className="flex min-h-28 flex-col justify-between gap-3 rounded-2xl border border-dashed border-amber-400/60 bg-amber-50 p-4 text-sm text-amber-900">
+        <div
+          key={entry.key}
+          className="flex min-h-28 flex-col justify-between gap-3 rounded-2xl border border-dashed border-amber-400/60 bg-amber-50 p-4 text-sm text-amber-900"
+        >
           <p>
-            <span className="font-semibold">{entry.label}</span> bölümü henüz yok
+            <span className="font-semibold">{entry.label}</span> bölümü henüz
+            yok
           </p>
           <CreateTemplateSectionButton pageId={pageId} entry={entry} />
         </div>
@@ -192,7 +296,11 @@ function Group({
     <section className="space-y-4">
       <header className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-3">
         <div>
-          {eyebrow && <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-(--brand-accent)">{eyebrow}</p>}
+          {eyebrow && (
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-(--brand-accent)">
+              {eyebrow}
+            </p>
+          )}
           <h2 className="brand-heading mt-1 flex flex-wrap items-center gap-2 text-2xl font-bold tracking-tight text-(--brand-primary)">
             {GroupIcon && <GroupIcon className="size-5" />}
             {title}
@@ -201,7 +309,9 @@ function Group({
         </div>
         {action}
       </header>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">{children}</div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        {children}
+      </div>
     </section>
   );
 }
@@ -227,14 +337,22 @@ function Tile({
       className="group flex min-h-28 items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-(--brand-accent)/40 hover:shadow-md"
     >
       <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-(--brand-primary)/10 text-(--brand-primary) transition group-hover:bg-(--brand-primary) group-hover:text-white">
-        {number ? <span className="text-sm font-bold">{number}</span> : <TileIcon className="size-5" />}
+        {number ? (
+          <span className="text-sm font-bold">{number}</span>
+        ) : (
+          <TileIcon className="size-5" />
+        )}
       </span>
       <span className="min-w-0">
         <span className="flex flex-wrap items-center gap-1.5 text-base font-bold text-(--brand-primary)">
           <span className="truncate">{title}</span>
           {badge}
         </span>
-        {description && <span className="mt-1 block text-sm leading-5 text-muted-foreground">{description}</span>}
+        {description && (
+          <span className="mt-1 block text-sm leading-5 text-muted-foreground">
+            {description}
+          </span>
+        )}
       </span>
     </Link>
   );

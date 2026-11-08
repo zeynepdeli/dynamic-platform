@@ -16,7 +16,7 @@ import { ImageUploadField } from "@/components/forms/ImageUploadField";
 
 import type { FieldConfig, SectionField } from "@/brand/page-templates";
 import { fieldLabel } from "@/lib/field-config";
-import { SECTION_FIELDS_BY_TYPE, hasColumns } from "@/lib/section-types";
+import { MODULE_ONLY_TYPES, SECTION_FIELDS_BY_TYPE, hasColumns } from "@/lib/section-types";
 import {
   SECTION_TYPES,
   SECTION_TYPE_HINTS,
@@ -126,9 +126,9 @@ export function SectionForm({
           <div
             role="radiogroup"
             aria-label="Bölüm tipi"
-            className="grid grid-cols-2 gap-2 sm:grid-cols-3 @3xl:grid-cols-5"
+            className="grid grid-cols-2 gap-2 sm:grid-cols-3 @3xl:grid-cols-6"
           >
-            {SECTION_TYPES.map((option) => {
+            {SECTION_TYPES.filter((option) => option === type || !MODULE_ONLY_TYPES.includes(option)).map((option) => {
               const active = type === option;
               return (
                 <button
