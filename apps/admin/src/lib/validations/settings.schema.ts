@@ -48,6 +48,11 @@ export const settingsSchemas = {
     faviconUrl: imageUrlSchema,
     ogImageUrl: imageUrlSchema,
     allowIndexing: z.boolean(),
+    gaMeasurementId: z
+      .string()
+      .trim()
+      .toUpperCase()
+      .refine((v) => v === "" || /^G-[A-Z0-9]{4,15}$/.test(v), "Ölçüm kimliği G-XXXXXXX biçiminde olmalı."),
   }),
   footer: footerSchema,
 } as const;

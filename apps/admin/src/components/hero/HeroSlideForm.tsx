@@ -1,5 +1,6 @@
 "use client";
 
+import { useUnsavedChanges } from "@/lib/hooks/use-unsaved-changes";
 import { useState } from "react";
 import { useLiveValues } from "@/lib/hooks/use-live-values";
 import { useForm } from "react-hook-form";
@@ -51,6 +52,9 @@ export function HeroSlideForm({
     resolver: zodResolver(heroSlideSchema),
     defaultValues: initialValues ?? heroSlideDefaultValues,
   });
+
+  // Kaydetmeden çıkılırsa uyar
+  useUnsavedChanges(isDirty && !isSubmitting);
 
   useLiveValues(control, onValuesChange);
 

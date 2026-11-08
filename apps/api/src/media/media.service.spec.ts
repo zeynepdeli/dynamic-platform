@@ -3,6 +3,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 
 import { PrismaService } from '../prisma/prisma.service.js';
 import { MediaFileValidatorService } from './media-file-validator.service.js';
+import { MEDIA_STORAGE } from './storage/media-storage.js';
 import { MediaService } from './media.service.js';
 
 const USED = '/media/0b8f1a52-3c4d-4e5f-8a9b-0c1d2e3f4a5b.webp';
@@ -40,6 +41,7 @@ describe('MediaService', () => {
       providers: [
         MediaService,
         { provide: PrismaService, useValue: prisma },
+        { provide: MEDIA_STORAGE, useValue: { kind: 'local', save: vi.fn(), remove: vi.fn() } },
         { provide: MediaFileValidatorService, useValue: {} },
       ],
     }).compile();
@@ -62,9 +64,9 @@ describe('MediaService', () => {
     expect(prisma.media.findMany.mock.calls[0][0].take).toBe(500);
   });
 
-  it('sayfa arka planı kullanımda sayılır, harici (https) adresler sayılmaz', async () => {
+  it('sayfa arka planı ve https (Cloudinary) adresleri kullanımda sayılır', async () => {
     const urls = await service.findUsedUrls();
-    expect([...urls].sort()).toEqual([USED, PAGE_BG].sort());
+    expect([...urls].sort()).toEqual([USED, PAGE_BG, 'https://cdn.example.com/x.jpg'].sort());
   });
 
   it('kullanımdaki görsel silinemez (409)', async () => {

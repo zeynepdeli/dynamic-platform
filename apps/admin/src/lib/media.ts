@@ -8,6 +8,7 @@ export type MediaFile = {
   mimeType: string;
   size: number;
   url: string;
+  alt: string | null;
   createdAt: string;
   /** Sitede herhangi bir yerde kullanılıyor mu? (API hesaplar) */
   inUse: boolean;

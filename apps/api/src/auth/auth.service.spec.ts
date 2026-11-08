@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, type TestingModule } from '@nestjs/testing';
 
 import { PrismaService } from '../prisma/prisma.service.js';
+import { SessionsService } from './sessions.service.js';
 import { AuthService } from './auth.service.js';
 
 describe('AuthService', () => {
@@ -16,6 +17,7 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         { provide: PrismaService, useValue: prisma },
+        { provide: SessionsService, useValue: { create: vi.fn().mockResolvedValue('r'.repeat(43)), revokeAll: vi.fn(), purgeExpired: vi.fn(), rotate: vi.fn(), revoke: vi.fn() } },
         { provide: JwtService, useValue: jwtService },
       ],
     }).compile();
@@ -80,6 +82,7 @@ describe('AuthService.changePassword', () => {
       providers: [
         AuthService,
         { provide: PrismaService, useValue: prisma },
+        { provide: SessionsService, useValue: { create: vi.fn().mockResolvedValue('r'.repeat(43)), revokeAll: vi.fn(), purgeExpired: vi.fn(), rotate: vi.fn(), revoke: vi.fn() } },
         { provide: JwtService, useValue: jwt },
       ],
     }).compile();

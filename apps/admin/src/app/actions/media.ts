@@ -1,5 +1,7 @@
 "use server";
 
+import { z } from "zod";
+
 import { ApiError, adminFetch, apiErrorMessage } from "@/lib/api";
 import { sendToApi } from "@/lib/admin/send";
 import { validateImageFile } from "@/lib/validations/media";
@@ -8,8 +10,9 @@ type UploadResult =
   | { success: true; url: string }
   | { success: false; error: string };
 
+// Yerel (/media/<uuid>.uzantı) veya Cloudinary adresi
 const MEDIA_URL_REGEX =
-  /^\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)$/;
+  /^(\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)|https:\/\/res\.cloudinary\.com\/[a-z0-9_-]+\/image\/upload\/[A-Za-z0-9_.\/-]+)$/i;
 
 export async function uploadImageAction(
   formData: FormData,
@@ -131,4 +134,19 @@ export async function listMediaForPickerAction(): Promise<
           : "Beklenmeyen bir hata oluştu.",
     };
   }
+}
+
+export async function updateMediaAltAction(id: string, alt: string) {
+  const parsedId = z.uuid().safeParse(id);
+  const parsedAlt = z.string().trim().max(200).safeParse(alt);
+  if (!parsedId.success || !parsedAlt.success) {
+    return { success: false as const, error: "Geçersiz istek." };
+  }
+  return sendToApi(
+    `/admin/media/${parsedId.data}`,
+    "PATCH",
+    { alt: parsedAlt.data || null },
+    "Açıklama kaydedilemedi.",
+    "/media",
+  );
 }

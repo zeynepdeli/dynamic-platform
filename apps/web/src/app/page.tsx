@@ -7,7 +7,7 @@ import { SectionRenderer } from "@/components/sections/SectionRenderer";
 // ✏️ MÜŞTERİYE ÖZEL: Ana sayfa düzeni.
 // Özel tasarım için: const home = await getHome(); home.section("hizmetler")
 export default async function HomePage() {
-  const { heroSlides, homeSections, settings } = await getSite();
+  const { heroSlides, homeSections, settings, mediaAlts } = await getSite();
 
   // İstemci bileşenine yalnızca doğrulanmış adresler gönderilir
   const slides: HeroSlideView[] = heroSlides.map((slide) => {
@@ -19,6 +19,7 @@ export default async function HomePage() {
       description: slide.description,
       image: safeImageSrc(slide.imageUrl),
       mobileImage: safeImageSrc(slide.mobileImageUrl),
+      alt: (slide.imageUrl && mediaAlts?.[slide.imageUrl]) || "",
       button: slide.buttonText && href ? { text: slide.buttonText, href } : null,
     };
   });

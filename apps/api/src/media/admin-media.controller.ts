@@ -5,7 +5,9 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
+  Body,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -21,6 +23,7 @@ import { RolesGuard } from '../auth/guards/roles/roles.guard.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
 
 import { MediaService } from './media.service.js';
+import { UpdateMediaDto } from './dto/update-media.dto.js';
 
 @Controller('admin/media')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -59,6 +62,11 @@ export class AdminMediaController {
   }
 
   // Medya dosyasını sil.
+  @Patch(':id')
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateMediaDto) {
+    return this.mediaService.updateAlt(id, dto.alt);
+  }
+
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.mediaService.remove(id);

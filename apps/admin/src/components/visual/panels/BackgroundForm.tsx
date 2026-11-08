@@ -1,5 +1,6 @@
 "use client";
 
+import { useUnsavedChanges } from "@/lib/hooks/use-unsaved-changes";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLiveValues } from "@/lib/hooks/use-live-values";
@@ -37,6 +38,9 @@ export function BackgroundForm({
     reset,
     formState: { isSubmitting, isDirty },
   } = useForm<BackgroundValues>({ defaultValues: initialValues });
+
+  // Kaydetmeden çıkılırsa uyar
+  useUnsavedChanges(isDirty && !isSubmitting);
 
   useLiveValues(control, onValuesChange);
 

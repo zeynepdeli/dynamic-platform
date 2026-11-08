@@ -26,6 +26,7 @@ export default async function SeoAreaPage() {
           "faviconUrl",
           "ogImageUrl",
           "allowIndexing",
+          "gaMeasurementId",
         ])}
         panels={[
           {
@@ -42,6 +43,13 @@ export default async function SeoAreaPage() {
             fields: [
               { name: "faviconUrl", label: "Favicon", kind: "image", description: "Sekmede görünen küçük ikon. Kare görsel (ör. 512×512)." },
               { name: "ogImageUrl", label: "Paylaşım Görseli (OpenGraph)", kind: "image", description: "WhatsApp, Facebook, LinkedIn'de link paylaşıldığında görünür (1200×630 önerilir)." },
+            ],
+          },
+          {
+            title: "Google Analytics",
+            hint: "Ziyaretçi istatistikleri için. Yalnızca ölçüm kimliği girilir; site koduna serbest kod eklenmez.",
+            fields: [
+              { name: "gaMeasurementId", label: "Ölçüm Kimliği", kind: "text", placeholder: "G-XXXXXXXXXX", description: "Google Analytics → Yönetici → Veri akışları → Ölçüm kimliği." },
             ],
           },
           {

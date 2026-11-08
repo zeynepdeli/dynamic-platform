@@ -12,6 +12,7 @@ export type HeroSlideView = {
   description: string | null;
   image: string | undefined;
   mobileImage: string | undefined;
+  alt: string;
   button: { text: string; href: string } | null;
 };
 
@@ -61,7 +62,7 @@ export function HeroSlider({ slides }: { slides: HeroSlideView[] }) {
               { }
               <img
                 src={slide.image}
-                alt=""
+                alt={slide.alt}
                 fetchPriority={i === 0 ? "high" : "auto"}
                 loading={i === 0 ? "eager" : "lazy"}
                 className="absolute inset-0 -z-10 size-full object-cover"

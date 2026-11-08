@@ -10,13 +10,35 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { JwtService } from '@nestjs/jwt';
+import { SessionsService } from './sessions.service.js';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly sessions: SessionsService,
   ) {}
+
+  /** Erişim anahtarı (15 dk) + yenileme anahtarı */
+  private async issueTokens(user: { id: string; role: string }, refreshToken?: string) {
+    const accessToken = await this.jwtService.signAsync({ sub: user.id, role: user.role });
+    return {
+      accessToken,
+      tokenType: 'Bearer' as const,
+      expiresIn: 900,
+      refreshToken: refreshToken ?? (await this.sessions.create(user.id)),
+    };
+  }
+
+  async refresh(refreshToken: string) {
+    const { user, refreshToken: next } = await this.sessions.rotate(refreshToken);
+    return this.issueTokens(user, next);
+  }
+
+  async logout(refreshToken: string) {
+    await this.sessions.revoke(refreshToken);
+  }
 
   // Kullanıcı bulunamadığında da Argon2 doğrulaması yapabilmek için
   // kullanılan sahte hash. Böylece "kayıtlı / kayıtsız e-posta" yanıt
@@ -144,25 +166,14 @@ export class AuthService {
       },
     });
 
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-      role: user.role,
-    });
-    return { accessToken, tokenType: 'Bearer', expiresIn: 900 };
+    // Diğer cihazlardaki oturumları kapat, bu cihaza yenisini ver
+    await this.sessions.revokeAll(user.id);
+    return this.issueTokens(user);
   }
 
   async login(dto: LoginDto) {
     const user = await this.validateUser(dto);
-
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-      role: user.role,
-    });
-
-    return {
-      accessToken,
-      tokenType: 'Bearer',
-      expiresIn: 900,
-    };
+    await this.sessions.purgeExpired();
+    return this.issueTokens(user);
   }
 }

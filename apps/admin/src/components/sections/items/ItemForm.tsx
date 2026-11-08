@@ -1,5 +1,6 @@
 "use client";
 
+import { useUnsavedChanges } from "@/lib/hooks/use-unsaved-changes";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,6 +54,9 @@ export function ItemForm({
     resolver: zodResolver(sectionItemSchema),
     defaultValues: initialValues ?? sectionItemDefaultValues,
   });
+
+  // Kaydetmeden çıkılırsa uyar
+  useUnsavedChanges(isDirty && !isSubmitting);
 
   async function submit(values: SectionItemFormValues) {
     setSubmitError(null);

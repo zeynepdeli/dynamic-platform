@@ -1,5 +1,6 @@
 "use client";
 
+import { useUnsavedChanges } from "@/lib/hooks/use-unsaved-changes";
 import { useState } from "react";
 import { useLiveValues } from "@/lib/hooks/use-live-values";
 import { useForm, useWatch } from "react-hook-form";
@@ -70,6 +71,9 @@ export function SectionForm({
     resolver: zodResolver(sectionSchema),
     defaultValues: initialValues ?? sectionDefaultValues,
   });
+
+  // Kaydetmeden çıkılırsa uyar
+  useUnsavedChanges(isDirty && !isSubmitting);
 
   // Canlı önizleme: her değişiklikte üst bileşene bildir
   useLiveValues(control, onValuesChange);

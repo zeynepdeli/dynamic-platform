@@ -69,3 +69,10 @@ export function buildMenuTree(
       children: sorted.filter((item) => item.parentId === root.id),
     }));
 }
+
+/** Görselin açıklaması (Medya kütüphanesinde girilen alt metni) */
+export async function altFor(url: string | null | undefined): Promise<string> {
+  if (!url) return "";
+  const { mediaAlts } = await getSite();
+  return mediaAlts && Object.hasOwn(mediaAlts, url) ? mediaAlts[url] : "";
+}

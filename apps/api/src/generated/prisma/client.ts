@@ -77,6 +77,11 @@ export type Media = Prisma.MediaModel
  */
 export type FooterSettings = Prisma.FooterSettingsModel
 /**
+ * Model RefreshSession
+ * 
+ */
+export type RefreshSession = Prisma.RefreshSessionModel
+/**
  * Model ContactMessage
  * 
  */

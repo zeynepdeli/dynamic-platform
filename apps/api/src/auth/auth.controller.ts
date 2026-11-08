@@ -16,6 +16,7 @@ import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { ChangePasswordDto } from './dto/change-password.dto.js';
+import { RefreshDto } from './dto/refresh.dto.js';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard.js';
 
 @Controller('auth')
@@ -42,6 +43,20 @@ export class AuthController {
   })
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  // Oturumu yenile (anahtar döner; eskisi geçersiz olur)
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 30, ttl: 60_000 } })
+  refresh(@Body() dto: RefreshDto) {
+    return this.authService.refresh(dto.refreshToken);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logout(@Body() dto: RefreshDto) {
+    await this.authService.logout(dto.refreshToken);
   }
 
   // Kaba kuvvete karşı sıkı sınır
