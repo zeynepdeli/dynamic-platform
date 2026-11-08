@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { getSiteUrl } from "@/core/config";
 import { Analytics } from "@/components/site/Analytics";
-import { Geist, Geist_Mono } from "next/font/google";
+// Yazı tipi dosyaları pakette: derleme sırasında internet gerekmez
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
 import { getSite } from "@/core/site";
 import { safeImageSrc } from "@/core/safe";
@@ -11,8 +14,12 @@ import { Header } from "@/components/site/Header";
 import "./globals.css";
 
 // ✏️ MÜŞTERİYE ÖZEL: Fontlar
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin", "latin-ext"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistSans = GeistSans;
+const geistMono = GeistMono;
+
+// Sayfalar istek anında oluşturulur (derleme sırasında API gerekmez).
+// API verisi yine REVALIDATE_SECONDS kadar önbellekte tutulur.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSite();
@@ -21,7 +28,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const ogImage = safeImageSrc(settings.ogImageUrl);
 
+  const siteUrl = getSiteUrl();
+
   return {
+    // Paylaşım görselleri vb. için tam adres
+    metadataBase: siteUrl ? new URL(siteUrl) : undefined,
     title: { default: title, template: `%s | ${settings.siteName}` },
     description: settings.metaDescription ?? settings.description ?? undefined,
     keywords: settings.metaKeywords ?? undefined,

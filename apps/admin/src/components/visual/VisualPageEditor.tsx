@@ -290,6 +290,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
               <div className="border-t border-border pt-6 2xl:border-l 2xl:border-t-0 2xl:pl-10 2xl:pt-0">
                 <InlineItems
                   sectionId={selectedSection.id}
+                  sectionType={selectedSection.type}
                   items={selectedSection.items}
                   mediaBaseUrl={theme.mediaBaseUrl}
                   itemLabel={template?.itemLabel ?? ITEM_CONFIG[selectedSection.type]?.label ?? "Kart"}

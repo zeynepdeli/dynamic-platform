@@ -1,0 +1,29 @@
+# Otomatik HTTPS (Let's Encrypt). Alan adlarının DNS kayıtları (A/AAAA)
+# bu sunucuyu göstermeli; 80 ve 443 portları açık olmalı.
+{
+	email {$ACME_EMAIL}
+}
+
+(common) {
+	encode zstd gzip
+	header -Server
+}
+
+{$SITE_DOMAIN} {
+	import common
+	reverse_proxy web:3000
+}
+
+{$ADMIN_DOMAIN} {
+	import common
+	reverse_proxy admin:3001
+}
+
+{$API_DOMAIN} {
+	import common
+	# Görsel yükleme sınırı (API kendi içinde ayrıca 5 MB ile sınırlar)
+	request_body {
+		max_size 12MB
+	}
+	reverse_proxy api:4000
+}

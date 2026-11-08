@@ -1,3 +1,4 @@
+import "./zod-locale";
 import { z } from "zod";
 
 import {
@@ -122,13 +123,9 @@ export const sectionDefaultValues: SectionFormValues = {
 // İkon adı: "truck", "shield-check" (SVG/HTML değil)
 export const ICON_NAME_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export const sectionItemSchema = z
+const sectionItemBase = z
   .object({
-    title: z
-      .string()
-      .trim()
-      .min(1, "Kart başlığı boş olamaz.")
-      .max(200, "Kart başlığı en fazla 200 karakter olabilir."),
+    title: z.string().trim().max(200, "Başlık en fazla 200 karakter olabilir."),
     description: z.string().trim().max(1000),
     imageUrl: imageUrlSchema,
     icon: z
@@ -147,7 +144,20 @@ export const sectionItemSchema = z
   })
   .refine(buttonPairIsValid, buttonPairError);
 
-export type SectionItemFormValues = z.infer<typeof sectionItemSchema>;
+/**
+ * Sunucu tarafı (action): başlık boş olabilir; türe göre kuralı API uygular.
+ * Formlar türe göre aşağıdaki şemayı kullanır.
+ */
+export const sectionItemSchema = sectionItemBase;
+
+/** Galeride görsel zorunlu, alt yazı isteğe bağlı; diğer türlerde başlık zorunlu */
+export function itemSchemaFor(type: SectionType | undefined) {
+  return type === "GALLERY"
+    ? sectionItemBase.refine((v) => v.imageUrl !== "", { path: ["imageUrl"], message: "Bir görsel seçin." })
+    : sectionItemBase.refine((v) => v.title !== "", { path: ["title"], message: "Başlık boş olamaz." });
+}
+
+export type SectionItemFormValues = z.infer<typeof sectionItemBase>;
 
 export const sectionItemDefaultValues: SectionItemFormValues = {
   title: "",

@@ -18,13 +18,16 @@ import type { FieldConfig, ItemField } from "@/brand/page-templates";
 import { fieldLabel } from "@/lib/field-config";
 import {
   sectionItemDefaultValues,
-  sectionItemSchema,
+  itemSchemaFor,
+  type SectionType,
   type SectionItemFormValues,
 } from "@/lib/validations/section.schema";
 
 type ItemFormProps = {
   mode: "create" | "edit";
   fields?: FieldConfig<ItemField>;
+  /** Bölüm türü (galeride alt yazı isteğe bağlı, görsel zorunlu) */
+  sectionType?: SectionType;
   initialValues?: SectionItemFormValues;
   mediaBaseUrl: string;
   onSubmit: (values: SectionItemFormValues) => Promise<string | null>;
@@ -35,6 +38,7 @@ type ItemFormProps = {
 export function ItemForm({
   mode,
   fields,
+  sectionType,
   initialValues,
   mediaBaseUrl,
   onSubmit,
@@ -51,7 +55,7 @@ export function ItemForm({
     reset,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<SectionItemFormValues>({
-    resolver: zodResolver(sectionItemSchema),
+    resolver: zodResolver(itemSchemaFor(sectionType)),
     defaultValues: initialValues ?? sectionItemDefaultValues,
   });
 

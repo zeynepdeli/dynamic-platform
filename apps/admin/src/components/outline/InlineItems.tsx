@@ -19,7 +19,7 @@ import {
 import type { FieldConfig, ItemField } from "@/brand/page-templates";
 import type { SectionItem } from "@/lib/sections";
 import { imageUrlSchema } from "@/lib/validations/common";
-import type { SectionItemFormValues } from "@/lib/validations/section.schema";
+import type { SectionItemFormValues, SectionType } from "@/lib/validations/section.schema";
 
 type InlineItemsProps = {
   sectionId: string;
@@ -27,6 +27,7 @@ type InlineItemsProps = {
   mediaBaseUrl: string;
   itemLabel: string;
   fields?: FieldConfig<ItemField>;
+  sectionType?: SectionType;
 };
 
 function thumb(value: string | null, base: string) {
@@ -35,7 +36,7 @@ function thumb(value: string | null, base: string) {
 }
 
 /** Bölüm içindeki kartlar: her kart açılır form, yeni kart da sayfa içinde */
-export function InlineItems({ sectionId, items, mediaBaseUrl, itemLabel, fields }: InlineItemsProps) {
+export function InlineItems({ sectionId, items, mediaBaseUrl, itemLabel, fields, sectionType }: InlineItemsProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -103,7 +104,7 @@ export function InlineItems({ sectionId, items, mediaBaseUrl, itemLabel, fields 
                       <ImageIcon className="size-4 text-muted-foreground" />
                     )}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-sm font-medium">{item.title}</span>
+                  <span className="min-w-0 flex-1 truncate text-sm font-medium">{item.title || <span className="font-normal italic text-muted-foreground">(alt yazı yok)</span>}</span>
                   <ChevronDown className={`size-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
                 </button>
 
@@ -112,11 +113,11 @@ export function InlineItems({ sectionId, items, mediaBaseUrl, itemLabel, fields 
                   checked={item.active}
                   disabled={isPending}
                   onCheckedChange={(checked) => run(() => setItemActiveAction(sectionId, item.id, checked))}
-                  aria-label={`${item.title} yayında`}
+                  aria-label={`${item.title || itemLabel} yayında`}
                 />
                 <ConfirmDeleteDialog
                   title={`${itemLabel} sil`}
-                  description={<><strong>{item.title}</strong> kalıcı olarak silinecek.</>}
+                  description={<><strong>{item.title || itemLabel}</strong> kalıcı olarak silinecek.</>}
                   onConfirm={() => deleteItemAction(sectionId, item.id)}
                 />
               </div>
@@ -126,6 +127,7 @@ export function InlineItems({ sectionId, items, mediaBaseUrl, itemLabel, fields 
                   <ItemForm
                     mode="edit"
                     fields={fields}
+                    sectionType={sectionType}
                     initialValues={item.formValues}
                     mediaBaseUrl={mediaBaseUrl}
                     onSubmit={async (values) => {
@@ -148,6 +150,7 @@ export function InlineItems({ sectionId, items, mediaBaseUrl, itemLabel, fields 
           <ItemForm
             mode="create"
             fields={fields}
+            sectionType={sectionType}
             mediaBaseUrl={mediaBaseUrl}
             submitLabel={`${itemLabel} Ekle`}
             onCancel={() => setCreating(false)}

@@ -19,3 +19,15 @@ export function getMediaBaseUrl(): string {
 
 /** Admin'deki değişikliklerin sitede görünme süresi (saniye) */
 export const REVALIDATE_SECONDS = Number(process.env.REVALIDATE_SECONDS ?? 30);
+
+/** Sitenin herkese açık adresi (ör. https://siteadi.com) — sitemap ve paylaşım için */
+export function getSiteUrl(): string | undefined {
+  const url = process.env.SITE_URL?.trim().replace(/\/$/, "");
+  if (!url) return undefined;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" || parsed.hostname === "localhost" ? parsed.origin : undefined;
+  } catch {
+    return undefined;
+  }
+}

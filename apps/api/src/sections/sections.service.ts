@@ -179,7 +179,9 @@ export class SectionsService {
   // ───────────── ADMIN: KARTLAR ─────────────
 
   async createItem(sectionId: string, dto: CreateSectionItemDto) {
-    await this.ensureSectionExists(sectionId);
+    const section = await this.ensureSectionExists(sectionId);
+    const title = dto.title?.trim() ?? '';
+    this.assertItemContent(section.type, title, dto.imageUrl);
 
     const count = await this.prisma.sectionItem.count({
       where: { sectionId },
@@ -193,7 +195,7 @@ export class SectionsService {
     return this.prisma.sectionItem.create({
       data: {
         sectionId, // URL'den gelir, body'den DEĞİL
-        title: dto.title.trim(),
+        title,
         description: dto.description,
         imageUrl: dto.imageUrl,
         icon: dto.icon,
@@ -213,9 +215,16 @@ export class SectionsService {
     dto: UpdateSectionItemDto,
   ) {
     await this.ensureItemBelongsToSection(sectionId, itemId);
+    const section = await this.ensureSectionExists(sectionId);
 
-    // title zorunlu: null gelirse yok say
+    // title null gelirse yok say; gönderildiyse türe göre denetle
     const { title, ...rest } = dto;
+    if (title != null && section.type !== 'GALLERY' && !title.trim()) {
+      throw new BadRequestException('Başlık boş olamaz.');
+    }
+    if (section.type === 'GALLERY' && dto.imageUrl === null) {
+      throw new BadRequestException('Galeri öğesinde görsel olmalı.');
+    }
 
     return this.prisma.sectionItem.update({
       where: { id: itemId },
@@ -312,7 +321,7 @@ export class SectionsService {
   private async ensureSectionExists(id: string) {
     const section = await this.prisma.section.findUnique({
       where: { id },
-      select: { id: true, pageId: true },
+      select: { id: true, pageId: true, type: true },
     });
 
     if (!section) {
@@ -363,6 +372,15 @@ export class SectionsService {
   }
 
   // IDOR koruması: kart, URL'deki bölüme ait değilse 404
+  /** Galeride görsel zorunlu, alt yazı isteğe bağlı; diğerlerinde başlık zorunlu */
+  private assertItemContent(type: string, title: string, imageUrl?: string) {
+    if (type === 'GALLERY') {
+      if (!imageUrl) throw new BadRequestException('Galeri öğesinde görsel olmalı.');
+      return;
+    }
+    if (!title) throw new BadRequestException('Başlık boş olamaz.');
+  }
+
   private async ensureItemBelongsToSection(sectionId: string, itemId: string) {
     const item = await this.prisma.sectionItem.findFirst({
       where: { id: itemId, sectionId },

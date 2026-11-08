@@ -25,7 +25,7 @@ export const ITEM_CONFIG: Partial<Record<SectionType, { label: string; fields?: 
   },
   GALLERY: {
     label: "Görsel",
-    fields: { title: "Alt Yazı", imageUrl: "Görsel", description: NONE, icon: NONE, buttonText: NONE, buttonHref: NONE, backgroundColor: NONE, backgroundImage: NONE },
+    fields: { title: "Alt Yazı (isteğe bağlı)", imageUrl: "Görsel", description: NONE, icon: NONE, buttonText: NONE, buttonHref: NONE, backgroundColor: NONE, backgroundImage: NONE },
   },
   STATS: {
     label: "Sayı",
