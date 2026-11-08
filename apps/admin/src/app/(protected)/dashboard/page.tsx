@@ -16,6 +16,8 @@ import {
   PanelsTopLeft,
   Plus,
   Trash2,
+  Package,
+  FolderTree,
 } from "lucide-react";
 
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
@@ -24,6 +26,7 @@ import { AreaHeader } from "@/components/areas/AreaShell";
 import { MODULES, moduleBySlug } from "@/brand/modules";
 import { MODULE_ICONS } from "@/components/modules/module-icons";
 import { getUnreadCount } from "@/lib/contact-messages";
+import { getFeatures } from "@/lib/features";
 import { getAdminPages, type Page } from "@/lib/pages";
 import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
 import { getAdminSections, type Section } from "@/lib/sections";
@@ -33,9 +36,10 @@ type Icon = React.ComponentType<{ className?: string }>;
 
 /** Site Haritası: sitenin her parçası ayrı bir kutucuk; her biri kendi ekranında düzenlenir */
 export default async function DashboardPage() {
-  const [allPages, unread] = await Promise.all([
+  const [allPages, unread, features] = await Promise.all([
     getAdminPages(),
     getUnreadCount(),
+    getFeatures(),
   ]);
   // Modül sayfaları (SSS, İletişim, Galeri) yalnızca Modüller grubunda görünür
   const pages = allPages.filter((p) => !moduleBySlug(p.slug));
@@ -107,6 +111,23 @@ export default async function DashboardPage() {
           }
         />
       </Group>
+
+      {features.commerce && (
+        <Group eyebrow="E-ticaret" title="Mağaza">
+          <Tile
+            href="/shop/products"
+            icon={Package}
+            title="Ürün Yönetimi"
+            description="Ürünler, fiyat, stok, görseller"
+          />
+          <Tile
+            href="/shop/categories"
+            icon={FolderTree}
+            title="Kategori Yönetimi"
+            description="Ürün kategorileri ve sıralaması"
+          />
+        </Group>
+      )}
 
       <Group eyebrow="Kendi ekranı olan sayfalar" title="Modüller">
         {MODULES.map((mod) => {

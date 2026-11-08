@@ -64,8 +64,28 @@ açın, çekirdek güncellemelerini almak için bu repoyu `upstream` olarak ekle
 4. **Görseller** – Cloudinary önerilir (`MEDIA_STORAGE=cloudinary`, müşteri başına ayrı `CLOUDINARY_FOLDER`).
 5. **E-posta** – SMTP bilgileri ("şifremi unuttum" ve yeni mesaj bildirimi için).
    Admin → Mesajlar ekranındaki e-posta kutusundan test e-postası gönderin.
-6. **Yayın öncesi** – Admin → SEO Yönetimi'nden **arama motoru indekslemeyi açın**
+6. **Modüller** – E-ticaret gerekiyorsa `COMMERCE_ENABLED=true` (API ortam değişkeni). Admin'de
+   **Mağaza** grubu (Ürün / Kategori Yönetimi) açılır; mağaza API'si `/shop/...` altında yayınlanır.
+   Kapalıyken bu uçlar hiç yüklenmez.
+7. **Yayın öncesi** – Admin → SEO Yönetimi'nden **arama motoru indekslemeyi açın**
    (örnek içerikle kurulan site kapalı başlar).
+
+---
+
+## Mağaza API'si (COMMERCE_ENABLED=true)
+
+Müşteriye özel frontend bu uçları kullanır (hepsi herkese açık, yalnızca yayındaki kayıtlar):
+
+| Uç | Açıklama |
+|---|---|
+| `GET /features` | Açık modüller (`{ "commerce": true }`) |
+| `GET /shop/categories` | Aktif kategoriler ve ürün sayıları |
+| `GET /shop/categories/:slug` | Kategori bilgisi (SEO alanlarıyla) |
+| `GET /shop/products?category=&q=&sort=new\|price-asc\|price-desc\|name&featured=true&page=&limit=` | Sayfalı ürün listesi (limit ≤ 48) |
+| `GET /shop/products/:slug` | Ürün detayı: görseller, sekmeler, SEO |
+
+Fiyatlar `"249.90"` biçiminde metin döner (kuruş hatası olmasın diye). Kesin stok adedi
+paylaşılmaz; yalnızca `inStock` döner. Gizli kategorideki ürünler de gizlidir.
 
 ---
 

@@ -113,6 +113,26 @@ try {
         order: 0,
       },
     });
+
+    // Mağaza modülü açıksa örnek kategori ve ürün
+    if (process.env.COMMERCE_ENABLED === 'true') {
+      const category = await tx.productCategory.create({
+        data: { name: 'Örnek Kategori', slug: 'ornek-kategori', order: 0 },
+      });
+      await tx.product.create({
+        data: {
+          name: 'Örnek Ürün',
+          slug: 'ornek-urun',
+          summary: 'Kısa ürün açıklaması.',
+          description: 'Ürün açıklamasını admin → Mağaza → Ürün Yönetimi ekranından düzenleyin.',
+          price: '199.90',
+          unit: 'Adet',
+          stock: 10,
+          categoryId: category.id,
+          tabs: { create: [{ title: 'Özellikler', body: 'Ürün özelliklerini buraya yazın.', order: 0 }] },
+        },
+      });
+    }
   });
 
   console.log(`Örnek içerik eklendi (${siteName}). Site arama motorlarına KAPALI başlar; yayına alınca admin → SEO Yönetimi'nden açın.`);

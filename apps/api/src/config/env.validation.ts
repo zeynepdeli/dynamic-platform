@@ -46,6 +46,10 @@ const envSchema = z
 
     // Web sitesi ↔ API ortak gizli anahtar (iletişim formunda ziyaretçi IP'si için)
     WEB_API_SECRET: z.string().min(32, 'WEB_API_SECRET en az 32 karakter olmalıdır').optional(),
+
+    // ───── Modüller (müşteriye göre açılıp kapanır) ─────
+    // E-ticaret: ürün, kategori (ileride sepet, sipariş, ödeme)
+    COMMERCE_ENABLED: z.enum(['true', 'false']).default('false'),
   })
   .superRefine((env, ctx) => {
     if (env.SMTP_HOST && !env.MAIL_FROM) {

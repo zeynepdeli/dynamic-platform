@@ -106,3 +106,23 @@ export type Section = Prisma.SectionModel
  * 
  */
 export type SectionItem = Prisma.SectionItemModel
+/**
+ * Model ProductCategory
+ * 
+ */
+export type ProductCategory = Prisma.ProductCategoryModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model ProductImage
+ * 
+ */
+export type ProductImage = Prisma.ProductImageModel
+/**
+ * Model ProductTab
+ * 
+ */
+export type ProductTab = Prisma.ProductTabModel

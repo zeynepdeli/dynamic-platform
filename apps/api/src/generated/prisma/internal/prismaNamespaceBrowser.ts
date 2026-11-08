@@ -63,7 +63,11 @@ export const ModelName = {
   ContactMessage: 'ContactMessage',
   SocialLink: 'SocialLink',
   Section: 'Section',
-  SectionItem: 'SectionItem'
+  SectionItem: 'SectionItem',
+  ProductCategory: 'ProductCategory',
+  Product: 'Product',
+  ProductImage: 'ProductImage',
+  ProductTab: 'ProductTab'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -308,6 +312,69 @@ export const SectionItemScalarFieldEnum = {
 } as const
 
 export type SectionItemScalarFieldEnum = (typeof SectionItemScalarFieldEnum)[keyof typeof SectionItemScalarFieldEnum]
+
+
+export const ProductCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  order: 'order',
+  active: 'active',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductCategoryScalarFieldEnum = (typeof ProductCategoryScalarFieldEnum)[keyof typeof ProductCategoryScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  sku: 'sku',
+  summary: 'summary',
+  description: 'description',
+  price: 'price',
+  compareAtPrice: 'compareAtPrice',
+  unit: 'unit',
+  stock: 'stock',
+  trackStock: 'trackStock',
+  active: 'active',
+  featured: 'featured',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  alt: 'alt',
+  order: 'order',
+  productId: 'productId'
+} as const
+
+export type ProductImageScalarFieldEnum = (typeof ProductImageScalarFieldEnum)[keyof typeof ProductImageScalarFieldEnum]
+
+
+export const ProductTabScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  body: 'body',
+  order: 'order',
+  productId: 'productId'
+} as const
+
+export type ProductTabScalarFieldEnum = (typeof ProductTabScalarFieldEnum)[keyof typeof ProductTabScalarFieldEnum]
 
 
 export const SortOrder = {

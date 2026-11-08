@@ -30,6 +30,7 @@ x-api-env: &api-env
   ADMIN_EMAIL: ${ADMIN_EMAIL:-}
   ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
   SEED_SITE_NAME: ${SEED_SITE_NAME:-}
+  COMMERCE_ENABLED: ${COMMERCE_ENABLED:-false}
 
 services:
   postgres:
