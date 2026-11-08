@@ -26,7 +26,7 @@ export function AreaShell({
   children: React.ReactNode;
 }) {
   return (
-    <main className="mx-auto w-full min-w-0 max-w-6xl space-y-6 pb-16">
+    <main className="mx-auto w-full min-w-0 max-w-[1800px] space-y-5 pb-12">
       {back && (
         <nav aria-label="Sayfa yolu" className="text-sm text-muted-foreground">
           <Link href={back.href} className="inline-flex items-center gap-1.5 hover:text-[#346872]">
@@ -59,7 +59,7 @@ export function AreaHeader({
   actions?: React.ReactNode;
 }) {
   return (
-    <header className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+    <header className="relative overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-sm sm:px-7 sm:py-6">
       <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-20 size-64 rounded-full bg-[#346872]/8 blur-2xl" />
       <div className="relative flex flex-wrap items-center justify-between gap-5">
         <div className="flex min-w-0 items-start gap-4">
@@ -100,14 +100,14 @@ export function AreaCard({
 }) {
   return (
     <section className="rounded-3xl border border-border bg-card shadow-sm">
-      <header className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-5 py-4 sm:px-8 sm:py-5">
+      <header className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-[#183350]">{title}</h2>
           {hint && <p className="mt-0.5 text-sm text-muted-foreground">{hint}</p>}
         </div>
         {action}
       </header>
-      <div className="@container p-5 sm:p-8">{children}</div>
+      <div className="@container p-5 sm:px-7 sm:py-6">{children}</div>
     </section>
   );
 }

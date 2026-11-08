@@ -135,7 +135,7 @@ function HeaderContent({ pathname, unread }: HeaderContentProps) {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b border-border bg-surface/95 backdrop-blur-xl">
-        <div className="flex h-17 w-full items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 2xl:px-10">
+        <div className="flex h-17 w-full items-center justify-between gap-3 px-3 sm:px-4 lg:px-6">
           {/* Logo */}
           <Link
             href="/dashboard"
