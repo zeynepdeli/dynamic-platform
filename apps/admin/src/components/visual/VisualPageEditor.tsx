@@ -639,7 +639,7 @@ function Panel({
 }) {
   return (
     <section className="rounded-2xl border border-border bg-card shadow-sm">
-      <header className="flex flex-wrap items-start gap-3 border-b border-border p-5 sm:px-8">
+      <header className="flex flex-wrap items-start gap-3 border-b border-border p-5 sm:px-7">
         <div className="min-w-0 flex-1">
           <h2 className="flex flex-wrap items-center gap-2 text-xl font-bold tracking-tight text-[#183350]">
             {title}
@@ -664,7 +664,7 @@ function Panel({
           <div className="flex shrink-0 items-center gap-1.5">{actions}</div>
         )}
       </header>
-      <div className="@container p-5 sm:p-8">{children}</div>
+      <div className="@container p-5 sm:px-7 sm:py-6">{children}</div>
     </section>
   );
 }

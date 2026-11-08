@@ -18,7 +18,7 @@ export default async function ProtectedLayout({
     <div className="min-h-screen bg-background text-foreground">
       <CommandHeader unread={await getUnreadCount()} />
 
-      <main className="w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8 2xl:px-10">
+      <main className="w-full px-3 py-4 sm:px-4 lg:px-6 lg:py-5">
         {children}
       </main>
     </div>

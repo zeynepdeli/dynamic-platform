@@ -38,7 +38,7 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="mx-auto w-full min-w-0 max-w-6xl space-y-8 pb-16">
+    <div className="mx-auto w-full min-w-0 max-w-[1800px] space-y-7 pb-12">
       <AreaHeader
         icon={LayoutDashboard}
         eyebrow="Yönetim Paneli"
@@ -201,7 +201,7 @@ function Group({
         </div>
         {action}
       </header>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{children}</div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">{children}</div>
     </section>
   );
 }

@@ -74,7 +74,7 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
             : { icon: LayoutGrid, title: `${sectionLabel} Bölümü`, description: `${section ? SECTION_TYPE_LABELS[section.type] : ""} · Bölümün metinleri, görselleri ve arka planı.` };
 
   return (
-    <main className="mx-auto w-full min-w-0 max-w-6xl space-y-6 pb-16">
+    <main className="mx-auto w-full min-w-0 max-w-[1800px] space-y-5 pb-12">
       <nav aria-label="Sayfa yolu" className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
         <Link href="/dashboard" className="inline-flex items-center gap-1.5 hover:text-[#346872]">
           <ArrowLeft className="size-3.5" />
