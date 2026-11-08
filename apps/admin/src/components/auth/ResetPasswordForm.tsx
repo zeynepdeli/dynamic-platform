@@ -6,7 +6,7 @@ import { KeyRound, Loader2 } from "lucide-react";
 
 import { resetPasswordAction } from "@/app/actions/password-reset";
 
-const input = "h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-[#346872] focus:ring-2 focus:ring-[#346872]/20";
+const input = "h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-(--brand-accent) focus:ring-2 focus:ring-(--brand-accent)/20";
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const router = useRouter();
@@ -41,7 +41,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
         <input id="confirmPassword" type="password" autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={input} />
       </div>
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <button type="submit" disabled={loading} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#183350] text-sm font-semibold text-white transition hover:bg-[#183350]/90 disabled:opacity-60">
+      <button type="submit" disabled={loading} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-(--brand-primary) text-sm font-semibold text-white transition hover:bg-(--brand-primary)/90 disabled:opacity-60">
         {loading ? <Loader2 className="size-4 animate-spin" /> : <KeyRound className="size-4" />}
         Şifreyi yenile
       </button>

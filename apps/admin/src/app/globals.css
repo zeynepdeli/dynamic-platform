@@ -2,6 +2,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "../brand/theme.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,39 +14,39 @@
   color-scheme: light;
 
   /* Command Center */
-  --background: #f5f8fb;
-  --foreground: #183350;
+  --background: var(--brand-background);
+  --foreground: var(--brand-text);
 
-  --surface: #ffffff;
-  --surface-muted: #eef3f7;
+  --surface: var(--brand-surface);
+  --surface-muted: var(--brand-surface-muted);
 
-  --border: #dce5ec;
+  --border: var(--brand-border);
 
-  --primary: #183350;
+  --primary: var(--brand-primary);
   --primary-foreground: #ffffff;
 
-  --accent: #346872;
+  --accent: var(--brand-accent);
   --accent-foreground: #ffffff;
 
   --radius: 0.625rem;
 
   /* shadcn/ui */
-  --card: #ffffff;
-  --card-foreground: #183350;
+  --card: var(--brand-surface);
+  --card-foreground: var(--brand-text);
 
-  --popover: #ffffff;
-  --popover-foreground: #183350;
+  --popover: var(--brand-surface);
+  --popover-foreground: var(--brand-text);
 
-  --secondary: #eef3f7;
-  --secondary-foreground: #183350;
+  --secondary: var(--brand-surface-muted);
+  --secondary-foreground: var(--brand-text);
 
-  --muted: #eef3f7;
-  --muted-foreground: #64748b;
+  --muted: var(--brand-surface-muted);
+  --muted-foreground: var(--brand-text-muted);
 
   --destructive: #dc2626;
 
-  --input: #dce5ec;
-  --ring: #346872;
+  --input: var(--brand-border);
+  --ring: var(--brand-accent);
 
   /* Charts */
   --chart-1: #183350;
@@ -230,4 +231,9 @@ button:disabled {
 ::selection {
   background: #346872;
   color: #ffffff;
+}
+
+/* Marka başlık yazı tipi (brand/theme.css → --brand-font-heading) */
+.brand-heading {
+  font-family: var(--brand-font-heading);
 }

@@ -183,7 +183,7 @@ export function SlidesPanel({ slides, mediaBaseUrl, activeIndex, onActiveChange,
       </ol>
 
       {creating ? (
-        <div className="rounded-xl border border-dashed border-[#346872]/40 bg-surface p-4">
+        <div className="rounded-xl border border-dashed border-(--brand-accent)/40 bg-surface p-4">
           <p className="mb-4 text-sm font-semibold">Yeni Slayt</p>
           <HeroSlideForm
             mode="create"
@@ -212,7 +212,7 @@ export function SlidesPanel({ slides, mediaBaseUrl, activeIndex, onActiveChange,
             setOpenId(null);
             onDraftChange(null);
           }}
-          className="inline-flex items-center gap-2 rounded-lg border border-dashed border-border px-4 py-2.5 text-sm font-medium text-[#346872] hover:bg-surface-muted"
+          className="inline-flex items-center gap-2 rounded-lg border border-dashed border-border px-4 py-2.5 text-sm font-medium text-(--brand-accent) hover:bg-surface-muted"
         >
           <Plus className="size-4" />
           Slayt Ekle

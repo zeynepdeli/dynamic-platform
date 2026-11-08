@@ -1,5 +1,6 @@
 "use client";
 
+import { BRAND } from "@/brand/brand";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -142,12 +143,17 @@ function HeaderContent({ pathname, unread }: HeaderContentProps) {
             href="/dashboard"
             className="flex min-w-0 shrink-0 items-center gap-3"
           >
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <Blocks size={21} strokeWidth={1.8} />
-            </span>
+            {BRAND.logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={BRAND.logo} alt="" className="h-10 w-auto max-w-32 object-contain" />
+            ) : (
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                <Blocks size={21} strokeWidth={1.8} />
+              </span>
+            )}
 
-            <span className="hidden truncate text-base font-bold tracking-tight text-foreground sm:block">
-              Dynamic Platform
+            <span className="brand-heading hidden truncate text-base font-bold tracking-tight text-foreground sm:block">
+              {BRAND.name}
             </span>
           </Link>
 
@@ -312,7 +318,7 @@ function HeaderContent({ pathname, unread }: HeaderContentProps) {
 
                 <div>
                   <p className="text-sm font-semibold text-foreground">
-                    Command Center
+                    {BRAND.name}
                   </p>
 
                   <p className="text-xs text-muted-foreground">

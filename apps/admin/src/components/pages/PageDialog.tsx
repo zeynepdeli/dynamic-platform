@@ -92,7 +92,7 @@ export function PageDialog({
             setSubmitError(null);
             setOpen(true);
           }}
-          className="min-h-11 gap-2 bg-[#183350] px-5 font-semibold text-white hover:bg-[#24486c]"
+          className="min-h-11 gap-2 bg-(--brand-primary) px-5 font-semibold text-white hover:bg-[#24486c]"
         >
           {mode === "create" ? (
             <FilePlus2 className="size-4" />
@@ -134,9 +134,9 @@ export function PageDialog({
             <div className="flex items-center justify-between gap-5">
               <div className="min-w-0">
                 <div className="mb-2 flex items-center gap-2">
-                  <span className="size-2 rounded-full bg-[#346872]" />
+                  <span className="size-2 rounded-full bg-(--brand-accent)" />
 
-                  <span className="text-xs font-semibold uppercase tracking-[0.15em] text-[#346872]">
+                  <span className="text-xs font-semibold uppercase tracking-[0.15em] text-(--brand-accent)">
                     Sayfa Yönetimi
                   </span>
                 </div>

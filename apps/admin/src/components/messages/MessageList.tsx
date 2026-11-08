@@ -68,7 +68,7 @@ export function MessageList({ messages }: { messages: MessageView[] }) {
               aria-selected={filter === f.key}
               onClick={() => setFilter(f.key)}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                filter === f.key ? "bg-[#183350] text-white" : "bg-surface-muted text-foreground hover:bg-border"
+                filter === f.key ? "bg-(--brand-primary) text-white" : "bg-surface-muted text-foreground hover:bg-border"
               }`}
             >
               {f.label} ({count})
@@ -93,14 +93,14 @@ export function MessageList({ messages }: { messages: MessageView[] }) {
           {visible.map((m) => {
             const open = openId === m.id;
             return (
-              <li key={m.id} className={`rounded-2xl border bg-card transition ${m.read ? "border-border" : "border-[#346872]/40 shadow-sm"}`}>
+              <li key={m.id} className={`rounded-2xl border bg-card transition ${m.read ? "border-border" : "border-(--brand-accent)/40 shadow-sm"}`}>
                 <button
                   type="button"
                   aria-expanded={open}
                   onClick={() => toggle(m)}
                   className="flex w-full items-start gap-3 p-4 text-left"
                 >
-                  <span className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl ${m.read ? "bg-surface-muted text-muted-foreground" : "bg-[#183350] text-white"}`}>
+                  <span className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl ${m.read ? "bg-surface-muted text-muted-foreground" : "bg-(--brand-primary) text-white"}`}>
                     {m.read ? <MailOpen className="size-4" /> : <Mail className="size-4" />}
                   </span>
                   <span className="min-w-0 flex-1">
@@ -134,7 +134,7 @@ export function MessageList({ messages }: { messages: MessageView[] }) {
                     <div className="flex flex-wrap items-center gap-2">
                       <a
                         href={`mailto:${encodeURIComponent(m.email)}?subject=${encodeURIComponent(`Re: ${m.subject ?? "Mesajınız"}`)}`}
-                        className="inline-flex items-center gap-2 rounded-full bg-[#183350] px-4 py-2 text-sm font-semibold text-white hover:bg-[#183350]/90"
+                        className="inline-flex items-center gap-2 rounded-full bg-(--brand-primary) px-4 py-2 text-sm font-semibold text-white hover:bg-(--brand-primary)/90"
                       >
                         <Reply className="size-4" />
                         E-posta ile yanıtla

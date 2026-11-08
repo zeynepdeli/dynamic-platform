@@ -76,7 +76,7 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
   return (
     <main className="mx-auto w-full min-w-0 max-w-[1800px] space-y-5 pb-12">
       <nav aria-label="Sayfa yolu" className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
-        <Link href="/dashboard" className="inline-flex items-center gap-1.5 hover:text-[#346872]">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 hover:text-(--brand-accent)">
           <ArrowLeft className="size-3.5" />
           Dashboard
         </Link>

@@ -25,12 +25,12 @@ export function UsersList({ users }: { users: AdminRow[] }) {
       <ul className="divide-y divide-border rounded-2xl border border-border" aria-busy={pending}>
         {users.map((u) => (
           <li key={u.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
-            <span className={`flex size-9 items-center justify-center rounded-full ${u.active ? "bg-[#183350]/10 text-[#183350]" : "bg-neutral-200 text-neutral-500"}`}>
+            <span className={`flex size-9 items-center justify-center rounded-full ${u.active ? "bg-(--brand-primary)/10 text-(--brand-primary)" : "bg-neutral-200 text-neutral-500"}`}>
               <ShieldCheck className="size-4" />
             </span>
             <div className="min-w-0 flex-1">
               <p className={`truncate font-medium ${u.active ? "" : "text-muted-foreground line-through"}`}>
-                {u.email} {u.isMe && <span className="ml-1 rounded-full bg-[#346872]/10 px-2 py-0.5 text-[11px] font-semibold text-[#346872] no-underline">Siz</span>}
+                {u.email} {u.isMe && <span className="ml-1 rounded-full bg-(--brand-accent)/10 px-2 py-0.5 text-[11px] font-semibold text-(--brand-accent) no-underline">Siz</span>}
               </p>
               <p className="text-xs text-muted-foreground">Eklenme: {u.createdAt}</p>
             </div>
