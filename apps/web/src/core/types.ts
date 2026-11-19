@@ -142,3 +142,31 @@ export type SiteBootstrap = {
   /** Görsel adresi → açıklama (admin → Medya) */
   mediaAlts: Record<string, string>;
 };
+
+/** Blog listesindeki yazı (içerik hariç) */
+export type PostSummary = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  coverImageUrl: string | null;
+  category: string | null;
+  publishedAt: string;
+  updatedAt: string;
+  /** Her açık dildeki adresi: { tr: "/blog/merhaba", en: "/en/blog/hello" } */
+  alternates: Record<string, string>;
+};
+
+export type Post = PostSummary & {
+  content: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+};
+
+export type PostPage = {
+  items: PostSummary[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};

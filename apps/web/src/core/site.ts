@@ -3,7 +3,7 @@ import "server-only";
 import { cache } from "react";
 
 import { apiGet } from "./api";
-import type { MenuItem, MenuNode, Page, Section, SiteBootstrap } from "./types";
+import type { MenuItem, MenuNode, Page, Post, PostPage, Section, SiteBootstrap } from "./types";
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -76,3 +76,24 @@ export async function altFor(url: string | null | undefined): Promise<string> {
   const { mediaAlts } = await getSite();
   return mediaAlts && Object.hasOwn(mediaAlts, url) ? mediaAlts[url] : "";
 }
+
+/** Blog listesi (sayfalı) */
+export const getPosts = cache(async (page = 1, pageSize = 12): Promise<PostPage> => {
+  const safePage = Number.isInteger(page) && page >= 1 && page <= 10_000 ? page : 1;
+  const safeSize = Number.isInteger(pageSize) && pageSize >= 1 && pageSize <= 50 ? pageSize : 12;
+  return (
+    (await apiGet<PostPage>(`/posts?page=${safePage}&limit=${safeSize}`)) ?? {
+      items: [],
+      total: 0,
+      page: 1,
+      pageSize: safeSize,
+      totalPages: 1,
+    }
+  );
+});
+
+/** Yayındaki tek yazı. Yoksa null (→ notFound()) */
+export const getPost = cache(async (slug: string): Promise<Post | null> => {
+  if (slug.length > 150 || !SLUG.test(slug)) return null;
+  return apiGet<Post>(`/posts/${slug}`);
+});

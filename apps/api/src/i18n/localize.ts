@@ -28,6 +28,7 @@ export const TRANSLATABLE = {
   sectionItem: ['title', 'subtitle', 'description', 'buttonText', 'buttonHref'],
   footer: ['description', 'copyright', 'address'],
   media: ['alt'],
+  post: ['title', 'slug', 'excerpt', 'content', 'category', 'seoTitle', 'seoDescription'],
 } as const;
 
 type Row = { translations?: unknown } & Record<string, unknown>;

@@ -9,6 +9,7 @@ import {
   Home,
   Info,
   LayoutGrid,
+  Newspaper,
   Languages,
   PaintBucket,
   Palette,
@@ -141,6 +142,12 @@ export default async function DashboardPage() {
             />
           );
         })}
+        <Tile
+          href="/blog"
+          icon={Newspaper}
+          title="Blog / Haberler"
+          description="Yazılar, duyurular, zamanlanmış yayın · /blog"
+        />
       </Group>
 
       <PageGroup

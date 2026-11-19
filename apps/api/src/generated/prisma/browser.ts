@@ -28,6 +28,11 @@ export type SiteSettings = Prisma.SiteSettingsModel
  */
 export type Page = Prisma.PageModel
 /**
+ * Model Post
+ * Blog / Haberler yazısı
+ */
+export type Post = Prisma.PostModel
+/**
  * Model User
  * 
  */

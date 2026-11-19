@@ -19,6 +19,7 @@ import { ContactMessagesModule } from './contact-messages/contact-messages.modul
 import { MailModule } from './mail/mail.module.js';
 import { UsersModule } from './users/users.module.js';
 import { I18nModule } from './i18n/i18n.module.js';
+import { PostsModule } from './posts/posts.module.js';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { I18nModule } from './i18n/i18n.module.js';
     I18nModule,
     AuthModule,
     PagesModule,
+    PostsModule,
     SiteSettingsModule,
     MenuItemsModule,
     HeroSlidesModule,
