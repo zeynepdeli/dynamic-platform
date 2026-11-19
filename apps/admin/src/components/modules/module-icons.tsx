@@ -1,4 +1,4 @@
-import { CircleHelp, Images, Mail } from "lucide-react";
+import { BadgeCheck, CircleHelp, Images, Info, Mail, MessageSquareQuote, Users } from "lucide-react";
 
 import type { ModuleDefinition } from "@/brand/modules";
 
@@ -9,4 +9,8 @@ export const MODULE_ICONS: Record<
   faq: CircleHelp,
   contact: Mail,
   gallery: Images,
+  about: Info,
+  team: Users,
+  brands: BadgeCheck,
+  testimonials: MessageSquareQuote,
 };
