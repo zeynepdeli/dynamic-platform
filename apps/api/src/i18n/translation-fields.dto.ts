@@ -101,6 +101,23 @@ export class FooterTranslationDto {
   @text(500) address?: string;
 }
 
+export class PostTranslationDto {
+  @line(200) title?: string;
+  /** Bu dildeki adres: /en/blog/my-post. Boşsa ana dildeki slug kullanılır. */
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  @Matches(/^$|^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
+    message: 'Adres yalnızca küçük harf, rakam ve tire içerebilir.',
+  })
+  slug?: string;
+  @text(500) excerpt?: string;
+  @text(50000) content?: string;
+  @line(60) category?: string;
+  @line(150) seoTitle?: string;
+  @text(300) seoDescription?: string;
+}
+
 export class MediaTranslationDto {
   @line(200) alt?: string;
 }
@@ -117,5 +134,6 @@ export const SectionItemTranslations = TranslationsDto(
 );
 export const FooterTranslations = TranslationsDto(FooterTranslationDto);
 export const MediaTranslations = TranslationsDto(MediaTranslationDto);
+export const PostTranslations = TranslationsDto(PostTranslationDto);
 
 export type TranslationsOf<T> = Partial<Record<'tr' | 'en', T>>;

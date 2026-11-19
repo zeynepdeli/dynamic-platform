@@ -49,7 +49,7 @@ export class MediaService {
    * kullanımdaki bir görsel silinebilir.
    */
   async findUsedUrls(): Promise<Set<string>> {
-    const [settings, footers, pages, slides, sections, items] =
+    const [settings, footers, pages, slides, sections, items, posts] =
       await Promise.all([
       this.prisma.siteSettings.findMany({
         select: {
@@ -89,6 +89,10 @@ export class MediaService {
         },
         select: { imageUrl: true, backgroundImage: true },
       }),
+      this.prisma.post.findMany({
+        where: { coverImageUrl: { not: null } },
+        select: { coverImageUrl: true },
+      }),
     ]);
 
     const urls = [
@@ -105,6 +109,7 @@ export class MediaService {
       ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl, s.foregroundImageUrl]),
       ...sections.map((s) => s.backgroundImage),
       ...items.flatMap((i) => [i.imageUrl, i.backgroundImage]),
+      ...posts.map((p) => p.coverImageUrl),
     ];
 
     return new Set(

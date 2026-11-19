@@ -10,6 +10,7 @@
  */
 export type * from './models/SiteSettings.js'
 export type * from './models/Page.js'
+export type * from './models/Post.js'
 export type * from './models/User.js'
 export type * from './models/MenuItem.js'
 export type * from './models/HeroSlide.js'

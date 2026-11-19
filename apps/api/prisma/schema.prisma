@@ -93,6 +93,32 @@ model Page {
   sections Section[]
 }
 
+/// Blog / Haberler yazısı
+model Post {
+  id            String    @id @default(uuid())
+  title         String
+  slug          String    @unique
+  /// Liste kartlarında görünen kısa özet
+  excerpt       String?
+  /// Düz metin (paragraflar boş satırla ayrılır; HTML çalışmaz)
+  content       String?
+  coverImageUrl String?
+  category      String?
+  published     Boolean   @default(false)
+  /// Yayın tarihi: ileri bir tarih verilirse o ana kadar sitede görünmez
+  publishedAt   DateTime?
+  seoTitle       String?
+  seoDescription String?
+
+  // Diğer dillerdeki metinler (src/i18n/localize.ts → TRANSLATABLE.post)
+  translations Json @default("{}")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, publishedAt])
+}
+
 enum UserRole {
   ADMIN
   USER

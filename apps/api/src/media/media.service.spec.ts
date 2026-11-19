@@ -21,6 +21,7 @@ describe('MediaService', () => {
     heroSlide: { findMany: vi.fn() },
     section: { findMany: vi.fn() },
     sectionItem: { findMany: vi.fn() },
+    post: { findMany: vi.fn() },
   };
 
   beforeEach(async () => {
@@ -36,6 +37,7 @@ describe('MediaService', () => {
     prisma.sectionItem.findMany.mockResolvedValue([
       { imageUrl: 'https://cdn.example.com/x.jpg' },
     ]);
+    prisma.post.findMany.mockResolvedValue([]);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -67,6 +69,12 @@ describe('MediaService', () => {
   it('sayfa arka planı ve https (Cloudinary) adresleri kullanımda sayılır', async () => {
     const urls = await service.findUsedUrls();
     expect([...urls].sort()).toEqual([USED, PAGE_BG, 'https://cdn.example.com/x.jpg'].sort());
+  });
+
+  it('blog kapak görseli kullanımda sayılır', async () => {
+    prisma.post.findMany.mockResolvedValue([{ coverImageUrl: '/media/kapak.webp' }]);
+    const urls = await service.findUsedUrls();
+    expect(urls.has('/media/kapak.webp')).toBe(true);
   });
 
   it('kullanımdaki görsel silinemez (409)', async () => {
