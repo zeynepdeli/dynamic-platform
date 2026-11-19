@@ -77,14 +77,19 @@ describe('İçeriği çevirme', () => {
   });
 
   it('kaydetme: alan alan birleşir; boş metin o alanı siler, gönderilmeyenler korunur', () => {
-    const current = { en: { title: 'Old', body: 'B', seo: 'S' }, de: { title: 'X' } };
-    expect(mergeTranslations(current, { en: { title: ' New ', body: '' } })).toEqual({
+    const current = {
+      en: { title: 'Old', body: 'B', seo: 'S' },
+      de: { title: 'X' },
+    };
+    expect(
+      mergeTranslations(current, { en: { title: ' New ', body: '' } }),
+    ).toEqual({
       en: { title: 'New', seo: 'S' },
       de: { title: 'X' },
     });
-    expect(mergeTranslations({ en: { title: 'A' } }, { en: { title: '' } })).toEqual({});
-    expect(mergeTranslations(current, undefined)).toBeUndefined();
-  });
+    expect(
+      mergeTranslations({ en: { title: 'A' } }, { en: { title: '' } }),
+    ).toEqual({});
     expect(mergeTranslations(current, undefined)).toBeUndefined();
   });
 });
