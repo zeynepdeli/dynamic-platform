@@ -2,6 +2,7 @@ import "./zod-locale";
 import { z } from "zod";
 
 import { imageUrlSchema, optionalHexColorSchema } from "./common";
+import { tLine, translationsSchema, tText } from "../i18n";
 
 export const footerSchema = z.object({
   enabled: z.boolean(),
@@ -19,6 +20,7 @@ export const footerSchema = z.object({
     .max(50)
     .regex(/^[0-9+()\s-]*$/, "Telefon yalnızca rakam, boşluk ve + ( ) - içerebilir."),
   address: z.string().trim().max(500),
+  translations: translationsSchema({ description: tText(1000), copyright: tLine(255), address: tText(500) }),
 });
 
 export type FooterFormValues = z.infer<typeof footerSchema>;

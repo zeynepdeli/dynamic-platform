@@ -11,6 +11,8 @@ import type { CreateSectionDto } from './dto/create-section.dto.js';
 import type { UpdateSectionDto } from './dto/update-section.dto.js';
 import type { CreateSectionItemDto } from './dto/create-section-item.dto.js';
 import type { UpdateSectionItemDto } from './dto/update-section-item.dto.js';
+import { localize, localizeHref, mergeTranslations, TRANSLATABLE } from '../i18n/localize.js';
+import { DEFAULT_LOCALE_CONTEXT, type LocaleContext } from '../i18n/i18n.service.js';
 
 // Kaynak tüketimini sınırla (OWASP A04)
 const MAX_SECTIONS_PER_PAGE = 50;
@@ -23,6 +25,9 @@ const publicItemSelect = {
   description: true,
   imageUrl: true,
   icon: true,
+  subtitle: true,
+  rating: true,
+  linkUrl: true,
   buttonText: true,
   buttonHref: true,
   backgroundColor: true,
@@ -44,10 +49,11 @@ const publicSectionSelect = {
   columns: true,
   videoUrl: true,
   mapAddress: true,
+  translations: true,
   items: {
     where: { active: true },
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
-    select: publicItemSelect,
+    select: { ...publicItemSelect, translations: true },
   },
 } satisfies Prisma.SectionSelect;
 
@@ -64,24 +70,47 @@ export class SectionsService {
   // ───────────── PUBLIC ─────────────
 
   // Ana sayfa bölümleri (pageId = null)
-  async findPublicHome() {
-    return this.prisma.section.findMany({
+  async findPublicHome(ctx: LocaleContext = DEFAULT_LOCALE_CONTEXT) {
+    const sections = await this.prisma.section.findMany({
       where: { pageId: null, active: true },
       orderBy: sectionOrder,
       select: publicSectionSelect,
     });
+    return sections.map((s) => this.localizeSection(s, ctx));
   }
 
-  // Yayındaki bir sayfanın bölümleri
-  async findPublicByPageSlug(slug: string) {
-    return this.prisma.section.findMany({
+  // Yayındaki bir sayfanın bölümleri. slug: istenen dildeki adres (ctx.slugMap'teki değerlerden biri).
+  async findPublicByPageSlug(slug: string, ctx: LocaleContext = DEFAULT_LOCALE_CONTEXT) {
+    // Ana dil dışında: o dildeki adresi ana slug'a çevir (çevirisi yoksa ikisi aynıdır)
+    const baseSlug =
+      ctx.locale === ctx.defaultLocale ? slug : [...ctx.slugMap].find(([, localized]) => localized === slug)?.[0];
+    if (!baseSlug) return [];
+    const sections = await this.prisma.section.findMany({
       where: {
         active: true,
-        page: { slug, published: true, deletedAt: null },
+        page: { slug: baseSlug, published: true, deletedAt: null },
       },
       orderBy: sectionOrder,
       select: publicSectionSelect,
     });
+    return sections.map((s) => this.localizeSection(s, ctx));
+  }
+
+  /** Bölüm ve kartlarını istenen dile çevirir; site içi bağlantıları o dilin adreslerine taşır */
+  private localizeSection(
+    row: Prisma.SectionGetPayload<{ select: typeof publicSectionSelect }>,
+    ctx: LocaleContext,
+  ) {
+    const href = (h: string | null) => localizeHref(h, ctx.locale, ctx.defaultLocale, ctx.slugMap);
+    const section = localize(row, ctx.locale, ctx.defaultLocale, TRANSLATABLE.section);
+    return {
+      ...section,
+      buttonHref: href(section.buttonHref),
+      items: row.items.map((i) => {
+        const item = localize(i, ctx.locale, ctx.defaultLocale, TRANSLATABLE.sectionItem);
+        return { ...item, buttonHref: href(item.buttonHref) };
+      }),
+    };
   }
 
   // ───────────── ADMIN: BÖLÜMLER ─────────────
@@ -149,6 +178,7 @@ export class SectionsService {
           columns: dto.columns ?? 3,
           order: dto.order ?? count, // varsayılan: en sona ekle
           active: dto.active ?? true,
+          translations: mergeTranslations({}, dto.translations),
         },
       })
       .catch((error: unknown) => this.rethrowKeyConflict(error));
@@ -161,10 +191,11 @@ export class SectionsService {
       await this.ensureKeyAvailable(section.pageId, dto.key, id);
     }
 
+    const { translations, ...rest } = dto;
     return this.prisma.section
       .update({
         where: { id },
-        data: dto,
+        data: { ...rest, translations: mergeTranslations(section.translations, translations) },
       })
       .catch((error: unknown) => this.rethrowKeyConflict(error));
   }
@@ -181,7 +212,7 @@ export class SectionsService {
   async createItem(sectionId: string, dto: CreateSectionItemDto) {
     const section = await this.ensureSectionExists(sectionId);
     const title = dto.title?.trim() ?? '';
-    this.assertItemContent(section.type, title, dto.imageUrl);
+    this.assertItemContent(section.type, title, dto.imageUrl, dto.description);
 
     const count = await this.prisma.sectionItem.count({
       where: { sectionId },
@@ -199,12 +230,16 @@ export class SectionsService {
         description: dto.description,
         imageUrl: dto.imageUrl,
         icon: dto.icon,
+        subtitle: dto.subtitle ?? null,
+        rating: dto.rating ?? null,
+        linkUrl: dto.linkUrl ?? null,
         buttonText: dto.buttonText,
         buttonHref: dto.buttonHref,
         backgroundColor: dto.backgroundColor,
         backgroundImage: dto.backgroundImage,
         order: dto.order ?? count,
         active: dto.active ?? true,
+        translations: mergeTranslations({}, dto.translations),
       },
     });
   }
@@ -214,16 +249,19 @@ export class SectionsService {
     itemId: string,
     dto: UpdateSectionItemDto,
   ) {
-    await this.ensureItemBelongsToSection(sectionId, itemId);
+    const current = await this.ensureItemBelongsToSection(sectionId, itemId);
     const section = await this.ensureSectionExists(sectionId);
 
     // title null gelirse yok say; gönderildiyse türe göre denetle
-    const { title, ...rest } = dto;
+    const { title, translations, ...rest } = dto;
     if (title != null && section.type !== 'GALLERY' && !title.trim()) {
       throw new BadRequestException('Başlık boş olamaz.');
     }
-    if (section.type === 'GALLERY' && dto.imageUrl === null) {
-      throw new BadRequestException('Galeri öğesinde görsel olmalı.');
+    if ((section.type === 'GALLERY' || section.type === 'LOGOS') && dto.imageUrl === null) {
+      throw new BadRequestException(section.type === 'LOGOS' ? 'Logo öğesinde görsel olmalı.' : 'Galeri öğesinde görsel olmalı.');
+    }
+    if (section.type === 'TESTIMONIALS' && dto.description !== undefined && !dto.description?.trim()) {
+      throw new BadRequestException('Yorum metni boş olamaz.');
     }
 
     return this.prisma.sectionItem.update({
@@ -231,6 +269,7 @@ export class SectionsService {
       data: {
         ...rest,
         ...(title != null ? { title: title.trim() } : {}),
+        ...(translations ? { translations: mergeTranslations(current.translations, translations) } : {}),
       },
     });
   }
@@ -321,7 +360,7 @@ export class SectionsService {
   private async ensureSectionExists(id: string) {
     const section = await this.prisma.section.findUnique({
       where: { id },
-      select: { id: true, pageId: true, type: true },
+      select: { id: true, pageId: true, type: true, translations: true },
     });
 
     if (!section) {
@@ -373,22 +412,26 @@ export class SectionsService {
 
   // IDOR koruması: kart, URL'deki bölüme ait değilse 404
   /** Galeride görsel zorunlu, alt yazı isteğe bağlı; diğerlerinde başlık zorunlu */
-  private assertItemContent(type: string, title: string, imageUrl?: string) {
+  /** Bölüm tipine göre öğede zorunlu içerik */
+  private assertItemContent(type: string, title: string, imageUrl?: string | null, description?: string | null) {
     if (type === 'GALLERY') {
       if (!imageUrl) throw new BadRequestException('Galeri öğesinde görsel olmalı.');
       return;
     }
     if (!title) throw new BadRequestException('Başlık boş olamaz.');
+    if (type === 'LOGOS' && !imageUrl) throw new BadRequestException('Logo öğesinde görsel olmalı.');
+    if (type === 'TESTIMONIALS' && !description?.trim()) throw new BadRequestException('Yorum metni boş olamaz.');
   }
 
   private async ensureItemBelongsToSection(sectionId: string, itemId: string) {
     const item = await this.prisma.sectionItem.findFirst({
       where: { id: itemId, sectionId },
-      select: { id: true },
+      select: { id: true, translations: true },
     });
 
     if (!item) {
       throw new NotFoundException('Kart bulunamadı.');
     }
+    return item;
   }
 }

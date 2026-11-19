@@ -23,6 +23,7 @@ function payload(v: MenuItemFormValues) {
     visible: v.visible,
     icon: v.icon === "" ? null : v.icon,
     parentId: v.parentId === "" ? null : v.parentId,
+    translations: v.translations,
   };
 }
 

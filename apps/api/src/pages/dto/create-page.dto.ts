@@ -1,10 +1,14 @@
+import { Type } from 'class-transformer';
+import { PageTranslations, type PageTranslationDto, type TranslationsOf } from '../../i18n/translation-fields.dto.js';
 import {
   IsBoolean,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 import {
   HEX_COLOR_MESSAGE,
@@ -69,4 +73,11 @@ export class CreatePageDto {
   @IsOptional()
   @IsImageUrl()
   backgroundImage?: string;
+
+  /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => PageTranslations)
+  translations?: TranslationsOf<PageTranslationDto>;
 }

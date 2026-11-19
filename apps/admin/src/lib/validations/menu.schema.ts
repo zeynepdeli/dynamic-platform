@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { INTERNAL_PATH_REGEX } from "./common";
 import { MENU_ICON_KEYS } from "@/components/icons/registry";
+import { tLine, tPath, translationsSchema } from "../i18n";
 
 export const menuItemSchema = z.object({
   label: z
@@ -24,6 +25,7 @@ export const menuItemSchema = z.object({
   // "" = ikon yok
   icon: z.union([z.enum(MENU_ICON_KEYS), z.literal("")]),
   visible: z.boolean(),
+  translations: translationsSchema({ label: tLine(100), href: tPath() }),
 });
 
 export type MenuItemFormValues = z.infer<typeof menuItemSchema>;
@@ -34,4 +36,5 @@ export const menuItemDefaultValues: MenuItemFormValues = {
   parentId: "",
   icon: "",
   visible: true,
+  translations: {},
 };

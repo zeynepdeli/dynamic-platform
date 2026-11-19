@@ -1,6 +1,7 @@
 import "server-only";
 
 import { adminFetch } from "@/lib/api";
+import { toTranslationsForm } from "@/lib/i18n";
 
 export type SiteSettings = {
   siteName: string;
@@ -24,10 +25,15 @@ export type SiteSettings = {
   allowIndexing: boolean;
   gaMeasurementId: string | null;
   notifyEmail: string | null;
+  defaultLocale: string;
+  locales: string[];
+  /** Diğer dillerdeki metinler (site adı, SEO, header butonu) */
+  translations: unknown;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const response = await adminFetch("/site-settings");
+  // Yönetim ucu: bildirim e-postası gibi iç alanlar yalnızca burada
+  const response = await adminFetch("/admin/site-settings");
 
   if (!response.ok) {
     throw new Error(`Site ayarları yüklenemedi (HTTP ${response.status}).`);
@@ -37,6 +43,9 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 /** API'deki null değerleri form için boş metne çevirir */
-export function pickSettings<K extends keyof SiteSettings>(s: SiteSettings, keys: K[]) {
-  return Object.fromEntries(keys.map((k) => [k, s[k] ?? ""])) as Record<K, string | boolean>;
+export function pickSettings<K extends keyof SiteSettings>(s: SiteSettings, keys: K[], translatable: string[] = []) {
+  const values = Object.fromEntries(keys.map((k) => [k, s[k] ?? ""])) as Record<string, unknown>;
+  // Ekranın çevrilebilen alanları: form translations.<dil>.<alan> olarak düzenler
+  if (translatable.length) values.translations = toTranslationsForm(s.translations, translatable);
+  return values;
 }

@@ -34,6 +34,8 @@ describe('SectionsService', () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    // Varsayılan: kart bölümü (testler kendi türünü ayrıca verir; önceki testin türü sızmasın)
+    prisma.section.findUnique.mockResolvedValue({ id: 's', pageId: null, type: 'CARDS' });
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SectionsService,
@@ -46,17 +48,70 @@ describe('SectionsService', () => {
 
   describe('öğe içeriği türe göre', () => {
     it('galeride alt yazı boş olabilir ama görsel zorunlu', async () => {
-      prisma.section.findUnique.mockResolvedValue({ id: 's', pageId: null, type: 'GALLERY' });
-      await expect(service.createItem('s', { imageUrl: '/media/11111111-1111-4111-8111-111111111111.jpg' })).resolves.toBeUndefined();
+      prisma.section.findUnique.mockResolvedValue({
+        id: 's',
+        pageId: null,
+        type: 'GALLERY',
+      });
+      await expect(
+        service.createItem('s', {
+          imageUrl: '/media/11111111-1111-4111-8111-111111111111.jpg',
+        }),
+      ).resolves.toBeUndefined();
       expect(prisma.sectionItem.create.mock.calls[0][0].data.title).toBe('');
-      await expect(service.createItem('s', { title: 'Alt yazı' })).rejects.toBeInstanceOf(BadRequestException);
+      await expect(
+        service.createItem('s', { title: 'Alt yazı' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
 
     it('kart/SSS gibi türlerde başlık zorunlu', async () => {
-      prisma.section.findUnique.mockResolvedValue({ id: 's', pageId: null, type: 'FAQ' });
-      await expect(service.createItem('s', { title: '   ' })).rejects.toBeInstanceOf(BadRequestException);
+      prisma.section.findUnique.mockResolvedValue({
+        id: 's',
+        pageId: null,
+        type: 'FAQ',
+      });
+      await expect(
+        service.createItem('s', { title: '   ' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
       prisma.sectionItem.findFirst.mockResolvedValue({ id: 'i' });
-      await expect(service.updateItem('s', 'i', { title: '' })).rejects.toBeInstanceOf(BadRequestException);
+      await expect(
+        service.updateItem('s', 'i', { title: '' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+    });
+
+    it('logoda görsel ve ad zorunlu', async () => {
+      prisma.section.findUnique.mockResolvedValue({
+        id: 's',
+        pageId: null,
+        type: 'LOGOS',
+      });
+      await expect(
+        service.createItem('s', { title: 'Marka' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      await expect(
+        service.createItem('s', {
+          imageUrl: '/media/11111111-1111-4111-8111-111111111111.png',
+        }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      prisma.sectionItem.findFirst.mockResolvedValue({ id: 'i' });
+      await expect(
+        service.updateItem('s', 'i', { imageUrl: null }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+    });
+
+    it('yorumda metin zorunlu', async () => {
+      prisma.section.findUnique.mockResolvedValue({
+        id: 's',
+        pageId: null,
+        type: 'TESTIMONIALS',
+      });
+      await expect(
+        service.createItem('s', { title: 'Ayşe K.' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      prisma.sectionItem.findFirst.mockResolvedValue({ id: 'i' });
+      await expect(
+        service.updateItem('s', 'i', { description: '  ' }),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
   });
 
@@ -69,7 +124,7 @@ describe('SectionsService', () => {
 
       expect(prisma.sectionItem.findFirst).toHaveBeenCalledWith({
         where: { id: 'item-1', sectionId: 'section-A' },
-        select: { id: true },
+        select: { id: true, translations: true },
       });
     });
 

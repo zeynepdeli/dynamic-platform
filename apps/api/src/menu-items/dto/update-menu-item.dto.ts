@@ -1,7 +1,10 @@
+import { Type } from 'class-transformer';
+import { MenuItemTranslations, type MenuItemTranslationDto, type TranslationsOf } from '../../i18n/translation-fields.dto.js';
 import {
   IsBoolean,
   IsIn,
   IsInt,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
@@ -10,6 +13,7 @@ import {
   MaxLength,
   Min,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator';
 import {
   INTERNAL_PATH_MESSAGE,
@@ -52,4 +56,11 @@ export class UpdateMenuItemDto {
   @ValidateIf((_, value: unknown) => value !== undefined && value !== null)
   @IsUUID()
   parentId?: string | null;
+
+  /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => MenuItemTranslations)
+  translations?: TranslationsOf<MenuItemTranslationDto>;
 }

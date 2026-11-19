@@ -98,6 +98,7 @@ export type SectionCountAggregateOutputType = {
   columns: number
   order: number
   active: number
+  translations: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -176,6 +177,7 @@ export type SectionCountAggregateInputType = {
   columns?: true
   order?: true
   active?: true
+  translations?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -285,6 +287,7 @@ export type SectionGroupByOutputType = {
   columns: number
   order: number
   active: boolean
+  translations: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: SectionCountAggregateOutputType | null
@@ -330,6 +333,7 @@ export type SectionWhereInput = {
   columns?: Prisma.IntFilter<"Section"> | number
   order?: Prisma.IntFilter<"Section"> | number
   active?: Prisma.BoolFilter<"Section"> | boolean
+  translations?: Prisma.JsonFilter<"Section">
   createdAt?: Prisma.DateTimeFilter<"Section"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Section"> | Date | string
   page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
@@ -354,6 +358,7 @@ export type SectionOrderByWithRelationInput = {
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   page?: Prisma.PageOrderByWithRelationInput
@@ -382,6 +387,7 @@ export type SectionWhereUniqueInput = Prisma.AtLeast<{
   columns?: Prisma.IntFilter<"Section"> | number
   order?: Prisma.IntFilter<"Section"> | number
   active?: Prisma.BoolFilter<"Section"> | boolean
+  translations?: Prisma.JsonFilter<"Section">
   createdAt?: Prisma.DateTimeFilter<"Section"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Section"> | Date | string
   page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
@@ -406,6 +412,7 @@ export type SectionOrderByWithAggregationInput = {
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SectionCountOrderByAggregateInput
@@ -436,6 +443,7 @@ export type SectionScalarWhereWithAggregatesInput = {
   columns?: Prisma.IntWithAggregatesFilter<"Section"> | number
   order?: Prisma.IntWithAggregatesFilter<"Section"> | number
   active?: Prisma.BoolWithAggregatesFilter<"Section"> | boolean
+  translations?: Prisma.JsonWithAggregatesFilter<"Section">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Section"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Section"> | Date | string
 }
@@ -457,6 +465,7 @@ export type SectionCreateInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   page?: Prisma.PageCreateNestedOneWithoutSectionsInput
@@ -481,6 +490,7 @@ export type SectionUncheckedCreateInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.SectionItemUncheckedCreateNestedManyWithoutSectionInput
@@ -503,6 +513,7 @@ export type SectionUpdateInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   page?: Prisma.PageUpdateOneWithoutSectionsNestedInput
@@ -527,6 +538,7 @@ export type SectionUncheckedUpdateInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.SectionItemUncheckedUpdateManyWithoutSectionNestedInput
@@ -550,6 +562,7 @@ export type SectionCreateManyInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -571,6 +584,7 @@ export type SectionUpdateManyMutationInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -593,6 +607,7 @@ export type SectionUncheckedUpdateManyInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -630,6 +645,7 @@ export type SectionCountOrderByAggregateInput = {
   columns?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -770,6 +786,7 @@ export type SectionCreateWithoutPageInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.SectionItemCreateNestedManyWithoutSectionInput
@@ -792,6 +809,7 @@ export type SectionUncheckedCreateWithoutPageInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.SectionItemUncheckedCreateNestedManyWithoutSectionInput
@@ -844,6 +862,7 @@ export type SectionScalarWhereInput = {
   columns?: Prisma.IntFilter<"Section"> | number
   order?: Prisma.IntFilter<"Section"> | number
   active?: Prisma.BoolFilter<"Section"> | boolean
+  translations?: Prisma.JsonFilter<"Section">
   createdAt?: Prisma.DateTimeFilter<"Section"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Section"> | Date | string
 }
@@ -865,6 +884,7 @@ export type SectionCreateWithoutItemsInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   page?: Prisma.PageCreateNestedOneWithoutSectionsInput
@@ -888,6 +908,7 @@ export type SectionUncheckedCreateWithoutItemsInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -925,6 +946,7 @@ export type SectionUpdateWithoutItemsInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   page?: Prisma.PageUpdateOneWithoutSectionsNestedInput
@@ -948,6 +970,7 @@ export type SectionUncheckedUpdateWithoutItemsInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -969,6 +992,7 @@ export type SectionCreateManyPageInput = {
   columns?: number
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -990,6 +1014,7 @@ export type SectionUpdateWithoutPageInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.SectionItemUpdateManyWithoutSectionNestedInput
@@ -1012,6 +1037,7 @@ export type SectionUncheckedUpdateWithoutPageInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.SectionItemUncheckedUpdateManyWithoutSectionNestedInput
@@ -1034,6 +1060,7 @@ export type SectionUncheckedUpdateManyWithoutPageInput = {
   columns?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1087,6 +1114,7 @@ export type SectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   columns?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.Section$pageArgs<ExtArgs>
@@ -1112,6 +1140,7 @@ export type SectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   columns?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.Section$pageArgs<ExtArgs>
@@ -1135,6 +1164,7 @@ export type SectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   columns?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.Section$pageArgs<ExtArgs>
@@ -1158,11 +1188,12 @@ export type SectionSelectScalar = {
   columns?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "key" | "type" | "title" | "subtitle" | "body" | "backgroundColor" | "backgroundImage" | "textColor" | "buttonText" | "buttonHref" | "videoUrl" | "mapAddress" | "columns" | "order" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["section"]>
+export type SectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "key" | "type" | "title" | "subtitle" | "body" | "backgroundColor" | "backgroundImage" | "textColor" | "buttonText" | "buttonHref" | "videoUrl" | "mapAddress" | "columns" | "order" | "active" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["section"]>
 export type SectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.Section$pageArgs<ExtArgs>
   items?: boolean | Prisma.Section$itemsArgs<ExtArgs>
@@ -1199,6 +1230,7 @@ export type $SectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     columns: number
     order: number
     active: boolean
+    translations: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["section"]>
@@ -1643,6 +1675,7 @@ export interface SectionFieldRefs {
   readonly columns: Prisma.FieldRef<"Section", 'Int'>
   readonly order: Prisma.FieldRef<"Section", 'Int'>
   readonly active: Prisma.FieldRef<"Section", 'Boolean'>
+  readonly translations: Prisma.FieldRef<"Section", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Section", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Section", 'DateTime'>
 }

@@ -1,9 +1,10 @@
 import "server-only";
 
 import { adminFetch } from "@/lib/api";
+import { toTranslationsForm } from "@/lib/i18n";
 import type { FooterFormValues } from "@/lib/validations/footer.schema";
 
-type FooterSettings = { [K in keyof FooterFormValues]: FooterFormValues[K] | null };
+type FooterSettings = { [K in keyof FooterFormValues]: FooterFormValues[K] | null } & { translations?: unknown };
 
 export async function getFooterFormValues(): Promise<FooterFormValues> {
   const response = await adminFetch("/admin/footer-settings");
@@ -23,5 +24,6 @@ export async function getFooterFormValues(): Promise<FooterFormValues> {
     email: s.email ?? "",
     phone: s.phone ?? "",
     address: s.address ?? "",
+    translations: toTranslationsForm(s.translations, ["description", "copyright", "address"]),
   };
 }

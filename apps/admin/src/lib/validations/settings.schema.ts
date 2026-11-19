@@ -8,6 +8,7 @@ import {
   optionalHexColorSchema,
 } from "./common";
 import { footerSchema } from "./footer.schema";
+import { tLine, tPath, translationsSchema, tText } from "../i18n";
 
 const optionalPath = z
   .string()
@@ -28,6 +29,7 @@ export const settingsSchemas = {
       headerBackgroundImage: imageUrlSchema,
       headerButtonText: z.string().trim().max(40),
       headerButtonHref: optionalPath,
+      translations: translationsSchema({ siteName: tLine(150), headerButtonText: tLine(40), headerButtonHref: tPath() }),
     })
     .refine((v) => !!v.headerButtonText === !!v.headerButtonHref, {
       path: ["headerButtonHref"],
@@ -54,6 +56,12 @@ export const settingsSchemas = {
       .trim()
       .toUpperCase()
       .refine((v) => v === "" || /^G-[A-Z0-9]{4,15}$/.test(v), "Ölçüm kimliği G-XXXXXXX biçiminde olmalı."),
+    translations: translationsSchema({
+      metaTitle: tLine(150),
+      metaDescription: tText(300),
+      metaKeywords: tLine(300),
+      description: tText(500),
+    }),
   }),
   footer: footerSchema,
   notify: z.object({
@@ -63,4 +71,5 @@ export const settingsSchemas = {
 
 export type SettingsGroup = keyof typeof settingsSchemas;
 export type SettingsValues<G extends SettingsGroup> = z.infer<(typeof settingsSchemas)[G]>;
-export type AnySettingsValues = Record<string, string | boolean>;
+/** Form tarafında ortak kayıt tipi (çeviriler iç içe nesne) */
+export type AnySettingsValues = Record<string, unknown>;

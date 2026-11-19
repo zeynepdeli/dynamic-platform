@@ -1,9 +1,15 @@
 import "./zod-locale";
 import { z } from "zod";
 
+import { tLine, tPath, translationsSchema, tText } from "../i18n";
+
+/** Çevrilebilen alanlar */
+export const SECTION_TRANSLATABLE = ["title", "subtitle", "body", "buttonText", "buttonHref"] as const;
+export const ITEM_TRANSLATABLE = ["title", "subtitle", "description", "buttonText", "buttonHref"] as const;
 import {
   imageUrlSchema,
   internalPathSchema,
+  isSafeHttpsUrl,
   optionalHexColorSchema,
 } from "./common";
 
@@ -18,6 +24,9 @@ export const SECTION_TYPES = [
   "MAP",
   "STATS",
   "CONTACT_FORM",
+  "LOGOS",
+  "TEAM",
+  "TESTIMONIALS",
 ] as const;
 export type SectionType = (typeof SECTION_TYPES)[number];
 
@@ -32,6 +41,9 @@ export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
   MAP: "Harita",
   STATS: "Sayılar",
   CONTACT_FORM: "İletişim Formu",
+  LOGOS: "Logolar",
+  TEAM: "Ekip",
+  TESTIMONIALS: "Yorumlar",
 };
 
 /** Tip seçicide kısa açıklama */
@@ -45,6 +57,9 @@ export const SECTION_TYPE_HINTS: Record<SectionType, string> = {
   VIDEO: "YouTube veya Vimeo",
   MAP: "Adres ve Google Harita",
   STATS: "\u201C500+ müşteri\u201D gibi sayılar",
+  LOGOS: "Markalar, referanslar, iş ortakları",
+  TEAM: "Fotoğraf, ad, unvan",
+  TESTIMONIALS: "Müşteri yorumları ve puanlar",
   CONTACT_FORM: "Ziyaretçi mesaj bırakır",
 };
 
@@ -96,6 +111,13 @@ export const sectionSchema = z
       .max(300)
       .refine((v) => !/[\u0000-\u001f]/.test(v), "Adres tek satır olmalı."),
     active: z.boolean(),
+    translations: translationsSchema({
+      title: tLine(200),
+      subtitle: tLine(300),
+      body: tText(5000),
+      buttonText: tLine(60),
+      buttonHref: tPath(),
+    }),
   })
   .refine(buttonPairIsValid, buttonPairError)
   .refine((v) => v.type !== "VIDEO" || v.videoUrl !== "", { path: ["videoUrl"], message: "Video adresi girin." })
@@ -118,6 +140,7 @@ export const sectionDefaultValues: SectionFormValues = {
   videoUrl: "",
   mapAddress: "",
   active: true,
+  translations: {},
 };
 
 // İkon adı: "truck", "shield-check" (SVG/HTML değil)
@@ -140,7 +163,28 @@ const sectionItemBase = z
     buttonHref: internalPathSchema,
     backgroundColor: optionalHexColorSchema,
     backgroundImage: imageUrlSchema,
+    /** Ekip: unvan · Yorum: şirket/unvan */
+    subtitle: z
+      .string()
+      .trim()
+      .max(150, "En fazla 150 karakter olabilir.")
+      .refine((v) => !/[\r\n]/.test(v), "Tek satır olmalı."),
+    /** Yorum puanı: "" = yok */
+    rating: z.enum(["", "1", "2", "3", "4", "5"]),
+    /** Dış bağlantı (yalnızca https) */
+    linkUrl: z
+      .string()
+      .trim()
+      .max(500)
+      .refine((v) => v === "" || isSafeHttpsUrl(v), "Bağlantı https:// ile başlamalı (ör. https://marka.com)."),
     active: z.boolean(),
+    translations: translationsSchema({
+      title: tLine(200),
+      subtitle: tLine(150),
+      description: tText(1000),
+      buttonText: tLine(60),
+      buttonHref: tPath(),
+    }),
   })
   .refine(buttonPairIsValid, buttonPairError);
 
@@ -150,11 +194,21 @@ const sectionItemBase = z
  */
 export const sectionItemSchema = sectionItemBase;
 
-/** Galeride görsel zorunlu, alt yazı isteğe bağlı; diğer türlerde başlık zorunlu */
+/**
+ * Türe göre zorunlu alanlar: galeride görsel (alt yazı isteğe bağlı); diğerlerinde başlık;
+ * logoda ayrıca görsel; yorumda ayrıca yorum metni. (API aynı kuralları uygular.)
+ */
 export function itemSchemaFor(type: SectionType | undefined) {
-  return type === "GALLERY"
-    ? sectionItemBase.refine((v) => v.imageUrl !== "", { path: ["imageUrl"], message: "Bir görsel seçin." })
-    : sectionItemBase.refine((v) => v.title !== "", { path: ["title"], message: "Başlık boş olamaz." });
+  if (type === "GALLERY") {
+    return sectionItemBase.refine((v) => v.imageUrl !== "", { path: ["imageUrl"], message: "Bir görsel seçin." });
+  }
+  return sectionItemBase
+    .refine((v) => v.title !== "", { path: ["title"], message: "Başlık boş olamaz." })
+    .refine((v) => type !== "LOGOS" || v.imageUrl !== "", { path: ["imageUrl"], message: "Logo görseli seçin." })
+    .refine((v) => type !== "TESTIMONIALS" || v.description !== "", {
+      path: ["description"],
+      message: "Yorum metni boş olamaz.",
+    });
 }
 
 export type SectionItemFormValues = z.infer<typeof sectionItemBase>;
@@ -168,5 +222,9 @@ export const sectionItemDefaultValues: SectionItemFormValues = {
   buttonHref: "",
   backgroundColor: "",
   backgroundImage: "",
+  subtitle: "",
+  rating: "",
+  linkUrl: "",
   active: true,
+  translations: {},
 };

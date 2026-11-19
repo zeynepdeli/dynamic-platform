@@ -9,6 +9,8 @@ export type MediaFile = {
   size: number;
   url: string;
   alt: string | null;
+  /** Diğer dillerdeki açıklamalar: { en: { alt } } */
+  translations?: Partial<Record<string, { alt?: string }>>;
   createdAt: string;
   /** Sitede herhangi bir yerde kullanılıyor mu? (API hesaplar) */
   inUse: boolean;

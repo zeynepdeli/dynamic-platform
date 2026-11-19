@@ -12,6 +12,7 @@ import { FormField } from "@/components/forms/FormField";
 import { FormTextarea } from "@/components/forms/FormTextarea";
 import { FormSwitch } from "@/components/forms/FormSwitch";
 import { ImageUploadField } from "@/components/forms/ImageUploadField";
+import { TranslationPanel } from "@/components/i18n/TranslationPanel";
 
 import {
   heroSlideDefaultValues,
@@ -123,6 +124,15 @@ export function HeroSlideForm({
         />
       </div>
 
+      <ImageUploadField
+        name="foregroundImageUrl"
+        label="Ön Plan Görseli (isteğe bağlı)"
+        control={control}
+        mediaBaseUrl={mediaBaseUrl}
+        description="Arka planın önünde durur; dekupe (şeffaf PNG/WebP) kişi veya ürün fotoğrafı önerilir. Tasarım kullanmıyorsa görünmez."
+        previewClassName="aspect-square @md:w-32"
+      />
+
       <div className="grid gap-5 @xl:grid-cols-2">
         <FormField
           name="buttonText"
@@ -146,6 +156,18 @@ export function HeroSlideForm({
         label="Yayında"
         description="Kapalıysa slayt sitede gösterilmez."
         control={control}
+      />
+
+      <TranslationPanel
+        control={control}
+        register={register}
+        fields={[
+          { name: "title", label: "Başlık" },
+          { name: "subtitle", label: "Alt Başlık" },
+          { name: "description", label: "Açıklama", multiline: true },
+          { name: "buttonText", label: "Buton Yazısı" },
+          { name: "buttonHref", label: "Buton Bağlantısı", placeholder: "Boşsa ana dildeki bağlantı (/en ile)" },
+        ]}
       />
 
       {submitError && (

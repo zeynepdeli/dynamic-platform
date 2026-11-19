@@ -3,7 +3,8 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import { pageSchema, type PageFormValues } from "@/lib/validations/page.schema";
+import { toTranslationsForm } from "@/lib/i18n";
+import { PAGE_TRANSLATABLE, pageSchema, type PageFormValues } from "@/lib/validations/page.schema";
 
 import { getAdminPageById } from "@/lib/pages";
 
@@ -38,6 +39,7 @@ function preparePayload(values: PageFormValues) {
     seoKeywords: values.seoKeywords || null,
     ogImageUrl: values.ogImageUrl || null,
     noIndex: values.noIndex,
+    translations: values.translations,
   };
 }
 
@@ -223,6 +225,7 @@ export async function getPageForEditAction(
       seoKeywords: page.seoKeywords ?? "",
       ogImageUrl: page.ogImageUrl ?? "",
       noIndex: page.noIndex ?? false,
+      translations: toTranslationsForm(page.translations, PAGE_TRANSLATABLE),
     });
 
     if (!parsed.success) {

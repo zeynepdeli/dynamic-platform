@@ -2,7 +2,7 @@ import type { FieldConfig, ItemField, SectionField } from "@/brand/page-template
 import type { SectionType } from "@/lib/validations/section.schema";
 
 /** Öğe (kart/soru/görsel/sayı) listesi olan bölüm türleri */
-export const ITEM_TYPES: readonly SectionType[] = ["CARDS", "FAQ", "GALLERY", "STATS"];
+export const ITEM_TYPES: readonly SectionType[] = ["CARDS", "FAQ", "GALLERY", "STATS", "LOGOS", "TEAM", "TESTIMONIALS"];
 export const hasItems = (type: SectionType) => ITEM_TYPES.includes(type);
 
 /**
@@ -12,7 +12,8 @@ export const hasItems = (type: SectionType) => ITEM_TYPES.includes(type);
 export const MODULE_ONLY_TYPES: readonly SectionType[] = ["FAQ", "GALLERY", "MAP", "CONTACT_FORM"];
 
 /** Izgara sütunu seçilebilen türler */
-export const hasColumns = (type: SectionType) => ["CARDS", "GALLERY", "STATS"].includes(type);
+export const hasColumns = (type: SectionType) =>
+  ["CARDS", "GALLERY", "STATS", "LOGOS", "TEAM", "TESTIMONIALS"].includes(type);
 
 const NONE = false as const;
 
@@ -31,6 +32,37 @@ export const ITEM_CONFIG: Partial<Record<SectionType, { label: string; fields?: 
     label: "Sayı",
     fields: { title: "Sayı (ör. 500+)", description: "Açıklama (ör. Mutlu müşteri)", icon: "İkon", imageUrl: NONE, buttonText: NONE, buttonHref: NONE, backgroundImage: NONE },
   },
+  LOGOS: {
+    label: "Logo",
+    fields: {
+      title: "Marka Adı",
+      imageUrl: "Logo (şeffaf PNG/SVG önerilir)",
+      linkUrl: "Marka Sitesi (isteğe bağlı, https://)",
+      description: NONE, icon: NONE, buttonText: NONE, buttonHref: NONE, backgroundColor: NONE, backgroundImage: NONE,
+    },
+  },
+  TEAM: {
+    label: "Kişi",
+    fields: {
+      title: "Ad Soyad",
+      subtitle: "Unvan (ör. Kurucu Ortak)",
+      description: "Kısa Bilgi",
+      imageUrl: "Fotoğraf (kare önerilir)",
+      linkUrl: "LinkedIn / Profil (isteğe bağlı, https://)",
+      icon: NONE, buttonText: NONE, buttonHref: NONE, backgroundColor: NONE, backgroundImage: NONE,
+    },
+  },
+  TESTIMONIALS: {
+    label: "Yorum",
+    fields: {
+      title: "Ad Soyad",
+      subtitle: "Şirket / Unvan (isteğe bağlı)",
+      description: "Yorum",
+      rating: "Puan",
+      imageUrl: "Fotoğraf (isteğe bağlı)",
+      icon: NONE, buttonText: NONE, buttonHref: NONE, backgroundColor: NONE, backgroundImage: NONE,
+    },
+  },
 };
 
 /** Tür başına bölüm formunda gizlenecek alanlar */
@@ -41,4 +73,7 @@ export const SECTION_FIELDS_BY_TYPE: Partial<Record<SectionType, FieldConfig<Sec
   FAQ: { columns: NONE, body: "Giriş Metni" },
   GALLERY: { body: "Giriş Metni" },
   STATS: { body: "Giriş Metni" },
+  LOGOS: { body: "Giriş Metni" },
+  TEAM: { body: "Giriş Metni" },
+  TESTIMONIALS: { body: "Giriş Metni" },
 };

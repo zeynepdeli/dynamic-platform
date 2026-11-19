@@ -9,9 +9,12 @@ import { updateMediaAltAction } from "@/app/actions/media";
 export function MediaAltField({
   id,
   initial,
+  locale,
 }: {
   id: string;
   initial: string;
+  /** Verilirse bu dildeki açıklama (çeviri) düzenlenir */
+  locale?: string;
 }) {
   const [value, setValue] = useState(initial);
   const [saved, setSaved] = useState(initial);
@@ -23,7 +26,7 @@ export function MediaAltField({
     const next = value.trim();
     if (next === saved) return;
     start(async () => {
-      const result = await updateMediaAltAction(id, next);
+      const result = await updateMediaAltAction(id, next, locale);
       if (!result.success) {
         setError(result.error);
         return;
@@ -49,8 +52,8 @@ export function MediaAltField({
               save();
             }
           }}
-          placeholder="Açıklama (alt metni)"
-          aria-label="Görsel açıklaması"
+          placeholder={locale ? `${locale.toUpperCase()} açıklama` : "Açıklama (alt metni)"}
+          aria-label={locale ? `Görsel açıklaması (${locale.toUpperCase()})` : "Görsel açıklaması"}
           className="h-8 w-full rounded-lg border border-border bg-surface px-2 pr-7 text-xs"
         />
         <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground">

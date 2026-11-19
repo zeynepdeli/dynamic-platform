@@ -10,6 +10,8 @@ import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { MediaFileValidatorService } from './media-file-validator.service.js';
 import { MEDIA_STORAGE, type MediaStorage } from './storage/media-storage.js';
+import type { Locale } from '../i18n/locales.js';
+import { localize, mergeTranslations, TRANSLATABLE } from '../i18n/localize.js';
 
 export type MediaUploadInput = {
   originalName: string;
@@ -72,7 +74,7 @@ export class MediaService {
         select: { ogImageUrl: true, backgroundImage: true },
       }),
       this.prisma.heroSlide.findMany({
-        select: { imageUrl: true, mobileImageUrl: true },
+        select: { imageUrl: true, mobileImageUrl: true, foregroundImageUrl: true },
       }),
       this.prisma.section.findMany({
         where: { backgroundImage: { not: null } },
@@ -100,7 +102,7 @@ export class MediaService {
       ]),
       ...footers.map((f) => f.backgroundImage),
       ...pages.flatMap((p) => [p.ogImageUrl, p.backgroundImage]),
-      ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl]),
+      ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl, s.foregroundImageUrl]),
       ...sections.map((s) => s.backgroundImage),
       ...items.flatMap((i) => [i.imageUrl, i.backgroundImage]),
     ];
@@ -144,21 +146,29 @@ export class MediaService {
   }
 
   /** Görsel açıklaması (alt metni) */
-  async updateAlt(id: string, alt: string | null) {
-    const media = await this.prisma.media.findUnique({ where: { id }, select: { id: true } });
+  async updateAlt(id: string, alt: string | null | undefined, translations?: Partial<Record<string, object | undefined>>) {
+    const media = await this.prisma.media.findUnique({ where: { id }, select: { id: true, translations: true } });
     if (!media) throw new NotFoundException('Medya dosyası bulunamadı.');
-    return this.prisma.media.update({ where: { id }, data: { alt: alt?.trim() || null } });
+    return this.prisma.media.update({
+      where: { id },
+      data: {
+        ...(alt !== undefined ? { alt: alt?.trim() || null } : {}),
+        translations: mergeTranslations(media.translations, translations),
+      },
+    });
   }
 
   /** Sitede görselin açıklamasını bulmak için adres → alt eşlemesi */
-  async findAltMap(): Promise<Record<string, string>> {
+  async findAltMap(locale: Locale = 'tr', defaultLocale: Locale = 'tr'): Promise<Record<string, string>> {
     const rows = await this.prisma.media.findMany({
       where: { alt: { not: null } },
-      select: { url: true, alt: true },
+      select: { url: true, alt: true, translations: true },
       orderBy: { createdAt: 'desc' },
       take: 2000,
     });
-    return Object.fromEntries(rows.map((r) => [r.url, r.alt as string]));
+    return Object.fromEntries(
+      rows.map((r) => [r.url, localize(r, locale, defaultLocale, TRANSLATABLE.media).alt as string]),
+    );
   }
 
   async remove(id: string) {

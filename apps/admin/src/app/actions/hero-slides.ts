@@ -20,9 +20,11 @@ function payload(v: HeroSlideFormValues) {
     description: emptyToNull(v.description),
     imageUrl: emptyToNull(v.imageUrl),
     mobileImageUrl: emptyToNull(v.mobileImageUrl),
+    foregroundImageUrl: emptyToNull(v.foregroundImageUrl),
     buttonText: emptyToNull(v.buttonText),
     buttonHref: emptyToNull(v.buttonHref),
     active: v.active,
+    translations: v.translations,
   };
 }
 

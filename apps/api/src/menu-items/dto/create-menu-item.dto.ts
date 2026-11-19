@@ -1,8 +1,11 @@
+import { Type } from 'class-transformer';
+import { MenuItemTranslations, type MenuItemTranslationDto, type TranslationsOf } from '../../i18n/translation-fields.dto.js';
 import {
   IsBoolean,
   IsEnum,
   IsIn,
   IsInt,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
@@ -11,6 +14,7 @@ import {
   MaxLength,
   Min,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator';
 import {
   INTERNAL_PATH_MESSAGE,
@@ -58,6 +62,13 @@ export class CreateMenuItemDto {
   @IsOptional()
   @IsEnum(MenuLocation, { message: 'Geçersiz menü konumu.' })
   location?: MenuLocation;
+
+  /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => MenuItemTranslations)
+  translations?: TranslationsOf<MenuItemTranslationDto>;
 }
 
 export class ReorderMenuDto extends ReorderWithParentDto {

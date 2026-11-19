@@ -76,6 +76,7 @@ function sectionPayload(v: SectionFormValues) {
     videoUrl: v.type === "VIDEO" ? emptyToNull(v.videoUrl) : null,
     mapAddress: v.type === "MAP" ? emptyToNull(v.mapAddress) : null,
     active: v.active,
+    translations: v.translations,
   };
 }
 
@@ -89,7 +90,11 @@ function itemPayload(v: SectionItemFormValues) {
     buttonHref: emptyToNull(v.buttonHref),
     backgroundColor: emptyToNull(v.backgroundColor),
     backgroundImage: emptyToNull(v.backgroundImage),
+    subtitle: emptyToNull(v.subtitle),
+    rating: v.rating === "" ? null : Number(v.rating),
+    linkUrl: emptyToNull(v.linkUrl),
     active: v.active,
+    translations: v.translations,
   };
 }
 

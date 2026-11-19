@@ -1,7 +1,8 @@
 import "server-only";
 
 import { adminFetch } from "@/lib/api";
-import type { HeroSlideFormValues } from "@/lib/validations/hero-slide.schema";
+import { toTranslationsForm } from "@/lib/i18n";
+import { HERO_TRANSLATABLE, type HeroSlideFormValues } from "@/lib/validations/hero-slide.schema";
 
 export type HeroSlide = {
   id: string;
@@ -10,10 +11,12 @@ export type HeroSlide = {
   description: string | null;
   imageUrl: string | null;
   mobileImageUrl: string | null;
+  foregroundImageUrl?: string | null;
   buttonText: string | null;
   buttonHref: string | null;
   order: number;
   active: boolean;
+  translations?: unknown;
 };
 
 export async function getAdminHeroSlides(): Promise<HeroSlide[]> {
@@ -34,8 +37,10 @@ export function toHeroSlideFormValues(slide: HeroSlide): HeroSlideFormValues {
     description: slide.description ?? "",
     imageUrl: slide.imageUrl ?? "",
     mobileImageUrl: slide.mobileImageUrl ?? "",
+    foregroundImageUrl: slide.foregroundImageUrl ?? "",
     buttonText: slide.buttonText ?? "",
     buttonHref: slide.buttonHref ?? "",
     active: slide.active,
+    translations: toTranslationsForm(slide.translations, HERO_TRANSLATABLE),
   };
 }

@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { ApiError, adminFetch, apiErrorMessage } from "@/lib/api";
 import { sendToApi } from "@/lib/admin/send";
+import { SUPPORTED_LOCALES } from "@/lib/i18n";
 import { validateImageFile } from "@/lib/validations/media";
 
 type UploadResult =
@@ -136,16 +137,20 @@ export async function listMediaForPickerAction(): Promise<
   }
 }
 
-export async function updateMediaAltAction(id: string, alt: string) {
+/** locale verilirse o dilin açıklaması (çeviri) kaydedilir; verilmezse ana dildeki açıklama */
+export async function updateMediaAltAction(id: string, alt: string, locale?: string) {
   const parsedId = z.uuid().safeParse(id);
-  const parsedAlt = z.string().trim().max(200).safeParse(alt);
-  if (!parsedId.success || !parsedAlt.success) {
+  const parsedAlt = z.string().trim().max(200).regex(/^[^\u0000-\u001f\u007f]*$/).safeParse(alt);
+  const parsedLocale = z.enum(SUPPORTED_LOCALES).optional().safeParse(locale);
+  if (!parsedId.success || !parsedAlt.success || !parsedLocale.success) {
     return { success: false as const, error: "Geçersiz istek." };
   }
   return sendToApi(
     `/admin/media/${parsedId.data}`,
     "PATCH",
-    { alt: parsedAlt.data || null },
+    parsedLocale.data
+      ? { translations: { [parsedLocale.data]: { alt: parsedAlt.data } } }
+      : { alt: parsedAlt.data || null },
     "Açıklama kaydedilemedi.",
     "/media",
   );

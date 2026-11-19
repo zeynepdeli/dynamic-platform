@@ -2,9 +2,9 @@
 
 import { useUnsavedChanges } from "@/lib/hooks/use-unsaved-changes";
 import { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileText, Globe2, Loader2, Save, Search } from "lucide-react";
+import { FileText, Globe2, Languages, Loader2, Save, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FormField } from "@/components/forms/FormField";
 import { FormTextarea } from "@/components/forms/FormTextarea";
 import { FormSwitch } from "@/components/forms/FormSwitch";
+import { useExtraLocales } from "@/components/i18n/LocaleProvider";
+import { TranslationPanel } from "@/components/i18n/TranslationPanel";
 
 import {
   pageSchema,
@@ -19,7 +21,7 @@ import {
   type PageFormValues,
 } from "@/lib/validations/page.schema";
 
-type FormTab = "content" | "seo" | "publish";
+type FormTab = "content" | "seo" | "publish" | "languages";
 
 type PageFormProps = {
   mode: "create" | "edit";
@@ -35,6 +37,7 @@ export function PageForm({
   onCancel,
 }: PageFormProps) {
   const [activeTab, setActiveTab] = useState<FormTab>("content");
+  const hasExtraLocales = useExtraLocales().length > 0;
 
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -94,16 +97,14 @@ export function PageForm({
     }
   }
 
-  function handleInvalid() {
-    if (errors.title || errors.slug || errors.content) {
+  // Hatanın bulunduğu sekmeyi aç (o anki hatalar parametreyle gelir; render'daki "errors" bir adım geridedir)
+  function handleInvalid(invalid: FieldErrors<PageFormValues>) {
+    if (invalid.title || invalid.slug || invalid.content) {
       setActiveTab("content");
-    } else if (
-      errors.seoTitle ||
-      errors.seoDescription ||
-      errors.seoKeywords ||
-      errors.ogImageUrl
-    ) {
+    } else if (invalid.seoTitle || invalid.seoDescription || invalid.seoKeywords || invalid.ogImageUrl) {
       setActiveTab("seo");
+    } else if (invalid.translations) {
+      setActiveTab("languages");
     }
   }
 
@@ -127,7 +128,7 @@ export function PageForm({
             h-15!
             min-h-15
             w-full
-            grid-cols-3
+            grid-cols-[repeat(auto-fit,minmax(0,1fr))]
             items-center
             gap-1
             rounded-xl
@@ -149,6 +150,13 @@ export function PageForm({
             <Globe2 className="size-4" />
             Yayın
           </TabsTrigger>
+
+          {hasExtraLocales && (
+            <TabsTrigger value="languages" className="gap-2 py-3">
+              <Languages className="size-4" />
+              Diller
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="content" className="space-y-5">
@@ -233,6 +241,23 @@ export function PageForm({
             </p>
           </div>
         </TabsContent>
+
+        {hasExtraLocales && (
+          <TabsContent value="languages" className="space-y-5">
+            <TranslationPanel
+              control={control}
+              register={register}
+              fields={[
+                { name: "title", label: "Sayfa Başlığı" },
+                { name: "slug", label: "Adres (URL)", placeholder: "about-us" },
+                { name: "content", label: "İçerik", multiline: true, rows: 6 },
+                { name: "seoTitle", label: "SEO Başlığı" },
+                { name: "seoKeywords", label: "Anahtar Kelimeler" },
+                { name: "seoDescription", label: "SEO Açıklaması", multiline: true },
+              ]}
+            />
+          </TabsContent>
+        )}
 
         <TabsContent value="publish" className="space-y-5">
           <FormSwitch

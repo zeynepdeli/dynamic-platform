@@ -15,7 +15,8 @@ import { IconPicker } from "@/components/icons/IconPicker";
 import { ImageUploadField } from "@/components/forms/ImageUploadField";
 
 import type { FieldConfig, ItemField } from "@/brand/page-templates";
-import { fieldLabel } from "@/lib/field-config";
+import { fieldLabel, optInLabel } from "@/lib/field-config";
+import { TranslationPanel, type TranslatableField } from "@/components/i18n/TranslationPanel";
 import {
   sectionItemDefaultValues,
   itemSchemaFor,
@@ -89,12 +90,19 @@ export function ItemForm({
   const bgImageLabel = label("backgroundImage", "Kart Arka Plan Fotoğrafı");
   const buttonTextLabel = label("buttonText", "Buton Metni");
   const buttonHrefLabel = label("buttonHref", "Buton Bağlantısı");
+  const subtitleLabel = optInLabel(fields, "subtitle");
+  const ratingLabel = optInLabel(fields, "rating");
+  const linkUrlLabel = optInLabel(fields, "linkUrl");
 
   const canSubmit = !isSubmitting && (mode === "create" || isDirty);
 
   return (
     <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-5">
       <FormField name="title" label={titleLabel} register={register} error={errors.title} required />
+
+      {subtitleLabel && (
+        <FormField name="subtitle" label={subtitleLabel} register={register} error={errors.subtitle} />
+      )}
 
       {descriptionLabel && (
         <FormTextarea
@@ -105,6 +113,23 @@ export function ItemForm({
           register={register}
           error={errors.description}
         />
+      )}
+
+      {ratingLabel && (
+        <label className="flex flex-col gap-2 text-sm font-medium">
+          {ratingLabel}
+          <select
+            {...register("rating")}
+            className="min-h-11 rounded-xl border border-border bg-surface px-3 text-sm"
+          >
+            <option value="">— Puan yok —</option>
+            {[5, 4, 3, 2, 1].map((n) => (
+              <option key={n} value={String(n)}>
+                {"★".repeat(n)} ({n})
+              </option>
+            ))}
+          </select>
+        </label>
       )}
 
       {imageLabel && (
@@ -165,7 +190,34 @@ export function ItemForm({
         </div>
       )}
 
+      {linkUrlLabel && (
+        <FormField
+          name="linkUrl"
+          label={linkUrlLabel}
+          placeholder="https://"
+          description="Yeni sekmede açılır; yalnızca https:// adresler."
+          register={register}
+          error={errors.linkUrl}
+        />
+      )}
+
       <FormSwitch name="active" label="Yayında" description="Kapalıysa sitede görünmez." control={control} />
+
+      <TranslationPanel
+        control={control}
+        register={register}
+        fields={(
+          [
+            ["title", titleLabel],
+            ["subtitle", subtitleLabel],
+            ["description", descriptionLabel, true],
+            ["buttonText", buttonTextLabel],
+            ["buttonHref", buttonHrefLabel],
+          ] as const
+        ).flatMap(([name, text, multiline]): TranslatableField[] =>
+          text ? [{ name, label: text, multiline: !!multiline }] : [],
+        )}
+      />
 
       {submitError && (
         <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">

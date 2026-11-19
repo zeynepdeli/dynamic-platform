@@ -6,6 +6,7 @@ import { FooterSettingsService } from '../footer-settings/footer-settings.servic
 import { SectionsService } from '../sections/sections.service.js';
 import { SocialLinksService } from '../social-links/social-links.service.js';
 import { MediaService } from '../media/media.service.js';
+import type { LocaleContext } from '../i18n/i18n.service.js';
 
 @Injectable()
 export class SiteBootstrapService {
@@ -19,16 +20,16 @@ export class SiteBootstrapService {
     private readonly mediaService: MediaService,
   ) {}
 
-  async getBootstrap() {
+  async getBootstrap(ctx: LocaleContext) {
     const [settings, menuItems, heroSlides, footer, homeSections, socialLinks, mediaAlts] =
       await Promise.all([
-        this.siteSettingsService.getSettings(),
-        this.menuItemsService.findPublic(),
-        this.heroSlidesService.findPublic(),
-        this.footerSettingsService.findPublic(),
-        this.sectionsService.findPublicHome(),
+        this.siteSettingsService.getPublicSettings(ctx),
+        this.menuItemsService.findPublic(ctx),
+        this.heroSlidesService.findPublic(ctx),
+        this.footerSettingsService.findLocalized(ctx),
+        this.sectionsService.findPublicHome(ctx),
         this.socialLinksService.findPublic(),
-        this.mediaService.findAltMap(),
+        this.mediaService.findAltMap(ctx.locale, ctx.defaultLocale),
       ]);
 
     return {

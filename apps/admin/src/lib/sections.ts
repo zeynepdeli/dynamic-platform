@@ -1,10 +1,13 @@
 import "server-only";
 
 import { adminFetch } from "@/lib/api";
-import type {
-  SectionFormValues,
-  SectionItemFormValues,
-  SectionType,
+import { toTranslationsForm } from "@/lib/i18n";
+import {
+  ITEM_TRANSLATABLE,
+  SECTION_TRANSLATABLE,
+  type SectionFormValues,
+  type SectionItemFormValues,
+  type SectionType,
 } from "@/lib/validations/section.schema";
 
 export type SectionItem = {
@@ -18,8 +21,12 @@ export type SectionItem = {
   buttonHref: string | null;
   backgroundColor: string | null;
   backgroundImage: string | null;
+  subtitle?: string | null;
+  rating?: number | null;
+  linkUrl?: string | null;
   order: number;
   active: boolean;
+  translations?: unknown;
 };
 
 export type Section = {
@@ -40,6 +47,7 @@ export type Section = {
   mapAddress: string | null;
   order: number;
   active: boolean;
+  translations?: unknown;
   items: SectionItem[];
 };
 
@@ -75,6 +83,7 @@ export function toSectionFormValues(section: Section): SectionFormValues {
     videoUrl: section.videoUrl ?? "",
     mapAddress: section.mapAddress ?? "",
     active: section.active,
+    translations: toTranslationsForm(section.translations, SECTION_TRANSLATABLE),
   };
 }
 
@@ -90,6 +99,16 @@ export function toSectionItemFormValues(
     buttonHref: item.buttonHref ?? "",
     backgroundColor: item.backgroundColor ?? "",
     backgroundImage: item.backgroundImage ?? "",
+    subtitle: item.subtitle ?? "",
+    rating: toRating(item.rating),
+    linkUrl: item.linkUrl ?? "",
     active: item.active,
+    translations: toTranslationsForm(item.translations, ITEM_TRANSLATABLE),
   };
+}
+
+const RATINGS = ["1", "2", "3", "4", "5"] as const;
+function toRating(value: number | null | undefined): SectionItemFormValues["rating"] {
+  const r = String(value ?? "");
+  return (RATINGS as readonly string[]).includes(r) ? (r as SectionItemFormValues["rating"]) : "";
 }

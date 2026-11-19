@@ -62,6 +62,7 @@ export type FooterSettingsCountAggregateOutputType = {
   enabled: number
   backgroundColor: number
   backgroundImage: number
+  translations: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -106,6 +107,7 @@ export type FooterSettingsCountAggregateInputType = {
   enabled?: true
   backgroundColor?: true
   backgroundImage?: true
+  translations?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,6 +195,7 @@ export type FooterSettingsGroupByOutputType = {
   enabled: boolean
   backgroundColor: string | null
   backgroundImage: string | null
+  translations: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: FooterSettingsCountAggregateOutputType | null
@@ -228,6 +231,7 @@ export type FooterSettingsWhereInput = {
   enabled?: Prisma.BoolFilter<"FooterSettings"> | boolean
   backgroundColor?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   backgroundImage?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
+  translations?: Prisma.JsonFilter<"FooterSettings">
   createdAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
 }
@@ -242,6 +246,7 @@ export type FooterSettingsOrderByWithRelationInput = {
   enabled?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -259,6 +264,7 @@ export type FooterSettingsWhereUniqueInput = Prisma.AtLeast<{
   enabled?: Prisma.BoolFilter<"FooterSettings"> | boolean
   backgroundColor?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
   backgroundImage?: Prisma.StringNullableFilter<"FooterSettings"> | string | null
+  translations?: Prisma.JsonFilter<"FooterSettings">
   createdAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FooterSettings"> | Date | string
 }, "id">
@@ -273,6 +279,7 @@ export type FooterSettingsOrderByWithAggregationInput = {
   enabled?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FooterSettingsCountOrderByAggregateInput
@@ -293,6 +300,7 @@ export type FooterSettingsScalarWhereWithAggregatesInput = {
   enabled?: Prisma.BoolWithAggregatesFilter<"FooterSettings"> | boolean
   backgroundColor?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
   backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"FooterSettings"> | string | null
+  translations?: Prisma.JsonWithAggregatesFilter<"FooterSettings">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FooterSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FooterSettings"> | Date | string
 }
@@ -307,6 +315,7 @@ export type FooterSettingsCreateInput = {
   enabled?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -321,6 +330,7 @@ export type FooterSettingsUncheckedCreateInput = {
   enabled?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -335,6 +345,7 @@ export type FooterSettingsUpdateInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,6 +360,7 @@ export type FooterSettingsUncheckedUpdateInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -363,6 +375,7 @@ export type FooterSettingsCreateManyInput = {
   enabled?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -377,6 +390,7 @@ export type FooterSettingsUpdateManyMutationInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -391,6 +405,7 @@ export type FooterSettingsUncheckedUpdateManyInput = {
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -405,6 +420,7 @@ export type FooterSettingsCountOrderByAggregateInput = {
   enabled?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -449,6 +465,7 @@ export type FooterSettingsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   enabled?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["footerSettings"]>
@@ -463,6 +480,7 @@ export type FooterSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   enabled?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["footerSettings"]>
@@ -477,6 +495,7 @@ export type FooterSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   enabled?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["footerSettings"]>
@@ -491,11 +510,12 @@ export type FooterSettingsSelectScalar = {
   enabled?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FooterSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "copyright" | "email" | "phone" | "address" | "enabled" | "backgroundColor" | "backgroundImage" | "createdAt" | "updatedAt", ExtArgs["result"]["footerSettings"]>
+export type FooterSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "copyright" | "email" | "phone" | "address" | "enabled" | "backgroundColor" | "backgroundImage" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["footerSettings"]>
 
 export type $FooterSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FooterSettings"
@@ -510,6 +530,7 @@ export type $FooterSettingsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     enabled: boolean
     backgroundColor: string | null
     backgroundImage: string | null
+    translations: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["footerSettings"]>
@@ -944,6 +965,7 @@ export interface FooterSettingsFieldRefs {
   readonly enabled: Prisma.FieldRef<"FooterSettings", 'Boolean'>
   readonly backgroundColor: Prisma.FieldRef<"FooterSettings", 'String'>
   readonly backgroundImage: Prisma.FieldRef<"FooterSettings", 'String'>
+  readonly translations: Prisma.FieldRef<"FooterSettings", 'Json'>
   readonly createdAt: Prisma.FieldRef<"FooterSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FooterSettings", 'DateTime'>
 }
