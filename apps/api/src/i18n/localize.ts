@@ -67,8 +67,9 @@ export function localize<T extends Row>(
 }
 
 /**
- * Admin'den gelen çevirileri kayıttakilerle birleştirir. Gönderilen dilin nesnesi bütünüyle değişir
- * (formda o dilin tüm alanları vardır); gönderilmeyen diller korunur. Boş metinler saklanmaz.
+ * Admin'den gelen çevirileri kayıttakilerle alan alan birleştirir: gönderilen alan yazılır
+ * (boş metin = o alanın çevirisini sil), gönderilmeyen alanlar ve diller korunur.
+ * Böylece aynı kaydın farklı ekranları (ör. site ayarlarında Header ve SEO) birbirini ezmez.
  */
 export function mergeTranslations(
   current: unknown,
@@ -81,12 +82,13 @@ export function mergeTranslations(
       : {};
   for (const [locale, fields] of Object.entries(incoming)) {
     if (!fields) continue;
-    const clean: Record<string, string> = {};
+    const merged: Record<string, string> = { ...(base[locale] ?? {}) };
     for (const [key, value] of Object.entries(fields)) {
-      if (typeof value === 'string' && value.trim() !== '')
-        clean[key] = value.trim();
+      if (typeof value !== 'string') continue;
+      if (value.trim() === '') delete merged[key];
+      else merged[key] = value.trim();
     }
-    if (Object.keys(clean).length) base[locale] = clean;
+    if (Object.keys(merged).length) base[locale] = merged;
     else delete base[locale];
   }
   return base;
