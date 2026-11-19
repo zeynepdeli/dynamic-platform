@@ -21,6 +21,9 @@ export type SectionItem = {
   buttonHref: string | null;
   backgroundColor: string | null;
   backgroundImage: string | null;
+  subtitle?: string | null;
+  rating?: number | null;
+  linkUrl?: string | null;
   order: number;
   active: boolean;
   translations?: unknown;
@@ -96,7 +99,16 @@ export function toSectionItemFormValues(
     buttonHref: item.buttonHref ?? "",
     backgroundColor: item.backgroundColor ?? "",
     backgroundImage: item.backgroundImage ?? "",
+    subtitle: item.subtitle ?? "",
+    rating: toRating(item.rating),
+    linkUrl: item.linkUrl ?? "",
     active: item.active,
     translations: toTranslationsForm(item.translations, ITEM_TRANSLATABLE),
   };
+}
+
+const RATINGS = ["1", "2", "3", "4", "5"] as const;
+function toRating(value: number | null | undefined): SectionItemFormValues["rating"] {
+  const r = String(value ?? "");
+  return (RATINGS as readonly string[]).includes(r) ? (r as SectionItemFormValues["rating"]) : "";
 }

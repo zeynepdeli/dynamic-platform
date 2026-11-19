@@ -27,10 +27,12 @@ export type AggregateSectionItem = {
 }
 
 export type SectionItemAvgAggregateOutputType = {
+  rating: number | null
   order: number | null
 }
 
 export type SectionItemSumAggregateOutputType = {
+  rating: number | null
   order: number | null
 }
 
@@ -41,6 +43,9 @@ export type SectionItemMinAggregateOutputType = {
   description: string | null
   imageUrl: string | null
   icon: string | null
+  subtitle: string | null
+  rating: number | null
+  linkUrl: string | null
   buttonText: string | null
   buttonHref: string | null
   backgroundColor: string | null
@@ -58,6 +63,9 @@ export type SectionItemMaxAggregateOutputType = {
   description: string | null
   imageUrl: string | null
   icon: string | null
+  subtitle: string | null
+  rating: number | null
+  linkUrl: string | null
   buttonText: string | null
   buttonHref: string | null
   backgroundColor: string | null
@@ -75,6 +83,9 @@ export type SectionItemCountAggregateOutputType = {
   description: number
   imageUrl: number
   icon: number
+  subtitle: number
+  rating: number
+  linkUrl: number
   buttonText: number
   buttonHref: number
   backgroundColor: number
@@ -89,10 +100,12 @@ export type SectionItemCountAggregateOutputType = {
 
 
 export type SectionItemAvgAggregateInputType = {
+  rating?: true
   order?: true
 }
 
 export type SectionItemSumAggregateInputType = {
+  rating?: true
   order?: true
 }
 
@@ -103,6 +116,9 @@ export type SectionItemMinAggregateInputType = {
   description?: true
   imageUrl?: true
   icon?: true
+  subtitle?: true
+  rating?: true
+  linkUrl?: true
   buttonText?: true
   buttonHref?: true
   backgroundColor?: true
@@ -120,6 +136,9 @@ export type SectionItemMaxAggregateInputType = {
   description?: true
   imageUrl?: true
   icon?: true
+  subtitle?: true
+  rating?: true
+  linkUrl?: true
   buttonText?: true
   buttonHref?: true
   backgroundColor?: true
@@ -137,6 +156,9 @@ export type SectionItemCountAggregateInputType = {
   description?: true
   imageUrl?: true
   icon?: true
+  subtitle?: true
+  rating?: true
+  linkUrl?: true
   buttonText?: true
   buttonHref?: true
   backgroundColor?: true
@@ -242,6 +264,9 @@ export type SectionItemGroupByOutputType = {
   description: string | null
   imageUrl: string | null
   icon: string | null
+  subtitle: string | null
+  rating: number | null
+  linkUrl: string | null
   buttonText: string | null
   buttonHref: string | null
   backgroundColor: string | null
@@ -283,6 +308,9 @@ export type SectionItemWhereInput = {
   description?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   icon?: Prisma.StringNullableFilter<"SectionItem"> | string | null
+  subtitle?: Prisma.StringNullableFilter<"SectionItem"> | string | null
+  rating?: Prisma.IntNullableFilter<"SectionItem"> | number | null
+  linkUrl?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   buttonText?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   backgroundColor?: Prisma.StringNullableFilter<"SectionItem"> | string | null
@@ -302,6 +330,9 @@ export type SectionItemOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
+  subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  linkUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonText?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonHref?: Prisma.SortOrderInput | Prisma.SortOrder
   backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -324,6 +355,9 @@ export type SectionItemWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   icon?: Prisma.StringNullableFilter<"SectionItem"> | string | null
+  subtitle?: Prisma.StringNullableFilter<"SectionItem"> | string | null
+  rating?: Prisma.IntNullableFilter<"SectionItem"> | number | null
+  linkUrl?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   buttonText?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   backgroundColor?: Prisma.StringNullableFilter<"SectionItem"> | string | null
@@ -343,6 +377,9 @@ export type SectionItemOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
+  subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  linkUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonText?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonHref?: Prisma.SortOrderInput | Prisma.SortOrder
   backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -369,6 +406,9 @@ export type SectionItemScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
   icon?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
+  subtitle?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
+  rating?: Prisma.IntNullableWithAggregatesFilter<"SectionItem"> | number | null
+  linkUrl?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
   buttonText?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
   buttonHref?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
   backgroundColor?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
@@ -386,6 +426,9 @@ export type SectionItemCreateInput = {
   description?: string | null
   imageUrl?: string | null
   icon?: string | null
+  subtitle?: string | null
+  rating?: number | null
+  linkUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   backgroundColor?: string | null
@@ -405,6 +448,9 @@ export type SectionItemUncheckedCreateInput = {
   description?: string | null
   imageUrl?: string | null
   icon?: string | null
+  subtitle?: string | null
+  rating?: number | null
+  linkUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   backgroundColor?: string | null
@@ -422,6 +468,9 @@ export type SectionItemUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -441,6 +490,9 @@ export type SectionItemUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -459,6 +511,9 @@ export type SectionItemCreateManyInput = {
   description?: string | null
   imageUrl?: string | null
   icon?: string | null
+  subtitle?: string | null
+  rating?: number | null
+  linkUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   backgroundColor?: string | null
@@ -476,6 +531,9 @@ export type SectionItemUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -494,6 +552,9 @@ export type SectionItemUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -522,6 +583,9 @@ export type SectionItemCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   icon?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  linkUrl?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
@@ -534,6 +598,7 @@ export type SectionItemCountOrderByAggregateInput = {
 }
 
 export type SectionItemAvgOrderByAggregateInput = {
+  rating?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -544,6 +609,9 @@ export type SectionItemMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   icon?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  linkUrl?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
@@ -561,6 +629,9 @@ export type SectionItemMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   icon?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  linkUrl?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
@@ -572,6 +643,7 @@ export type SectionItemMinOrderByAggregateInput = {
 }
 
 export type SectionItemSumOrderByAggregateInput = {
+  rating?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -617,12 +689,23 @@ export type SectionItemUncheckedUpdateManyWithoutSectionNestedInput = {
   deleteMany?: Prisma.SectionItemScalarWhereInput | Prisma.SectionItemScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type SectionItemCreateWithoutSectionInput = {
   id?: string
   title: string
   description?: string | null
   imageUrl?: string | null
   icon?: string | null
+  subtitle?: string | null
+  rating?: number | null
+  linkUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   backgroundColor?: string | null
@@ -640,6 +723,9 @@ export type SectionItemUncheckedCreateWithoutSectionInput = {
   description?: string | null
   imageUrl?: string | null
   icon?: string | null
+  subtitle?: string | null
+  rating?: number | null
+  linkUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   backgroundColor?: string | null
@@ -687,6 +773,9 @@ export type SectionItemScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   icon?: Prisma.StringNullableFilter<"SectionItem"> | string | null
+  subtitle?: Prisma.StringNullableFilter<"SectionItem"> | string | null
+  rating?: Prisma.IntNullableFilter<"SectionItem"> | number | null
+  linkUrl?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   buttonText?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   backgroundColor?: Prisma.StringNullableFilter<"SectionItem"> | string | null
@@ -704,6 +793,9 @@ export type SectionItemCreateManySectionInput = {
   description?: string | null
   imageUrl?: string | null
   icon?: string | null
+  subtitle?: string | null
+  rating?: number | null
+  linkUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   backgroundColor?: string | null
@@ -721,6 +813,9 @@ export type SectionItemUpdateWithoutSectionInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -738,6 +833,9 @@ export type SectionItemUncheckedUpdateWithoutSectionInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -755,6 +853,9 @@ export type SectionItemUncheckedUpdateManyWithoutSectionInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -775,6 +876,9 @@ export type SectionItemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   description?: boolean
   imageUrl?: boolean
   icon?: boolean
+  subtitle?: boolean
+  rating?: boolean
+  linkUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   backgroundColor?: boolean
@@ -794,6 +898,9 @@ export type SectionItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   description?: boolean
   imageUrl?: boolean
   icon?: boolean
+  subtitle?: boolean
+  rating?: boolean
+  linkUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   backgroundColor?: boolean
@@ -813,6 +920,9 @@ export type SectionItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   description?: boolean
   imageUrl?: boolean
   icon?: boolean
+  subtitle?: boolean
+  rating?: boolean
+  linkUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   backgroundColor?: boolean
@@ -832,6 +942,9 @@ export type SectionItemSelectScalar = {
   description?: boolean
   imageUrl?: boolean
   icon?: boolean
+  subtitle?: boolean
+  rating?: boolean
+  linkUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   backgroundColor?: boolean
@@ -843,7 +956,7 @@ export type SectionItemSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "imageUrl" | "icon" | "buttonText" | "buttonHref" | "backgroundColor" | "backgroundImage" | "order" | "active" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["sectionItem"]>
+export type SectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "imageUrl" | "icon" | "subtitle" | "rating" | "linkUrl" | "buttonText" | "buttonHref" | "backgroundColor" | "backgroundImage" | "order" | "active" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["sectionItem"]>
 export type SectionItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
 }
@@ -866,6 +979,9 @@ export type $SectionItemPayload<ExtArgs extends runtime.Types.Extensions.Interna
     description: string | null
     imageUrl: string | null
     icon: string | null
+    subtitle: string | null
+    rating: number | null
+    linkUrl: string | null
     buttonText: string | null
     buttonHref: string | null
     backgroundColor: string | null
@@ -1305,6 +1421,9 @@ export interface SectionItemFieldRefs {
   readonly description: Prisma.FieldRef<"SectionItem", 'String'>
   readonly imageUrl: Prisma.FieldRef<"SectionItem", 'String'>
   readonly icon: Prisma.FieldRef<"SectionItem", 'String'>
+  readonly subtitle: Prisma.FieldRef<"SectionItem", 'String'>
+  readonly rating: Prisma.FieldRef<"SectionItem", 'Int'>
+  readonly linkUrl: Prisma.FieldRef<"SectionItem", 'String'>
   readonly buttonText: Prisma.FieldRef<"SectionItem", 'String'>
   readonly buttonHref: Prisma.FieldRef<"SectionItem", 'String'>
   readonly backgroundColor: Prisma.FieldRef<"SectionItem", 'String'>

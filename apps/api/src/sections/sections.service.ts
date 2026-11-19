@@ -25,6 +25,9 @@ const publicItemSelect = {
   description: true,
   imageUrl: true,
   icon: true,
+  subtitle: true,
+  rating: true,
+  linkUrl: true,
   buttonText: true,
   buttonHref: true,
   backgroundColor: true,
@@ -209,7 +212,7 @@ export class SectionsService {
   async createItem(sectionId: string, dto: CreateSectionItemDto) {
     const section = await this.ensureSectionExists(sectionId);
     const title = dto.title?.trim() ?? '';
-    this.assertItemContent(section.type, title, dto.imageUrl);
+    this.assertItemContent(section.type, title, dto.imageUrl, dto.description);
 
     const count = await this.prisma.sectionItem.count({
       where: { sectionId },
@@ -227,6 +230,9 @@ export class SectionsService {
         description: dto.description,
         imageUrl: dto.imageUrl,
         icon: dto.icon,
+        subtitle: dto.subtitle ?? null,
+        rating: dto.rating ?? null,
+        linkUrl: dto.linkUrl ?? null,
         buttonText: dto.buttonText,
         buttonHref: dto.buttonHref,
         backgroundColor: dto.backgroundColor,
@@ -251,8 +257,11 @@ export class SectionsService {
     if (title != null && section.type !== 'GALLERY' && !title.trim()) {
       throw new BadRequestException('Başlık boş olamaz.');
     }
-    if (section.type === 'GALLERY' && dto.imageUrl === null) {
-      throw new BadRequestException('Galeri öğesinde görsel olmalı.');
+    if ((section.type === 'GALLERY' || section.type === 'LOGOS') && dto.imageUrl === null) {
+      throw new BadRequestException(section.type === 'LOGOS' ? 'Logo öğesinde görsel olmalı.' : 'Galeri öğesinde görsel olmalı.');
+    }
+    if (section.type === 'TESTIMONIALS' && dto.description !== undefined && !dto.description?.trim()) {
+      throw new BadRequestException('Yorum metni boş olamaz.');
     }
 
     return this.prisma.sectionItem.update({
@@ -403,12 +412,15 @@ export class SectionsService {
 
   // IDOR koruması: kart, URL'deki bölüme ait değilse 404
   /** Galeride görsel zorunlu, alt yazı isteğe bağlı; diğerlerinde başlık zorunlu */
-  private assertItemContent(type: string, title: string, imageUrl?: string) {
+  /** Bölüm tipine göre öğede zorunlu içerik */
+  private assertItemContent(type: string, title: string, imageUrl?: string | null, description?: string | null) {
     if (type === 'GALLERY') {
       if (!imageUrl) throw new BadRequestException('Galeri öğesinde görsel olmalı.');
       return;
     }
     if (!title) throw new BadRequestException('Başlık boş olamaz.');
+    if (type === 'LOGOS' && !imageUrl) throw new BadRequestException('Logo öğesinde görsel olmalı.');
+    if (type === 'TESTIMONIALS' && !description?.trim()) throw new BadRequestException('Yorum metni boş olamaz.');
   }
 
   private async ensureItemBelongsToSection(sectionId: string, itemId: string) {

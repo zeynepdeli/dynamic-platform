@@ -12,11 +12,12 @@ import { StatsSection } from "./StatsSection";
 import { ContactFormSection } from "./ContactFormSection";
 
 /**
- * Bölüm tipini doğru bileşene yönlendirir. Bilinmeyen tip → hiçbir şey.
+ * Bölüm tipini doğru bileşene yönlendirir. Bilinmeyen ya da bu tasarımda
+ * bileşeni olmayan tip (ör. LOGOS/TEAM/TESTIMONIALS) → hiçbir şey.
  * Özel tasarımlı sayfalarda bunun yerine bölümleri anahtarıyla alıp
  * (page.section("vizyon")) kendi bileşenlerinize verebilirsiniz.
  */
-const RENDERERS: Record<SectionType, (props: { section: Section; index: number }) => React.ReactNode> = {
+const RENDERERS: Partial<Record<SectionType, (props: { section: Section; index: number }) => React.ReactNode>> = {
   CARDS: ({ section }) => <CardsSection section={section} />,
   TEXT: ({ section }) => <TextSection section={section} />,
   // Ardışık görsel+metin bölümleri sağ-sol dönüşümlü

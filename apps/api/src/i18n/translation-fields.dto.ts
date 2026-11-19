@@ -89,6 +89,7 @@ export class SectionTranslationDto {
 
 export class SectionItemTranslationDto {
   @line(200) title?: string;
+  @line(150) subtitle?: string;
   @text(1000) description?: string;
   @line(60) buttonText?: string;
   @path() buttonHref?: string;

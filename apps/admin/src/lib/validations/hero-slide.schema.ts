@@ -21,6 +21,8 @@ export const heroSlideSchema = z
     description: z.string().trim().max(2000),
     imageUrl: imageUrlSchema,
     mobileImageUrl: imageUrlSchema,
+    /** Arka planın önünde duran görsel (ör. dekupe kişi/ürün fotoğrafı) */
+    foregroundImageUrl: imageUrlSchema,
     buttonText: z.string().trim().max(100),
     buttonHref: internalPathSchema,
     active: z.boolean(),
@@ -45,6 +47,7 @@ export const heroSlideDefaultValues: HeroSlideFormValues = {
   description: "",
   imageUrl: "",
   mobileImageUrl: "",
+  foregroundImageUrl: "",
   buttonText: "",
   buttonHref: "",
   active: true,

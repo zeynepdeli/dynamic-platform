@@ -69,6 +69,11 @@ export class UpdateHeroSlideDto {
   @IsBoolean()
   active?: boolean;
 
+  /** Arka planın önünde duran şeffaf görsel (PNG/WEBP) */
+  @ValidateIf((_, v: unknown) => v != null)
+  @IsImageUrl()
+  foregroundImageUrl?: string | null;
+
   /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
   @IsOptional()
   @IsObject()

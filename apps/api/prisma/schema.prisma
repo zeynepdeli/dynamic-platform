@@ -150,6 +150,8 @@ model HeroSlide {
 
   imageUrl       String?
   mobileImageUrl String?
+  // Arka planın önünde duran şeffaf görsel (ör. ekip fotoğrafı, ürün)
+  foregroundImageUrl String?
 
   buttonText String?
   buttonHref String?
@@ -291,6 +293,9 @@ enum SectionType {
   MAP // Adres + harita
   STATS // Sayılar (öğe: "500+" + açıklama)
   CONTACT_FORM // İletişim formu (mesajlar → Gelen Mesajlar)
+  LOGOS // Logo şeridi: markalar, referanslar (öğe: logo + ad + isteğe bağlı dış bağlantı)
+  TEAM // Ekip (öğe: fotoğraf + ad + unvan + kısa bilgi)
+  TESTIMONIALS // Müşteri yorumları (öğe: ad + unvan/şirket + yorum + puan + fotoğraf)
 }
 
 model Section {
@@ -348,6 +353,12 @@ model SectionItem {
   description String?
   imageUrl    String?
   icon        String? // İkon adı (ör. "truck"), serbest SVG DEĞİL
+  // Ekip: unvan · Yorum: şirket/unvan
+  subtitle    String?
+  // Yorum puanı (1–5)
+  rating      Int?
+  // Dış bağlantı (yalnızca https): marka sitesi, LinkedIn vb.
+  linkUrl     String?
 
   buttonText String?
   buttonHref String?

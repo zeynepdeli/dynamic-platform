@@ -124,6 +124,15 @@ export function HeroSlideForm({
         />
       </div>
 
+      <ImageUploadField
+        name="foregroundImageUrl"
+        label="Ön Plan Görseli (isteğe bağlı)"
+        control={control}
+        mediaBaseUrl={mediaBaseUrl}
+        description="Arka planın önünde durur; dekupe (şeffaf PNG/WebP) kişi veya ürün fotoğrafı önerilir. Tasarım kullanmıyorsa görünmez."
+        previewClassName="aspect-square @md:w-32"
+      />
+
       <div className="grid gap-5 @xl:grid-cols-2">
         <FormField
           name="buttonText"

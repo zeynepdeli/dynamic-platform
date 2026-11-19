@@ -35,7 +35,10 @@ export const SectionType = {
   VIDEO: 'VIDEO',
   MAP: 'MAP',
   STATS: 'STATS',
-  CONTACT_FORM: 'CONTACT_FORM'
+  CONTACT_FORM: 'CONTACT_FORM',
+  LOGOS: 'LOGOS',
+  TEAM: 'TEAM',
+  TESTIMONIALS: 'TESTIMONIALS'
 } as const
 
 export type SectionType = (typeof SectionType)[keyof typeof SectionType]

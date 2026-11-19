@@ -42,6 +42,8 @@ export type HeroSlide = {
   description: string | null;
   imageUrl: string | null;
   mobileImageUrl: string | null;
+  /** Arka planın önünde duran görsel (dekupe kişi/ürün) */
+  foregroundImageUrl: string | null;
   buttonText: string | null;
   buttonHref: string | null;
 };
@@ -74,7 +76,10 @@ export type SectionType =
   | "VIDEO"
   | "MAP"
   | "STATS"
-  | "CONTACT_FORM";
+  | "CONTACT_FORM"
+  | "LOGOS"
+  | "TEAM"
+  | "TESTIMONIALS";
 
 export type SectionItem = {
   id: string;
@@ -86,6 +91,12 @@ export type SectionItem = {
   buttonHref: string | null;
   backgroundColor: string | null;
   backgroundImage: string | null;
+  /** Ekip: unvan · Yorum: şirket/unvan */
+  subtitle: string | null;
+  /** Yorum puanı (1–5) */
+  rating: number | null;
+  /** Dış bağlantı (https) — logo için marka sitesi, ekip için profil */
+  linkUrl: string | null;
 };
 
 export type Section = {

@@ -11,6 +11,7 @@ export type HeroSlide = {
   description: string | null;
   imageUrl: string | null;
   mobileImageUrl: string | null;
+  foregroundImageUrl?: string | null;
   buttonText: string | null;
   buttonHref: string | null;
   order: number;
@@ -36,6 +37,7 @@ export function toHeroSlideFormValues(slide: HeroSlide): HeroSlideFormValues {
     description: slide.description ?? "",
     imageUrl: slide.imageUrl ?? "",
     mobileImageUrl: slide.mobileImageUrl ?? "",
+    foregroundImageUrl: slide.foregroundImageUrl ?? "",
     buttonText: slide.buttonText ?? "",
     buttonHref: slide.buttonHref ?? "",
     active: slide.active,

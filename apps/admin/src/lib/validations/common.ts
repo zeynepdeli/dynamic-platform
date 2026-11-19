@@ -6,7 +6,7 @@ export const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const LOCAL_MEDIA_REGEX =
   /^\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)$/;
 
-function isSafeHttpsUrl(value: string): boolean {
+export function isSafeHttpsUrl(value: string): boolean {
   try {
     const url = new URL(value);
     return url.protocol === "https:" && !url.username && !url.password;

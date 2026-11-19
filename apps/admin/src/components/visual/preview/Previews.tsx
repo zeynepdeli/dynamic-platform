@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronLeft, ChevronRight, ImageIcon, MapPin, PlayCircle } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ImageIcon, MapPin, PlayCircle, Quote, Star, UserRound } from "lucide-react";
 
 import type { FooterFormValues } from "@/lib/validations/footer.schema";
 import type { SocialLink } from "@/lib/validations/social-link.schema";
@@ -72,6 +72,7 @@ type HeroPreviewSlide = {
   subtitle: string;
   description: string;
   imageUrl: string;
+  foregroundImageUrl?: string;
   buttonText: string;
   active: boolean;
 };
@@ -98,6 +99,7 @@ export function PreviewHero({
 
   const current = slides[Math.min(index, slides.length - 1)];
   const bg = image(current.imageUrl, theme.mediaBaseUrl);
+  const fg = image(current.foregroundImageUrl ?? "", theme.mediaBaseUrl);
   const go = (next: number) => onIndexChange((next + slides.length) % slides.length);
 
   return (
@@ -105,6 +107,10 @@ export function PreviewHero({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       {bg && <img src={bg} alt="" className="absolute inset-0 -z-10 size-full object-cover" />}
       <div className="absolute inset-0 -z-10 bg-black/40" />
+      {fg && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={fg} alt="" className="pointer-events-none absolute bottom-0 right-6 -z-10 h-[85%] w-auto max-w-[45%] object-contain object-bottom" />
+      )}
 
       {!current.active && (
         <span className="absolute right-3 top-14 z-10 rounded-md bg-amber-400 px-2 py-0.5 text-[11px] font-semibold text-amber-950">
@@ -287,6 +293,95 @@ export function PreviewSection({
                   {item.description && <p className="text-xs opacity-75">{item.description}</p>}
                 </div>
               ))}
+            </div>
+          )}
+
+          {values.type === "LOGOS" && (
+            <div className={`grid items-center gap-4 pt-2 ${GRID[values.columns] ?? GRID[3]}`}>
+              {items.length === 0 && <p className="text-xs opacity-60">Henüz logo yok</p>}
+              {items.map((item) => {
+                const src = image(item.imageUrl, theme.mediaBaseUrl);
+                return (
+                  <div
+                    key={item.id}
+                    className={`flex h-20 items-center justify-center rounded-xl bg-white/70 p-4 ring-1 ring-black/5 ${item.active ? "" : "opacity-40"}`}
+                  >
+                    {src ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={src} alt={item.title} className="max-h-full max-w-full object-contain grayscale" />
+                    ) : (
+                      <span className="text-xs font-semibold text-neutral-500">{item.title || "Logo"}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {values.type === "TEAM" && (
+            <div className={`grid gap-4 pt-2 ${GRID[values.columns] ?? GRID[3]}`}>
+              {items.length === 0 && <p className="text-xs opacity-60">Henüz kişi yok</p>}
+              {items.map((item) => {
+                const src = image(item.imageUrl, theme.mediaBaseUrl);
+                return (
+                  <div key={item.id} className={`overflow-hidden rounded-xl bg-white text-neutral-900 shadow-sm ring-1 ring-black/5 ${item.active ? "" : "opacity-40"}`}>
+                    {src ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={src} alt="" className="aspect-square w-full object-cover" />
+                    ) : (
+                      <div className="flex aspect-square items-center justify-center bg-neutral-100">
+                        <UserRound className="size-8 opacity-30" />
+                      </div>
+                    )}
+                    <div className="space-y-0.5 p-4 text-center">
+                      <p className="text-sm font-semibold">{item.title}</p>
+                      {item.subtitle && (
+                        <p className="text-xs font-medium" style={{ color: theme.secondary }}>{item.subtitle}</p>
+                      )}
+                      {item.description && <p className="line-clamp-2 pt-1 text-xs leading-5 opacity-70">{item.description}</p>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {values.type === "TESTIMONIALS" && (
+            <div className={`grid gap-4 pt-2 ${GRID[values.columns] ?? GRID[3]}`}>
+              {items.length === 0 && <p className="text-xs opacity-60">Henüz yorum yok</p>}
+              {items.map((item) => {
+                const src = image(item.imageUrl, theme.mediaBaseUrl);
+                const rating = Number(item.rating) || 0;
+                return (
+                  <figure key={item.id} className={`space-y-3 rounded-xl bg-white p-5 text-neutral-900 shadow-sm ring-1 ring-black/5 ${item.active ? "" : "opacity-40"}`}>
+                    <div className="flex items-center justify-between">
+                      <Quote className="size-5 opacity-25" />
+                      {rating > 0 && (
+                        <span className="flex gap-0.5" aria-label={`${rating}/5`}>
+                          {Array.from({ length: 5 }, (_, i) => (
+                            <Star key={i} className={`size-3.5 ${i < rating ? "fill-amber-400 text-amber-400" : "text-neutral-300"}`} />
+                          ))}
+                        </span>
+                      )}
+                    </div>
+                    <blockquote className="line-clamp-4 text-xs leading-5 opacity-80">{item.description}</blockquote>
+                    <figcaption className="flex items-center gap-2">
+                      {src ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={src} alt="" className="size-8 rounded-full object-cover" />
+                      ) : (
+                        <span className="flex size-8 items-center justify-center rounded-full bg-neutral-100">
+                          <UserRound className="size-4 opacity-40" />
+                        </span>
+                      )}
+                      <span>
+                        <span className="block text-xs font-semibold">{item.title}</span>
+                        {item.subtitle && <span className="block text-[11px] opacity-60">{item.subtitle}</span>}
+                      </span>
+                    </figcaption>
+                  </figure>
+                );
+              })}
             </div>
           )}
 

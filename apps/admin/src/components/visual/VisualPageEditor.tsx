@@ -142,6 +142,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
       subtitle: v.subtitle,
       description: v.description,
       imageUrl: v.imageUrl,
+      foregroundImageUrl: v.foregroundImageUrl,
       buttonText: v.buttonText,
       active: v.active,
     };

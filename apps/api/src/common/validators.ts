@@ -58,6 +58,28 @@ export function IsImageUrl(validationOptions?: ValidationOptions) {
   );
 }
 
+/** Dış bağlantı: yalnızca https, kullanıcı adı/şifre yok (javascript:, data:, http: reddedilir) */
+export function isHttpsUrl(value: unknown): boolean {
+  return (
+    typeof value === 'string' &&
+    value.length <= 500 &&
+    isURL(value, { protocols: ['https'], require_protocol: true, require_tld: true, disallow_auth: true })
+  );
+}
+
+export function IsHttpsUrl(validationOptions?: ValidationOptions) {
+  return ValidateBy(
+    {
+      name: 'isHttpsUrl',
+      validator: {
+        validate: (value: unknown) => isHttpsUrl(value),
+        defaultMessage: () => 'Bağlantı https:// ile başlayan geçerli bir adres olmalıdır.',
+      },
+    },
+    validationOptions,
+  );
+}
+
 /** Tema renkleri için tek format: #RRGGBB (ör. #1a2b3c) */
 export const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 

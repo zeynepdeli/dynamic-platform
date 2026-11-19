@@ -43,7 +43,11 @@ export type ItemField =
   | "backgroundColor"
   | "backgroundImage"
   | "buttonText"
-  | "buttonHref";
+  | "buttonHref"
+  // Yalnızca açıkça etiket verilince görünür (Ekip, Yorumlar, Logolar açar)
+  | "subtitle"
+  | "rating"
+  | "linkUrl";
 
 /**
  * Alan adlarını tasarıma göre değiştir ya da gizle:

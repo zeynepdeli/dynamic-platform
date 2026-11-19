@@ -90,6 +90,9 @@ function itemPayload(v: SectionItemFormValues) {
     buttonHref: emptyToNull(v.buttonHref),
     backgroundColor: emptyToNull(v.backgroundColor),
     backgroundImage: emptyToNull(v.backgroundImage),
+    subtitle: emptyToNull(v.subtitle),
+    rating: v.rating === "" ? null : Number(v.rating),
+    linkUrl: emptyToNull(v.linkUrl),
     active: v.active,
     translations: v.translations,
   };

@@ -25,7 +25,7 @@ export const TRANSLATABLE = {
     'seoKeywords',
   ],
   section: ['title', 'subtitle', 'body', 'buttonText', 'buttonHref'],
-  sectionItem: ['title', 'description', 'buttonText', 'buttonHref'],
+  sectionItem: ['title', 'subtitle', 'description', 'buttonText', 'buttonHref'],
   footer: ['description', 'copyright', 'address'],
   media: ['alt'],
 } as const;

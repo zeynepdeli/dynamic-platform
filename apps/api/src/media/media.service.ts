@@ -74,7 +74,7 @@ export class MediaService {
         select: { ogImageUrl: true, backgroundImage: true },
       }),
       this.prisma.heroSlide.findMany({
-        select: { imageUrl: true, mobileImageUrl: true },
+        select: { imageUrl: true, mobileImageUrl: true, foregroundImageUrl: true },
       }),
       this.prisma.section.findMany({
         where: { backgroundImage: { not: null } },
@@ -102,7 +102,7 @@ export class MediaService {
       ]),
       ...footers.map((f) => f.backgroundImage),
       ...pages.flatMap((p) => [p.ogImageUrl, p.backgroundImage]),
-      ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl]),
+      ...slides.flatMap((s) => [s.imageUrl, s.mobileImageUrl, s.foregroundImageUrl]),
       ...sections.map((s) => s.backgroundImage),
       ...items.flatMap((i) => [i.imageUrl, i.backgroundImage]),
     ];

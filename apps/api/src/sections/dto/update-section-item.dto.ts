@@ -18,7 +18,9 @@ import {
   HEX_COLOR_REGEX,
   INTERNAL_PATH_MESSAGE,
   INTERNAL_PATH_REGEX,
+  IsHttpsUrl,
   IsImageUrl,
+  SINGLE_LINE_REGEX,
 } from '../../common/validators.js';
 import { ICON_NAME_REGEX } from './create-section-item.dto.js';
 
@@ -76,6 +78,25 @@ export class UpdateSectionItemDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  /** Ekip: unvan · Yorum: şirket/unvan */
+  @ValidateIf((_, v: unknown) => v != null)
+  @IsString()
+  @MaxLength(150)
+  @Matches(SINGLE_LINE_REGEX, { message: 'Alt başlık tek satır olmalı.' })
+  subtitle?: string | null;
+
+  /** Yorum puanı 1–5 */
+  @ValidateIf((_, v: unknown) => v != null)
+  @IsInt({ message: 'Puan 1 ile 5 arasında tam sayı olmalıdır.' })
+  @Min(1, { message: 'Puan 1 ile 5 arasında tam sayı olmalıdır.' })
+  @Max(5, { message: 'Puan 1 ile 5 arasında tam sayı olmalıdır.' })
+  rating?: number | null;
+
+  /** Dış bağlantı (yalnızca https): marka sitesi, LinkedIn vb. */
+  @ValidateIf((_, v: unknown) => v != null)
+  @IsHttpsUrl()
+  linkUrl?: string | null;
 
   /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
   @IsOptional()

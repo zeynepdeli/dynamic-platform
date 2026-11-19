@@ -41,6 +41,7 @@ export type HeroSlideMinAggregateOutputType = {
   description: string | null
   imageUrl: string | null
   mobileImageUrl: string | null
+  foregroundImageUrl: string | null
   buttonText: string | null
   buttonHref: string | null
   order: number | null
@@ -56,6 +57,7 @@ export type HeroSlideMaxAggregateOutputType = {
   description: string | null
   imageUrl: string | null
   mobileImageUrl: string | null
+  foregroundImageUrl: string | null
   buttonText: string | null
   buttonHref: string | null
   order: number | null
@@ -71,6 +73,7 @@ export type HeroSlideCountAggregateOutputType = {
   description: number
   imageUrl: number
   mobileImageUrl: number
+  foregroundImageUrl: number
   buttonText: number
   buttonHref: number
   order: number
@@ -97,6 +100,7 @@ export type HeroSlideMinAggregateInputType = {
   description?: true
   imageUrl?: true
   mobileImageUrl?: true
+  foregroundImageUrl?: true
   buttonText?: true
   buttonHref?: true
   order?: true
@@ -112,6 +116,7 @@ export type HeroSlideMaxAggregateInputType = {
   description?: true
   imageUrl?: true
   mobileImageUrl?: true
+  foregroundImageUrl?: true
   buttonText?: true
   buttonHref?: true
   order?: true
@@ -127,6 +132,7 @@ export type HeroSlideCountAggregateInputType = {
   description?: true
   imageUrl?: true
   mobileImageUrl?: true
+  foregroundImageUrl?: true
   buttonText?: true
   buttonHref?: true
   order?: true
@@ -230,6 +236,7 @@ export type HeroSlideGroupByOutputType = {
   description: string | null
   imageUrl: string | null
   mobileImageUrl: string | null
+  foregroundImageUrl: string | null
   buttonText: string | null
   buttonHref: string | null
   order: number
@@ -269,6 +276,7 @@ export type HeroSlideWhereInput = {
   description?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   mobileImageUrl?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
+  foregroundImageUrl?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   buttonText?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   order?: Prisma.IntFilter<"HeroSlide"> | number
@@ -285,6 +293,7 @@ export type HeroSlideOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mobileImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  foregroundImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonText?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonHref?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -304,6 +313,7 @@ export type HeroSlideWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   mobileImageUrl?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
+  foregroundImageUrl?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   buttonText?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   buttonHref?: Prisma.StringNullableFilter<"HeroSlide"> | string | null
   order?: Prisma.IntFilter<"HeroSlide"> | number
@@ -320,6 +330,7 @@ export type HeroSlideOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mobileImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  foregroundImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonText?: Prisma.SortOrderInput | Prisma.SortOrder
   buttonHref?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -344,6 +355,7 @@ export type HeroSlideScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
   mobileImageUrl?: Prisma.StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
+  foregroundImageUrl?: Prisma.StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
   buttonText?: Prisma.StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
   buttonHref?: Prisma.StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
   order?: Prisma.IntWithAggregatesFilter<"HeroSlide"> | number
@@ -360,6 +372,7 @@ export type HeroSlideCreateInput = {
   description?: string | null
   imageUrl?: string | null
   mobileImageUrl?: string | null
+  foregroundImageUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   order?: number
@@ -376,6 +389,7 @@ export type HeroSlideUncheckedCreateInput = {
   description?: string | null
   imageUrl?: string | null
   mobileImageUrl?: string | null
+  foregroundImageUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   order?: number
@@ -392,6 +406,7 @@ export type HeroSlideUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mobileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  foregroundImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -408,6 +423,7 @@ export type HeroSlideUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mobileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  foregroundImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -424,6 +440,7 @@ export type HeroSlideCreateManyInput = {
   description?: string | null
   imageUrl?: string | null
   mobileImageUrl?: string | null
+  foregroundImageUrl?: string | null
   buttonText?: string | null
   buttonHref?: string | null
   order?: number
@@ -440,6 +457,7 @@ export type HeroSlideUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mobileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  foregroundImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -456,6 +474,7 @@ export type HeroSlideUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mobileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  foregroundImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buttonHref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -472,6 +491,7 @@ export type HeroSlideCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   mobileImageUrl?: Prisma.SortOrder
+  foregroundImageUrl?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -492,6 +512,7 @@ export type HeroSlideMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   mobileImageUrl?: Prisma.SortOrder
+  foregroundImageUrl?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -507,6 +528,7 @@ export type HeroSlideMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   mobileImageUrl?: Prisma.SortOrder
+  foregroundImageUrl?: Prisma.SortOrder
   buttonText?: Prisma.SortOrder
   buttonHref?: Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -528,6 +550,7 @@ export type HeroSlideSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   description?: boolean
   imageUrl?: boolean
   mobileImageUrl?: boolean
+  foregroundImageUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   order?: boolean
@@ -544,6 +567,7 @@ export type HeroSlideSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   description?: boolean
   imageUrl?: boolean
   mobileImageUrl?: boolean
+  foregroundImageUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   order?: boolean
@@ -560,6 +584,7 @@ export type HeroSlideSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   description?: boolean
   imageUrl?: boolean
   mobileImageUrl?: boolean
+  foregroundImageUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   order?: boolean
@@ -576,6 +601,7 @@ export type HeroSlideSelectScalar = {
   description?: boolean
   imageUrl?: boolean
   mobileImageUrl?: boolean
+  foregroundImageUrl?: boolean
   buttonText?: boolean
   buttonHref?: boolean
   order?: boolean
@@ -585,7 +611,7 @@ export type HeroSlideSelectScalar = {
   updatedAt?: boolean
 }
 
-export type HeroSlideOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "subtitle" | "description" | "imageUrl" | "mobileImageUrl" | "buttonText" | "buttonHref" | "order" | "active" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["heroSlide"]>
+export type HeroSlideOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "subtitle" | "description" | "imageUrl" | "mobileImageUrl" | "foregroundImageUrl" | "buttonText" | "buttonHref" | "order" | "active" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["heroSlide"]>
 
 export type $HeroSlidePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "HeroSlide"
@@ -597,6 +623,7 @@ export type $HeroSlidePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     description: string | null
     imageUrl: string | null
     mobileImageUrl: string | null
+    foregroundImageUrl: string | null
     buttonText: string | null
     buttonHref: string | null
     order: number
@@ -1033,6 +1060,7 @@ export interface HeroSlideFieldRefs {
   readonly description: Prisma.FieldRef<"HeroSlide", 'String'>
   readonly imageUrl: Prisma.FieldRef<"HeroSlide", 'String'>
   readonly mobileImageUrl: Prisma.FieldRef<"HeroSlide", 'String'>
+  readonly foregroundImageUrl: Prisma.FieldRef<"HeroSlide", 'String'>
   readonly buttonText: Prisma.FieldRef<"HeroSlide", 'String'>
   readonly buttonHref: Prisma.FieldRef<"HeroSlide", 'String'>
   readonly order: Prisma.FieldRef<"HeroSlide", 'Int'>

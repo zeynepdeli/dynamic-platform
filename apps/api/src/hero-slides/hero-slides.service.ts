@@ -56,6 +56,7 @@ export class HeroSlidesService {
         description: dto.description,
         imageUrl: dto.imageUrl,
         mobileImageUrl: dto.mobileImageUrl,
+        foregroundImageUrl: dto.foregroundImageUrl ?? null,
         buttonText: dto.buttonText,
         buttonHref: dto.buttonHref,
         order: dto.order ?? count, // varsayılan: en sona

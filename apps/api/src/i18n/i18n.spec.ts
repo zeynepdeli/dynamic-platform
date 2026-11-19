@@ -6,6 +6,7 @@ import { validate } from 'class-validator';
 import { UpdateHeroSlideDto } from '../hero-slides/dto/update-hero-slide.dto.js';
 import { UpdatePageDto } from '../pages/dto/update-page.dto.js';
 import { UpdateSiteSettingsDto } from '../site-settings/dto/update-site-settings.dto.js';
+import { UpdateSectionItemDto } from '../sections/dto/update-section-item.dto.js';
 
 import { normalizeLocaleConfig, resolveLocale } from './locales.js';
 import {
@@ -171,6 +172,11 @@ describe('Çeviri doğrulaması', () => {
     [UpdatePageDto, { translations: { en: { slug: 'About Us' } } }],
     [UpdateSiteSettingsDto, { locales: ['tr', 'de'] }],
     [UpdateSiteSettingsDto, { defaultLocale: 'xx' }],
+    [UpdateSectionItemDto, { rating: 6 }],
+    [UpdateSectionItemDto, { rating: 0 }],
+    [UpdateSectionItemDto, { linkUrl: 'http://marka.com' }],
+    [UpdateSectionItemDto, { linkUrl: 'javascript:alert(1)' }],
+    [UpdateSectionItemDto, { subtitle: 'a\nb' }],
   ] as [new () => object, object][])(
     'geçersiz çeviri reddedilir: %o',
     async (cls, body) => {
