@@ -1,12 +1,16 @@
+import { Type } from 'class-transformer';
+import { HeroSlideTranslations, type HeroSlideTranslationDto, type TranslationsOf } from '../../i18n/translation-fields.dto.js';
 import {
   IsBoolean,
   IsInt,
+  IsObject,
   IsOptional,
   IsString,
   Matches,
   Max,
   MaxLength,
   Min,
+  ValidateNested,
 } from 'class-validator';
 import {
   INTERNAL_PATH_MESSAGE,
@@ -62,4 +66,11 @@ export class CreateHeroSlideDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => HeroSlideTranslations)
+  translations?: TranslationsOf<HeroSlideTranslationDto>;
 }

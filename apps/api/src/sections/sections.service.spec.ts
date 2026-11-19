@@ -69,7 +69,7 @@ describe('SectionsService', () => {
 
       expect(prisma.sectionItem.findFirst).toHaveBeenCalledWith({
         where: { id: 'item-1', sectionId: 'section-A' },
-        select: { id: true },
+        select: { id: true, translations: true },
       });
     });
 

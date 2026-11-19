@@ -47,6 +47,7 @@ export type SiteSettingsMinAggregateOutputType = {
   allowIndexing: boolean | null
   gaMeasurementId: string | null
   notifyEmail: string | null
+  defaultLocale: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -74,6 +75,7 @@ export type SiteSettingsMaxAggregateOutputType = {
   allowIndexing: boolean | null
   gaMeasurementId: string | null
   notifyEmail: string | null
+  defaultLocale: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -101,6 +103,9 @@ export type SiteSettingsCountAggregateOutputType = {
   allowIndexing: number
   gaMeasurementId: number
   notifyEmail: number
+  defaultLocale: number
+  locales: number
+  translations: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -130,6 +135,7 @@ export type SiteSettingsMinAggregateInputType = {
   allowIndexing?: true
   gaMeasurementId?: true
   notifyEmail?: true
+  defaultLocale?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -157,6 +163,7 @@ export type SiteSettingsMaxAggregateInputType = {
   allowIndexing?: true
   gaMeasurementId?: true
   notifyEmail?: true
+  defaultLocale?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -184,6 +191,9 @@ export type SiteSettingsCountAggregateInputType = {
   allowIndexing?: true
   gaMeasurementId?: true
   notifyEmail?: true
+  defaultLocale?: true
+  locales?: true
+  translations?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -284,6 +294,9 @@ export type SiteSettingsGroupByOutputType = {
   allowIndexing: boolean
   gaMeasurementId: string | null
   notifyEmail: string | null
+  defaultLocale: string
+  locales: string[]
+  translations: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: SiteSettingsCountAggregateOutputType | null
@@ -332,6 +345,9 @@ export type SiteSettingsWhereInput = {
   allowIndexing?: Prisma.BoolFilter<"SiteSettings"> | boolean
   gaMeasurementId?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   notifyEmail?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  defaultLocale?: Prisma.StringFilter<"SiteSettings"> | string
+  locales?: Prisma.StringNullableListFilter<"SiteSettings">
+  translations?: Prisma.JsonFilter<"SiteSettings">
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
 }
@@ -359,6 +375,9 @@ export type SiteSettingsOrderByWithRelationInput = {
   allowIndexing?: Prisma.SortOrder
   gaMeasurementId?: Prisma.SortOrderInput | Prisma.SortOrder
   notifyEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultLocale?: Prisma.SortOrder
+  locales?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -389,6 +408,9 @@ export type SiteSettingsWhereUniqueInput = Prisma.AtLeast<{
   allowIndexing?: Prisma.BoolFilter<"SiteSettings"> | boolean
   gaMeasurementId?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
   notifyEmail?: Prisma.StringNullableFilter<"SiteSettings"> | string | null
+  defaultLocale?: Prisma.StringFilter<"SiteSettings"> | string
+  locales?: Prisma.StringNullableListFilter<"SiteSettings">
+  translations?: Prisma.JsonFilter<"SiteSettings">
   createdAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSettings"> | Date | string
 }, "id">
@@ -416,6 +438,9 @@ export type SiteSettingsOrderByWithAggregationInput = {
   allowIndexing?: Prisma.SortOrder
   gaMeasurementId?: Prisma.SortOrderInput | Prisma.SortOrder
   notifyEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultLocale?: Prisma.SortOrder
+  locales?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SiteSettingsCountOrderByAggregateInput
@@ -449,6 +474,9 @@ export type SiteSettingsScalarWhereWithAggregatesInput = {
   allowIndexing?: Prisma.BoolWithAggregatesFilter<"SiteSettings"> | boolean
   gaMeasurementId?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
   notifyEmail?: Prisma.StringNullableWithAggregatesFilter<"SiteSettings"> | string | null
+  defaultLocale?: Prisma.StringWithAggregatesFilter<"SiteSettings"> | string
+  locales?: Prisma.StringNullableListFilter<"SiteSettings">
+  translations?: Prisma.JsonWithAggregatesFilter<"SiteSettings">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSettings"> | Date | string
 }
@@ -476,6 +504,9 @@ export type SiteSettingsCreateInput = {
   allowIndexing?: boolean
   gaMeasurementId?: string | null
   notifyEmail?: string | null
+  defaultLocale?: string
+  locales?: Prisma.SiteSettingsCreatelocalesInput | string[]
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -503,6 +534,9 @@ export type SiteSettingsUncheckedCreateInput = {
   allowIndexing?: boolean
   gaMeasurementId?: string | null
   notifyEmail?: string | null
+  defaultLocale?: string
+  locales?: Prisma.SiteSettingsCreatelocalesInput | string[]
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -530,6 +564,9 @@ export type SiteSettingsUpdateInput = {
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notifyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLocale?: Prisma.StringFieldUpdateOperationsInput | string
+  locales?: Prisma.SiteSettingsUpdatelocalesInput | string[]
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -557,6 +594,9 @@ export type SiteSettingsUncheckedUpdateInput = {
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notifyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLocale?: Prisma.StringFieldUpdateOperationsInput | string
+  locales?: Prisma.SiteSettingsUpdatelocalesInput | string[]
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -584,6 +624,9 @@ export type SiteSettingsCreateManyInput = {
   allowIndexing?: boolean
   gaMeasurementId?: string | null
   notifyEmail?: string | null
+  defaultLocale?: string
+  locales?: Prisma.SiteSettingsCreatelocalesInput | string[]
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -611,6 +654,9 @@ export type SiteSettingsUpdateManyMutationInput = {
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notifyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLocale?: Prisma.StringFieldUpdateOperationsInput | string
+  locales?: Prisma.SiteSettingsUpdatelocalesInput | string[]
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -638,8 +684,19 @@ export type SiteSettingsUncheckedUpdateManyInput = {
   allowIndexing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   gaMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notifyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLocale?: Prisma.StringFieldUpdateOperationsInput | string
+  locales?: Prisma.SiteSettingsUpdatelocalesInput | string[]
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type SiteSettingsCountOrderByAggregateInput = {
@@ -665,6 +722,9 @@ export type SiteSettingsCountOrderByAggregateInput = {
   allowIndexing?: Prisma.SortOrder
   gaMeasurementId?: Prisma.SortOrder
   notifyEmail?: Prisma.SortOrder
+  defaultLocale?: Prisma.SortOrder
+  locales?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -692,6 +752,7 @@ export type SiteSettingsMaxOrderByAggregateInput = {
   allowIndexing?: Prisma.SortOrder
   gaMeasurementId?: Prisma.SortOrder
   notifyEmail?: Prisma.SortOrder
+  defaultLocale?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -719,8 +780,13 @@ export type SiteSettingsMinOrderByAggregateInput = {
   allowIndexing?: Prisma.SortOrder
   gaMeasurementId?: Prisma.SortOrder
   notifyEmail?: Prisma.SortOrder
+  defaultLocale?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type SiteSettingsCreatelocalesInput = {
+  set: string[]
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -733,6 +799,11 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type SiteSettingsUpdatelocalesInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -764,6 +835,9 @@ export type SiteSettingsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   allowIndexing?: boolean
   gaMeasurementId?: boolean
   notifyEmail?: boolean
+  defaultLocale?: boolean
+  locales?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -791,6 +865,9 @@ export type SiteSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   allowIndexing?: boolean
   gaMeasurementId?: boolean
   notifyEmail?: boolean
+  defaultLocale?: boolean
+  locales?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -818,6 +895,9 @@ export type SiteSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   allowIndexing?: boolean
   gaMeasurementId?: boolean
   notifyEmail?: boolean
+  defaultLocale?: boolean
+  locales?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSettings"]>
@@ -845,11 +925,14 @@ export type SiteSettingsSelectScalar = {
   allowIndexing?: boolean
   gaMeasurementId?: boolean
   notifyEmail?: boolean
+  defaultLocale?: boolean
+  locales?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundColor" | "backgroundImage" | "headerBackgroundColor" | "headerBackgroundImage" | "headerButtonText" | "headerButtonHref" | "homeBackgroundColor" | "homeBackgroundImage" | "metaTitle" | "metaDescription" | "metaKeywords" | "ogImageUrl" | "allowIndexing" | "gaMeasurementId" | "notifyEmail" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
+export type SiteSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "logoUrl" | "faviconUrl" | "primaryColor" | "secondaryColor" | "backgroundColor" | "backgroundImage" | "headerBackgroundColor" | "headerBackgroundImage" | "headerButtonText" | "headerButtonHref" | "homeBackgroundColor" | "homeBackgroundImage" | "metaTitle" | "metaDescription" | "metaKeywords" | "ogImageUrl" | "allowIndexing" | "gaMeasurementId" | "notifyEmail" | "defaultLocale" | "locales" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSettings"]>
 
 export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SiteSettings"
@@ -877,6 +960,9 @@ export type $SiteSettingsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     allowIndexing: boolean
     gaMeasurementId: string | null
     notifyEmail: string | null
+    defaultLocale: string
+    locales: string[]
+    translations: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["siteSettings"]>
@@ -1324,6 +1410,9 @@ export interface SiteSettingsFieldRefs {
   readonly allowIndexing: Prisma.FieldRef<"SiteSettings", 'Boolean'>
   readonly gaMeasurementId: Prisma.FieldRef<"SiteSettings", 'String'>
   readonly notifyEmail: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly defaultLocale: Prisma.FieldRef<"SiteSettings", 'String'>
+  readonly locales: Prisma.FieldRef<"SiteSettings", 'String[]'>
+  readonly translations: Prisma.FieldRef<"SiteSettings", 'Json'>
   readonly createdAt: Prisma.FieldRef<"SiteSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SiteSettings", 'DateTime'>
 }

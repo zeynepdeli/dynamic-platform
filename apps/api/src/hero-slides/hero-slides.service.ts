@@ -9,6 +9,8 @@ import { PrismaService } from '../prisma/prisma.service.js';
 
 import type { CreateHeroSlideDto } from './dto/create-hero-slide.dto.js';
 import type { UpdateHeroSlideDto } from './dto/update-hero-slide.dto.js';
+import { localize, localizeHref, mergeTranslations, TRANSLATABLE } from '../i18n/localize.js';
+import { DEFAULT_LOCALE_CONTEXT, type LocaleContext } from '../i18n/i18n.service.js';
 
 // Kaynak tüketimini sınırla (OWASP A04)
 const MAX_HERO_SLIDES = 5;
@@ -17,13 +19,17 @@ const MAX_HERO_SLIDES = 5;
 export class HeroSlidesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // Ziyaretçilere yalnızca aktif sliderları göster.
-  async findPublic() {
-    return this.prisma.heroSlide.findMany({
+  // Ziyaretçilere yalnızca aktif sliderları göster (istenen dilde).
+  async findPublic(ctx: LocaleContext = DEFAULT_LOCALE_CONTEXT) {
+    const slides = await this.prisma.heroSlide.findMany({
       where: {
         active: true,
       },
       orderBy: [{ order: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
+    });
+    return slides.map((s) => {
+      const slide = localize(s, ctx.locale, ctx.defaultLocale, TRANSLATABLE.heroSlide);
+      return { ...slide, buttonHref: localizeHref(slide.buttonHref, ctx.locale, ctx.defaultLocale, ctx.slugMap) };
     });
   }
 
@@ -54,19 +60,21 @@ export class HeroSlidesService {
         buttonHref: dto.buttonHref,
         order: dto.order ?? count, // varsayılan: en sona
         active: dto.active ?? true,
+        translations: mergeTranslations({}, dto.translations),
       },
     });
   }
 
   // Slider bilgilerini güncelle.
   async update(id: string, dto: UpdateHeroSlideDto) {
-    await this.ensureExists(id);
+    const current = await this.ensureExists(id);
+    const { translations, ...rest } = dto;
 
     return this.prisma.heroSlide.update({
       where: {
         id,
       },
-      data: dto,
+      data: { ...rest, translations: mergeTranslations(current.translations, translations) },
     });
   }
 

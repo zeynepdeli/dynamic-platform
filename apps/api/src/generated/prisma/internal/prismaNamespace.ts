@@ -1453,6 +1453,9 @@ export const SiteSettingsScalarFieldEnum = {
   allowIndexing: 'allowIndexing',
   gaMeasurementId: 'gaMeasurementId',
   notifyEmail: 'notifyEmail',
+  defaultLocale: 'defaultLocale',
+  locales: 'locales',
+  translations: 'translations',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1475,7 +1478,8 @@ export const PageScalarFieldEnum = {
   ogImageUrl: 'ogImageUrl',
   noIndex: 'noIndex',
   backgroundColor: 'backgroundColor',
-  backgroundImage: 'backgroundImage'
+  backgroundImage: 'backgroundImage',
+  translations: 'translations'
 } as const
 
 export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
@@ -1504,6 +1508,7 @@ export const MenuItemScalarFieldEnum = {
   order: 'order',
   visible: 'visible',
   parentId: 'parentId',
+  translations: 'translations',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1522,6 +1527,7 @@ export const HeroSlideScalarFieldEnum = {
   buttonHref: 'buttonHref',
   order: 'order',
   active: 'active',
+  translations: 'translations',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1537,6 +1543,7 @@ export const MediaScalarFieldEnum = {
   size: 'size',
   url: 'url',
   alt: 'alt',
+  translations: 'translations',
   createdAt: 'createdAt'
 } as const
 
@@ -1553,6 +1560,7 @@ export const FooterSettingsScalarFieldEnum = {
   enabled: 'enabled',
   backgroundColor: 'backgroundColor',
   backgroundImage: 'backgroundImage',
+  translations: 'translations',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1631,6 +1639,7 @@ export const SectionScalarFieldEnum = {
   columns: 'columns',
   order: 'order',
   active: 'active',
+  translations: 'translations',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1651,6 +1660,7 @@ export const SectionItemScalarFieldEnum = {
   backgroundImage: 'backgroundImage',
   order: 'order',
   active: 'active',
+  translations: 'translations',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1666,12 +1676,28 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const NullsOrder = {
@@ -1706,6 +1732,20 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 

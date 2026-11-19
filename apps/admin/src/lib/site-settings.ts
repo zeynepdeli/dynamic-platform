@@ -27,7 +27,8 @@ export type SiteSettings = {
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const response = await adminFetch("/site-settings");
+  // Yönetim ucu: bildirim e-postası gibi iç alanlar yalnızca burada
+  const response = await adminFetch("/admin/site-settings");
 
   if (!response.ok) {
     throw new Error(`Site ayarları yüklenemedi (HTTP ${response.status}).`);

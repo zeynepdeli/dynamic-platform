@@ -10,6 +10,8 @@ import type { MenuLocation } from '../generated/prisma/enums.js';
 
 import type { CreateMenuItemDto } from './dto/create-menu-item.dto.js';
 import type { UpdateMenuItemDto } from './dto/update-menu-item.dto.js';
+import { localize, localizeHref, mergeTranslations, TRANSLATABLE } from '../i18n/localize.js';
+import { DEFAULT_LOCALE_CONTEXT, type LocaleContext } from '../i18n/i18n.service.js';
 
 // Kaynak tüketimini sınırla (OWASP A04)
 const MAX_MENU_ITEMS = 100;
@@ -20,7 +22,7 @@ export class MenuItemsService {
 
   // Ziyaretçilere yalnızca görünür menüleri döndürür.
 
-  async findPublic() {
+  async findPublic(ctx: LocaleContext = DEFAULT_LOCALE_CONTEXT) {
     const items = await this.prisma.menuItem.findMany({
       orderBy: [{ order: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
     });
@@ -50,7 +52,12 @@ export class MenuItemsService {
       return true;
     };
 
-    return items.filter((item) => isVisible(item.id));
+    return items
+      .filter((item) => isVisible(item.id))
+      .map((row) => {
+        const item = localize(row, ctx.locale, ctx.defaultLocale, TRANSLATABLE.menuItem);
+        return { ...item, href: localizeHref(item.href, ctx.locale, ctx.defaultLocale, ctx.slugMap) ?? item.href };
+      });
   }
 
   // Admin tüm menüleri, gizli olanlar dahil, görebilir.
@@ -94,6 +101,7 @@ export class MenuItemsService {
         visible: dto.visible ?? true,
         parentId: dto.parentId ?? null,
         location,
+        translations: mergeTranslations({}, dto.translations),
       },
     });
   }
@@ -129,9 +137,10 @@ export class MenuItemsService {
       }
     }
 
+    const { translations, ...rest } = dto;
     return this.prisma.menuItem.update({
       where: { id },
-      data: dto,
+      data: { ...rest, translations: mergeTranslations(item.translations, translations) },
     });
   }
 

@@ -1,6 +1,9 @@
+import { Type } from 'class-transformer';
+import { SectionItemTranslations, type SectionItemTranslationDto, type TranslationsOf } from '../../i18n/translation-fields.dto.js';
 import {
   IsBoolean,
   IsInt,
+  IsObject,
   IsOptional,
   IsString,
   Matches,
@@ -8,6 +11,7 @@ import {
   MaxLength,
   Min,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator';
 import {
   HEX_COLOR_MESSAGE,
@@ -72,4 +76,11 @@ export class UpdateSectionItemDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => SectionItemTranslations)
+  translations?: TranslationsOf<SectionItemTranslationDto>;
 }

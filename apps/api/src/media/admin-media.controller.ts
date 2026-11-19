@@ -64,7 +64,7 @@ export class AdminMediaController {
   // Medya dosyasını sil.
   @Patch(':id')
   update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateMediaDto) {
-    return this.mediaService.updateAlt(id, dto.alt);
+    return this.mediaService.updateAlt(id, dto.alt, dto.translations);
   }
 
   @Delete(':id')

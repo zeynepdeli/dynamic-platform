@@ -81,6 +81,7 @@ export type SectionItemCountAggregateOutputType = {
   backgroundImage: number
   order: number
   active: number
+  translations: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -142,6 +143,7 @@ export type SectionItemCountAggregateInputType = {
   backgroundImage?: true
   order?: true
   active?: true
+  translations?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -246,6 +248,7 @@ export type SectionItemGroupByOutputType = {
   backgroundImage: string | null
   order: number
   active: boolean
+  translations: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: SectionItemCountAggregateOutputType | null
@@ -286,6 +289,7 @@ export type SectionItemWhereInput = {
   backgroundImage?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   order?: Prisma.IntFilter<"SectionItem"> | number
   active?: Prisma.BoolFilter<"SectionItem"> | boolean
+  translations?: Prisma.JsonFilter<"SectionItem">
   createdAt?: Prisma.DateTimeFilter<"SectionItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SectionItem"> | Date | string
   section?: Prisma.XOR<Prisma.SectionScalarRelationFilter, Prisma.SectionWhereInput>
@@ -304,6 +308,7 @@ export type SectionItemOrderByWithRelationInput = {
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   section?: Prisma.SectionOrderByWithRelationInput
@@ -325,6 +330,7 @@ export type SectionItemWhereUniqueInput = Prisma.AtLeast<{
   backgroundImage?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   order?: Prisma.IntFilter<"SectionItem"> | number
   active?: Prisma.BoolFilter<"SectionItem"> | boolean
+  translations?: Prisma.JsonFilter<"SectionItem">
   createdAt?: Prisma.DateTimeFilter<"SectionItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SectionItem"> | Date | string
   section?: Prisma.XOR<Prisma.SectionScalarRelationFilter, Prisma.SectionWhereInput>
@@ -343,6 +349,7 @@ export type SectionItemOrderByWithAggregationInput = {
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SectionItemCountOrderByAggregateInput
@@ -368,6 +375,7 @@ export type SectionItemScalarWhereWithAggregatesInput = {
   backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"SectionItem"> | string | null
   order?: Prisma.IntWithAggregatesFilter<"SectionItem"> | number
   active?: Prisma.BoolWithAggregatesFilter<"SectionItem"> | boolean
+  translations?: Prisma.JsonWithAggregatesFilter<"SectionItem">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SectionItem"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SectionItem"> | Date | string
 }
@@ -384,6 +392,7 @@ export type SectionItemCreateInput = {
   backgroundImage?: string | null
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   section: Prisma.SectionCreateNestedOneWithoutItemsInput
@@ -402,6 +411,7 @@ export type SectionItemUncheckedCreateInput = {
   backgroundImage?: string | null
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -418,6 +428,7 @@ export type SectionItemUpdateInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   section?: Prisma.SectionUpdateOneRequiredWithoutItemsNestedInput
@@ -436,6 +447,7 @@ export type SectionItemUncheckedUpdateInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -453,6 +465,7 @@ export type SectionItemCreateManyInput = {
   backgroundImage?: string | null
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -469,6 +482,7 @@ export type SectionItemUpdateManyMutationInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -486,6 +500,7 @@ export type SectionItemUncheckedUpdateManyInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -513,6 +528,7 @@ export type SectionItemCountOrderByAggregateInput = {
   backgroundImage?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -613,6 +629,7 @@ export type SectionItemCreateWithoutSectionInput = {
   backgroundImage?: string | null
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -629,6 +646,7 @@ export type SectionItemUncheckedCreateWithoutSectionInput = {
   backgroundImage?: string | null
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -675,6 +693,7 @@ export type SectionItemScalarWhereInput = {
   backgroundImage?: Prisma.StringNullableFilter<"SectionItem"> | string | null
   order?: Prisma.IntFilter<"SectionItem"> | number
   active?: Prisma.BoolFilter<"SectionItem"> | boolean
+  translations?: Prisma.JsonFilter<"SectionItem">
   createdAt?: Prisma.DateTimeFilter<"SectionItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SectionItem"> | Date | string
 }
@@ -691,6 +710,7 @@ export type SectionItemCreateManySectionInput = {
   backgroundImage?: string | null
   order?: number
   active?: boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -707,6 +727,7 @@ export type SectionItemUpdateWithoutSectionInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -723,6 +744,7 @@ export type SectionItemUncheckedUpdateWithoutSectionInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -739,6 +761,7 @@ export type SectionItemUncheckedUpdateManyWithoutSectionInput = {
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -758,6 +781,7 @@ export type SectionItemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   backgroundImage?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
@@ -776,6 +800,7 @@ export type SectionItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   backgroundImage?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
@@ -794,6 +819,7 @@ export type SectionItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   backgroundImage?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
@@ -812,11 +838,12 @@ export type SectionItemSelectScalar = {
   backgroundImage?: boolean
   order?: boolean
   active?: boolean
+  translations?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "imageUrl" | "icon" | "buttonText" | "buttonHref" | "backgroundColor" | "backgroundImage" | "order" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["sectionItem"]>
+export type SectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "imageUrl" | "icon" | "buttonText" | "buttonHref" | "backgroundColor" | "backgroundImage" | "order" | "active" | "translations" | "createdAt" | "updatedAt", ExtArgs["result"]["sectionItem"]>
 export type SectionItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
 }
@@ -845,6 +872,7 @@ export type $SectionItemPayload<ExtArgs extends runtime.Types.Extensions.Interna
     backgroundImage: string | null
     order: number
     active: boolean
+    translations: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["sectionItem"]>
@@ -1283,6 +1311,7 @@ export interface SectionItemFieldRefs {
   readonly backgroundImage: Prisma.FieldRef<"SectionItem", 'String'>
   readonly order: Prisma.FieldRef<"SectionItem", 'Int'>
   readonly active: Prisma.FieldRef<"SectionItem", 'Boolean'>
+  readonly translations: Prisma.FieldRef<"SectionItem", 'Json'>
   readonly createdAt: Prisma.FieldRef<"SectionItem", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SectionItem", 'DateTime'>
 }

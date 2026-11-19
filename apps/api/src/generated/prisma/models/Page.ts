@@ -76,6 +76,7 @@ export type PageCountAggregateOutputType = {
   noIndex: number
   backgroundColor: number
   backgroundImage: number
+  translations: number
   _all: number
 }
 
@@ -132,6 +133,7 @@ export type PageCountAggregateInputType = {
   noIndex?: true
   backgroundColor?: true
   backgroundImage?: true
+  translations?: true
   _all?: true
 }
 
@@ -223,6 +225,7 @@ export type PageGroupByOutputType = {
   noIndex: boolean
   backgroundColor: string | null
   backgroundImage: string | null
+  translations: runtime.JsonValue
   _count: PageCountAggregateOutputType | null
   _min: PageMinAggregateOutputType | null
   _max: PageMaxAggregateOutputType | null
@@ -262,6 +265,7 @@ export type PageWhereInput = {
   noIndex?: Prisma.BoolFilter<"Page"> | boolean
   backgroundColor?: Prisma.StringNullableFilter<"Page"> | string | null
   backgroundImage?: Prisma.StringNullableFilter<"Page"> | string | null
+  translations?: Prisma.JsonFilter<"Page">
   sections?: Prisma.SectionListRelationFilter
 }
 
@@ -281,6 +285,7 @@ export type PageOrderByWithRelationInput = {
   noIndex?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  translations?: Prisma.SortOrder
   sections?: Prisma.SectionOrderByRelationAggregateInput
 }
 
@@ -303,6 +308,7 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   noIndex?: Prisma.BoolFilter<"Page"> | boolean
   backgroundColor?: Prisma.StringNullableFilter<"Page"> | string | null
   backgroundImage?: Prisma.StringNullableFilter<"Page"> | string | null
+  translations?: Prisma.JsonFilter<"Page">
   sections?: Prisma.SectionListRelationFilter
 }, "id" | "slug">
 
@@ -322,6 +328,7 @@ export type PageOrderByWithAggregationInput = {
   noIndex?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrderInput | Prisma.SortOrder
   backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  translations?: Prisma.SortOrder
   _count?: Prisma.PageCountOrderByAggregateInput
   _max?: Prisma.PageMaxOrderByAggregateInput
   _min?: Prisma.PageMinOrderByAggregateInput
@@ -346,6 +353,7 @@ export type PageScalarWhereWithAggregatesInput = {
   noIndex?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
   backgroundColor?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
+  translations?: Prisma.JsonWithAggregatesFilter<"Page">
 }
 
 export type PageCreateInput = {
@@ -364,6 +372,7 @@ export type PageCreateInput = {
   noIndex?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   sections?: Prisma.SectionCreateNestedManyWithoutPageInput
 }
 
@@ -383,6 +392,7 @@ export type PageUncheckedCreateInput = {
   noIndex?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   sections?: Prisma.SectionUncheckedCreateNestedManyWithoutPageInput
 }
 
@@ -402,6 +412,7 @@ export type PageUpdateInput = {
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   sections?: Prisma.SectionUpdateManyWithoutPageNestedInput
 }
 
@@ -421,6 +432,7 @@ export type PageUncheckedUpdateInput = {
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   sections?: Prisma.SectionUncheckedUpdateManyWithoutPageNestedInput
 }
 
@@ -440,6 +452,7 @@ export type PageCreateManyInput = {
   noIndex?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PageUpdateManyMutationInput = {
@@ -458,6 +471,7 @@ export type PageUpdateManyMutationInput = {
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PageUncheckedUpdateManyInput = {
@@ -476,6 +490,7 @@ export type PageUncheckedUpdateManyInput = {
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PageCountOrderByAggregateInput = {
@@ -494,6 +509,7 @@ export type PageCountOrderByAggregateInput = {
   noIndex?: Prisma.SortOrder
   backgroundColor?: Prisma.SortOrder
   backgroundImage?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
 }
 
 export type PageMaxOrderByAggregateInput = {
@@ -573,6 +589,7 @@ export type PageCreateWithoutSectionsInput = {
   noIndex?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PageUncheckedCreateWithoutSectionsInput = {
@@ -591,6 +608,7 @@ export type PageUncheckedCreateWithoutSectionsInput = {
   noIndex?: boolean
   backgroundColor?: string | null
   backgroundImage?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PageCreateOrConnectWithoutSectionsInput = {
@@ -625,6 +643,7 @@ export type PageUpdateWithoutSectionsInput = {
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PageUncheckedUpdateWithoutSectionsInput = {
@@ -643,6 +662,7 @@ export type PageUncheckedUpdateWithoutSectionsInput = {
   noIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
   backgroundColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -692,6 +712,7 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   noIndex?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
   sections?: boolean | Prisma.Page$sectionsArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["page"]>
@@ -712,6 +733,7 @@ export type PageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   noIndex?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
 }, ExtArgs["result"]["page"]>
 
 export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -730,6 +752,7 @@ export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   noIndex?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
 }, ExtArgs["result"]["page"]>
 
 export type PageSelectScalar = {
@@ -748,9 +771,10 @@ export type PageSelectScalar = {
   noIndex?: boolean
   backgroundColor?: boolean
   backgroundImage?: boolean
+  translations?: boolean
 }
 
-export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "published" | "deletedAt" | "createdAt" | "updatedAt" | "seoTitle" | "seoDescription" | "seoKeywords" | "ogImageUrl" | "noIndex" | "backgroundColor" | "backgroundImage", ExtArgs["result"]["page"]>
+export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "published" | "deletedAt" | "createdAt" | "updatedAt" | "seoTitle" | "seoDescription" | "seoKeywords" | "ogImageUrl" | "noIndex" | "backgroundColor" | "backgroundImage" | "translations", ExtArgs["result"]["page"]>
 export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sections?: boolean | Prisma.Page$sectionsArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
@@ -779,6 +803,7 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     noIndex: boolean
     backgroundColor: string | null
     backgroundImage: string | null
+    translations: runtime.JsonValue
   }, ExtArgs["result"]["page"]>
   composites: {}
 }
@@ -1218,6 +1243,7 @@ export interface PageFieldRefs {
   readonly noIndex: Prisma.FieldRef<"Page", 'Boolean'>
   readonly backgroundColor: Prisma.FieldRef<"Page", 'String'>
   readonly backgroundImage: Prisma.FieldRef<"Page", 'String'>
+  readonly translations: Prisma.FieldRef<"Page", 'Json'>
 }
     
 

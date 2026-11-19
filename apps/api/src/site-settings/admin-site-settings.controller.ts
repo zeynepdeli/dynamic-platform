@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 
 import { SiteSettingsService } from './site-settings.service.js';
 import { UpdateSiteSettingsDto } from './dto/update-site-settings.dto.js';
@@ -12,6 +12,12 @@ import { Roles } from '../auth/decorators/roles.decorator.js';
 @Roles('ADMIN')
 export class AdminSiteSettingsController {
   constructor(private readonly siteSettingsService: SiteSettingsService) {}
+
+  /** Yönetim: tüm alanlar (bildirim e-postası ve çeviriler dahil) */
+  @Get()
+  getSettings() {
+    return this.siteSettingsService.getSettings();
+  }
 
   @Patch()
   updateSettings(@Body() dto: UpdateSiteSettingsDto) {

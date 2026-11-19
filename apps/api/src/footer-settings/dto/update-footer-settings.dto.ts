@@ -1,10 +1,15 @@
+import { Type } from 'class-transformer';
+import { FooterTranslations, type FooterTranslationDto, type TranslationsOf } from '../../i18n/translation-fields.dto.js';
 import {
   IsBoolean,
-  Matches,
   IsEmail,
+  IsObject,
+  IsOptional,
   IsString,
+  Matches,
   MaxLength,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator';
 
 import {
@@ -50,4 +55,11 @@ export class UpdateFooterSettingsDto {
   @ValidateIf((_, value: unknown) => value !== undefined)
   @IsBoolean()
   enabled?: boolean;
+
+  /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => FooterTranslations)
+  translations?: TranslationsOf<FooterTranslationDto>;
 }

@@ -1,10 +1,19 @@
+import { SUPPORTED_LOCALES, type Locale } from '../../i18n/locales.js';
+import { Type } from 'class-transformer';
+import { SiteSettingsTranslations, type SiteSettingsTranslationDto, type TranslationsOf } from '../../i18n/translation-fields.dto.js';
 import {
+  ArrayMaxSize,
+  IsArray,
   IsBoolean,
   IsEmail,
+  IsIn,
+  IsObject,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator';
 
 import {
@@ -123,4 +132,23 @@ export class UpdateSiteSettingsDto {
   @ValidateIf(notNull)
   @IsImageUrl()
   homeBackgroundImage?: string | null;
+
+  /** Sitenin ana dili (asıl alanların dili) */
+  @ValidateIf(sent)
+  @IsIn(SUPPORTED_LOCALES, { message: 'Desteklenmeyen dil.' })
+  defaultLocale?: Locale;
+
+  /** Sitede açık diller (ana dil kendiliğinden eklenir) */
+  @ValidateIf(sent)
+  @IsArray()
+  @ArrayMaxSize(SUPPORTED_LOCALES.length)
+  @IsIn(SUPPORTED_LOCALES, { each: true, message: 'Desteklenmeyen dil.' })
+  locales?: Locale[];
+
+  /** Diğer dillerdeki metinler: { "en": { … } } (bkz. src/i18n) */
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => SiteSettingsTranslations)
+  translations?: TranslationsOf<SiteSettingsTranslationDto>;
 }

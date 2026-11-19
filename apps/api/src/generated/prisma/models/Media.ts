@@ -64,6 +64,7 @@ export type MediaCountAggregateOutputType = {
   size: number
   url: number
   alt: number
+  translations: number
   createdAt: number
   _all: number
 }
@@ -107,6 +108,7 @@ export type MediaCountAggregateInputType = {
   size?: true
   url?: true
   alt?: true
+  translations?: true
   createdAt?: true
   _all?: true
 }
@@ -205,6 +207,7 @@ export type MediaGroupByOutputType = {
   size: number
   url: string
   alt: string | null
+  translations: runtime.JsonValue
   createdAt: Date
   _count: MediaCountAggregateOutputType | null
   _avg: MediaAvgAggregateOutputType | null
@@ -239,6 +242,7 @@ export type MediaWhereInput = {
   size?: Prisma.IntFilter<"Media"> | number
   url?: Prisma.StringFilter<"Media"> | string
   alt?: Prisma.StringNullableFilter<"Media"> | string | null
+  translations?: Prisma.JsonFilter<"Media">
   createdAt?: Prisma.DateTimeFilter<"Media"> | Date | string
 }
 
@@ -250,6 +254,7 @@ export type MediaOrderByWithRelationInput = {
   size?: Prisma.SortOrder
   url?: Prisma.SortOrder
   alt?: Prisma.SortOrderInput | Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -264,6 +269,7 @@ export type MediaWhereUniqueInput = Prisma.AtLeast<{
   size?: Prisma.IntFilter<"Media"> | number
   url?: Prisma.StringFilter<"Media"> | string
   alt?: Prisma.StringNullableFilter<"Media"> | string | null
+  translations?: Prisma.JsonFilter<"Media">
   createdAt?: Prisma.DateTimeFilter<"Media"> | Date | string
 }, "id" | "storageKey">
 
@@ -275,6 +281,7 @@ export type MediaOrderByWithAggregationInput = {
   size?: Prisma.SortOrder
   url?: Prisma.SortOrder
   alt?: Prisma.SortOrderInput | Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.MediaCountOrderByAggregateInput
   _avg?: Prisma.MediaAvgOrderByAggregateInput
@@ -294,6 +301,7 @@ export type MediaScalarWhereWithAggregatesInput = {
   size?: Prisma.IntWithAggregatesFilter<"Media"> | number
   url?: Prisma.StringWithAggregatesFilter<"Media"> | string
   alt?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
+  translations?: Prisma.JsonWithAggregatesFilter<"Media">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Media"> | Date | string
 }
 
@@ -305,6 +313,7 @@ export type MediaCreateInput = {
   size: number
   url: string
   alt?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -316,6 +325,7 @@ export type MediaUncheckedCreateInput = {
   size: number
   url: string
   alt?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -327,6 +337,7 @@ export type MediaUpdateInput = {
   size?: Prisma.IntFieldUpdateOperationsInput | number
   url?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -338,6 +349,7 @@ export type MediaUncheckedUpdateInput = {
   size?: Prisma.IntFieldUpdateOperationsInput | number
   url?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -349,6 +361,7 @@ export type MediaCreateManyInput = {
   size: number
   url: string
   alt?: string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -360,6 +373,7 @@ export type MediaUpdateManyMutationInput = {
   size?: Prisma.IntFieldUpdateOperationsInput | number
   url?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -371,6 +385,7 @@ export type MediaUncheckedUpdateManyInput = {
   size?: Prisma.IntFieldUpdateOperationsInput | number
   url?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  translations?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -382,6 +397,7 @@ export type MediaCountOrderByAggregateInput = {
   size?: Prisma.SortOrder
   url?: Prisma.SortOrder
   alt?: Prisma.SortOrder
+  translations?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -425,6 +441,7 @@ export type MediaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   size?: boolean
   url?: boolean
   alt?: boolean
+  translations?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["media"]>
 
@@ -436,6 +453,7 @@ export type MediaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   size?: boolean
   url?: boolean
   alt?: boolean
+  translations?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["media"]>
 
@@ -447,6 +465,7 @@ export type MediaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   size?: boolean
   url?: boolean
   alt?: boolean
+  translations?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["media"]>
 
@@ -458,10 +477,11 @@ export type MediaSelectScalar = {
   size?: boolean
   url?: boolean
   alt?: boolean
+  translations?: boolean
   createdAt?: boolean
 }
 
-export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "originalName" | "storageKey" | "mimeType" | "size" | "url" | "alt" | "createdAt", ExtArgs["result"]["media"]>
+export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "originalName" | "storageKey" | "mimeType" | "size" | "url" | "alt" | "translations" | "createdAt", ExtArgs["result"]["media"]>
 
 export type $MediaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Media"
@@ -474,6 +494,7 @@ export type $MediaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     size: number
     url: string
     alt: string | null
+    translations: runtime.JsonValue
     createdAt: Date
   }, ExtArgs["result"]["media"]>
   composites: {}
@@ -905,6 +926,7 @@ export interface MediaFieldRefs {
   readonly size: Prisma.FieldRef<"Media", 'Int'>
   readonly url: Prisma.FieldRef<"Media", 'String'>
   readonly alt: Prisma.FieldRef<"Media", 'String'>
+  readonly translations: Prisma.FieldRef<"Media", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Media", 'DateTime'>
 }
     
