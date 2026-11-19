@@ -76,14 +76,15 @@ describe('İçeriği çevirme', () => {
     expect(localize(r, 'en', 'tr', ['title'])).toEqual({ id: '1' });
   });
 
-  it('kaydetme: gönderilen dil bütünüyle değişir, diğerleri korunur, boşlar atılır', () => {
-    const current = { en: { title: 'Old', body: 'B' }, de: { title: 'X' } };
-    expect(
-      mergeTranslations(current, { en: { title: ' New ', body: '' } }),
-    ).toEqual({ en: { title: 'New' }, de: { title: 'X' } });
-    expect(mergeTranslations(current, { en: { title: '' } })).toEqual({
+  it('kaydetme: alan alan birleşir; boş metin o alanı siler, gönderilmeyenler korunur', () => {
+    const current = { en: { title: 'Old', body: 'B', seo: 'S' }, de: { title: 'X' } };
+    expect(mergeTranslations(current, { en: { title: ' New ', body: '' } })).toEqual({
+      en: { title: 'New', seo: 'S' },
       de: { title: 'X' },
     });
+    expect(mergeTranslations({ en: { title: 'A' } }, { en: { title: '' } })).toEqual({});
+    expect(mergeTranslations(current, undefined)).toBeUndefined();
+  });
     expect(mergeTranslations(current, undefined)).toBeUndefined();
   });
 });
