@@ -12,6 +12,7 @@ import { FormField } from "@/components/forms/FormField";
 import { FormTextarea } from "@/components/forms/FormTextarea";
 import { FormSwitch } from "@/components/forms/FormSwitch";
 import { ImageUploadField } from "@/components/forms/ImageUploadField";
+import { TranslationPanel } from "@/components/i18n/TranslationPanel";
 
 import {
   heroSlideDefaultValues,
@@ -146,6 +147,18 @@ export function HeroSlideForm({
         label="Yayında"
         description="Kapalıysa slayt sitede gösterilmez."
         control={control}
+      />
+
+      <TranslationPanel
+        control={control}
+        register={register}
+        fields={[
+          { name: "title", label: "Başlık" },
+          { name: "subtitle", label: "Alt Başlık" },
+          { name: "description", label: "Açıklama", multiline: true },
+          { name: "buttonText", label: "Buton Yazısı" },
+          { name: "buttonHref", label: "Buton Bağlantısı", placeholder: "Boşsa ana dildeki bağlantı (/en ile)" },
+        ]}
       />
 
       {submitError && (

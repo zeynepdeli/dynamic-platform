@@ -30,7 +30,12 @@ export default async function HeaderAreaPage() {
           "headerBackgroundImage",
           "headerButtonText",
           "headerButtonHref",
-        ])}
+        ], ["siteName", "headerButtonText", "headerButtonHref"])}
+        translatable={[
+          { name: "siteName", label: "Site Adı" },
+          { name: "headerButtonText", label: "Buton Yazısı" },
+          { name: "headerButtonHref", label: "Buton Bağlantısı", placeholder: "Boşsa ana dildeki bağlantı (/en ile)" },
+        ]}
         panels={[
           {
             title: "Genel Header Ayarları",

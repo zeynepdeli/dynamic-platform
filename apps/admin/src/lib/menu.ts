@@ -3,6 +3,7 @@ import "server-only";
 import { adminFetch } from "@/lib/api";
 import type { MenuItemFormValues } from "@/lib/validations/menu.schema";
 import { getIcon } from "@/components/icons/registry";
+import { toTranslationsForm } from "@/lib/i18n";
 
 export type MenuItem = {
   id: string;
@@ -13,6 +14,7 @@ export type MenuItem = {
   visible: boolean;
   parentId: string | null;
   location: MenuLocation;
+  translations?: unknown;
 };
 
 export type MenuLocation = "HEADER" | "FOOTER";
@@ -42,6 +44,7 @@ export function toMenuFormValues(item: MenuItem): MenuItemFormValues {
       ? (item.icon as MenuItemFormValues["icon"])
       : "",
     visible: item.visible,
+    translations: toTranslationsForm(item.translations, ["label", "href"]),
   };
 }
 

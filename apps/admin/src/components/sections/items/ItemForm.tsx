@@ -16,6 +16,7 @@ import { ImageUploadField } from "@/components/forms/ImageUploadField";
 
 import type { FieldConfig, ItemField } from "@/brand/page-templates";
 import { fieldLabel } from "@/lib/field-config";
+import { TranslationPanel, type TranslatableField } from "@/components/i18n/TranslationPanel";
 import {
   sectionItemDefaultValues,
   itemSchemaFor,
@@ -166,6 +167,21 @@ export function ItemForm({
       )}
 
       <FormSwitch name="active" label="Yayında" description="Kapalıysa sitede görünmez." control={control} />
+
+      <TranslationPanel
+        control={control}
+        register={register}
+        fields={(
+          [
+            ["title", titleLabel],
+            ["description", descriptionLabel, true],
+            ["buttonText", buttonTextLabel],
+            ["buttonHref", buttonHrefLabel],
+          ] as const
+        ).flatMap(([name, text, multiline]): TranslatableField[] =>
+          text ? [{ name, label: text, multiline: !!multiline }] : [],
+        )}
+      />
 
       {submitError && (
         <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">

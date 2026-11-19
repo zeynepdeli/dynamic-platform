@@ -30,6 +30,11 @@ export default async function FooterAreaPage() {
         submitLabel="Footer Ayarlarını Kaydet"
         mediaBaseUrl={getMediaBaseUrl()}
         initialValues={footer}
+        translatable={[
+          { name: "description", label: "Kısa Açıklama", multiline: true },
+          { name: "copyright", label: "Telif Metni" },
+          { name: "address", label: "Adres", multiline: true },
+        ]}
         panels={[
           {
             title: "Genel Footer Ayarları",

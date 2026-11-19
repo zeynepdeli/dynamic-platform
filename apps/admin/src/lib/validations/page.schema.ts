@@ -1,6 +1,11 @@
 import "./zod-locale";
 import { z } from "zod";
 
+import { tLine, tSlug, translationsSchema, tText } from "../i18n";
+
+/** Sayfanın çevrilebilen alanları (slug: o dildeki adres, ör. about-us) */
+export const PAGE_TRANSLATABLE = ["title", "slug", "content", "seoTitle", "seoDescription", "seoKeywords"] as const;
+
 export const pageSchema = z.object({
   title: z
     .string()
@@ -30,6 +35,15 @@ export const pageSchema = z.object({
     .optional(),
 
   noIndex: z.boolean(),
+
+  translations: translationsSchema({
+    title: tLine(150),
+    slug: tSlug(),
+    content: tText(50000),
+    seoTitle: tLine(150),
+    seoDescription: tText(300),
+    seoKeywords: tLine(500),
+  }),
 });
 
 export type PageFormValues = z.infer<typeof pageSchema>;
@@ -44,4 +58,5 @@ export const pageDefaultValues: PageFormValues = {
   seoKeywords: "",
   ogImageUrl: "",
   noIndex: false,
+  translations: {},
 };

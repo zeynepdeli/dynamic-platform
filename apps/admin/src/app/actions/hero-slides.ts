@@ -23,6 +23,7 @@ function payload(v: HeroSlideFormValues) {
     buttonText: emptyToNull(v.buttonText),
     buttonHref: emptyToNull(v.buttonHref),
     active: v.active,
+    translations: v.translations,
   };
 }
 

@@ -9,6 +9,7 @@ import {
   Home,
   Info,
   LayoutGrid,
+  Languages,
   PaintBucket,
   Palette,
   PanelBottom,
@@ -86,6 +87,12 @@ export default async function DashboardPage() {
           icon={Palette}
           title="Tema Renkleri"
           description="Ana renk ve ikincil renk"
+        />
+        <Tile
+          href="/areas/languages"
+          icon={Languages}
+          title="Diller"
+          description="TR / EN: sitede açık diller"
         />
         <Tile
           href="/areas/seo"

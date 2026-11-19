@@ -17,6 +17,7 @@ import { ImageUploadField } from "@/components/forms/ImageUploadField";
 import type { FieldConfig, SectionField } from "@/brand/page-templates";
 import { fieldLabel } from "@/lib/field-config";
 import { MODULE_ONLY_TYPES, SECTION_FIELDS_BY_TYPE, hasColumns } from "@/lib/section-types";
+import { TranslationPanel, type TranslatableField } from "@/components/i18n/TranslationPanel";
 import {
   SECTION_TYPES,
   SECTION_TYPE_HINTS,
@@ -116,6 +117,19 @@ export function SectionForm({
   const columnsLabel = label("columns", "Sütun Sayısı (masaüstü)");
 
   const canSubmit = !isSubmitting && (mode === "create" || isDirty);
+
+  // Çeviri kutusu: yalnızca bu bölüm tipinde/şablonda görünen metin alanları
+  const translatable = (
+    [
+      ["title", titleLabel],
+      ["subtitle", subtitleLabel],
+      ["body", bodyLabel, true],
+      ["buttonText", buttonTextLabel],
+      ["buttonHref", buttonHrefLabel],
+    ] as const
+  ).flatMap(([name, text, multiline]): TranslatableField[] =>
+    text ? [{ name, label: text, multiline: !!multiline, placeholder: name === "buttonHref" ? "Boşsa ana dildeki bağlantı (/en ile)" : undefined }] : [],
+  );
 
   return (
     <form onSubmit={handleSubmit(submit)} noValidate className="@container space-y-6">
@@ -299,6 +313,10 @@ export function SectionForm({
         description="Kapalıysa bölüm sitede görünmez."
         control={control}
       />
+
+      {translatable.length > 0 && (
+        <TranslationPanel control={control} register={register} fields={translatable} />
+      )}
 
       {submitError && (
         <div

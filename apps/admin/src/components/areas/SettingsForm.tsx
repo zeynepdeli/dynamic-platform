@@ -13,6 +13,8 @@ import { FormField } from "@/components/forms/FormField";
 import { FormSwitch } from "@/components/forms/FormSwitch";
 import { FormTextarea } from "@/components/forms/FormTextarea";
 import { ImageUploadField } from "@/components/forms/ImageUploadField";
+import { TranslationPanel, type TranslatableField } from "@/components/i18n/TranslationPanel";
+import { useExtraLocales } from "@/components/i18n/LocaleProvider";
 
 import { updateSettingsAction } from "@/app/actions/settings";
 import {
@@ -46,13 +48,17 @@ export function SettingsForm({
   initialValues,
   mediaBaseUrl,
   submitLabel,
+  translatable = [],
 }: {
   group: SettingsGroup;
   panels: SettingsPanel[];
   initialValues: AnySettingsValues;
   mediaBaseUrl: string;
   submitLabel: string;
+  /** Ek dil açıksa çevirisi istenecek alanlar */
+  translatable?: TranslatableField[];
 }) {
+  const extraLocales = useExtraLocales();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -99,6 +105,12 @@ export function SettingsForm({
         </AreaCard>
       ))}
 
+      {translatable.length > 0 && extraLocales.length > 0 && (
+        <AreaCard title="Çeviriler" hint="Boş bırakılan alan sitede ana dildeki haliyle görünür.">
+          <TranslationPanel fields={translatable} control={control} register={register} />
+        </AreaCard>
+      )}
+
       {error && (
         <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
           {error}
@@ -137,7 +149,7 @@ function Field({
   const common = { label: field.label, description: field.description };
   switch (field.kind) {
     case "textarea":
-      return <FormTextarea name={field.name} rows={3} register={register} error={errors[field.name]} {...common} />;
+      return <FormTextarea name={field.name} rows={3} register={register} error={errors[field.name] as never} {...common} />;
     case "color":
       return <ColorField name={field.name} control={control} {...common} />;
     case "color-optional":
@@ -151,7 +163,7 @@ function Field({
         <FormField
           name={field.name}
           register={register}
-          error={errors[field.name]}
+          error={errors[field.name] as never}
           placeholder={field.placeholder}
           required={field.required}
           {...common}

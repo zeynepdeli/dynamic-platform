@@ -1,6 +1,11 @@
 import "./zod-locale";
 import { z } from "zod";
 
+import { tLine, tPath, translationsSchema, tText } from "../i18n";
+
+/** Çevrilebilen alanlar */
+export const SECTION_TRANSLATABLE = ["title", "subtitle", "body", "buttonText", "buttonHref"] as const;
+export const ITEM_TRANSLATABLE = ["title", "description", "buttonText", "buttonHref"] as const;
 import {
   imageUrlSchema,
   internalPathSchema,
@@ -96,6 +101,13 @@ export const sectionSchema = z
       .max(300)
       .refine((v) => !/[\u0000-\u001f]/.test(v), "Adres tek satır olmalı."),
     active: z.boolean(),
+    translations: translationsSchema({
+      title: tLine(200),
+      subtitle: tLine(300),
+      body: tText(5000),
+      buttonText: tLine(60),
+      buttonHref: tPath(),
+    }),
   })
   .refine(buttonPairIsValid, buttonPairError)
   .refine((v) => v.type !== "VIDEO" || v.videoUrl !== "", { path: ["videoUrl"], message: "Video adresi girin." })
@@ -118,6 +130,7 @@ export const sectionDefaultValues: SectionFormValues = {
   videoUrl: "",
   mapAddress: "",
   active: true,
+  translations: {},
 };
 
 // İkon adı: "truck", "shield-check" (SVG/HTML değil)
@@ -141,6 +154,12 @@ const sectionItemBase = z
     backgroundColor: optionalHexColorSchema,
     backgroundImage: imageUrlSchema,
     active: z.boolean(),
+    translations: translationsSchema({
+      title: tLine(200),
+      description: tText(1000),
+      buttonText: tLine(60),
+      buttonHref: tPath(),
+    }),
   })
   .refine(buttonPairIsValid, buttonPairError);
 
@@ -169,4 +188,5 @@ export const sectionItemDefaultValues: SectionItemFormValues = {
   backgroundColor: "",
   backgroundImage: "",
   active: true,
+  translations: {},
 };

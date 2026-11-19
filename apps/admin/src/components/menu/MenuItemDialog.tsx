@@ -19,6 +19,7 @@ import { FormSwitch } from "@/components/forms/FormSwitch";
 import { IconPicker } from "@/components/icons/IconPicker";
 
 import { createMenuItemAction, updateMenuItemAction } from "@/app/actions/menu";
+import { TranslationPanel } from "@/components/i18n/TranslationPanel";
 import {
   menuItemDefaultValues,
   menuItemSchema,
@@ -158,6 +159,15 @@ function MenuItemForm({
         label="Görünür"
         description="Kapalıysa menüde gösterilmez (alt menüleri de gizlenir)."
         control={control}
+      />
+
+      <TranslationPanel
+        control={control}
+        register={register}
+        fields={[
+          { name: "label", label: "Menü Başlığı" },
+          { name: "href", label: "Bağlantı", placeholder: "Boşsa ana dildeki bağlantı (/en ile)" },
+        ]}
       />
 
       {submitError && (

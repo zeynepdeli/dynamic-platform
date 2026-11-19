@@ -11,6 +11,7 @@ import { ConfirmDeleteDialog } from "@/components/common/ConfirmDeleteDialog";
 
 import { deleteMediaAction, uploadImageAction } from "@/app/actions/media";
 import type { MediaFile } from "@/lib/media";
+import { useExtraLocales } from "@/components/i18n/LocaleProvider";
 import { IMAGE_ACCEPT, validateImageFile } from "@/lib/validations/media";
 
 type MediaLibraryProps = {
@@ -32,6 +33,7 @@ export function MediaLibrary({ files, mediaBaseUrl }: MediaLibraryProps) {
   const [uploading, setUploading] = useState<string | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const extraLocales = useExtraLocales();
 
   async function handleFiles(list: FileList | null) {
     if (!list || list.length === 0) return;
@@ -160,6 +162,9 @@ export function MediaLibrary({ files, mediaBaseUrl }: MediaLibraryProps) {
                   {formatSize(file.size)}
                 </p>
                 <MediaAltField id={file.id} initial={file.alt ?? ""} />
+                {extraLocales.map((l) => (
+                  <MediaAltField key={l} id={file.id} locale={l} initial={file.translations?.[l]?.alt ?? ""} />
+                ))}
 
                 <div className="flex items-center gap-2">
                   <Button

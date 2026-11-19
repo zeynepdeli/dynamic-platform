@@ -27,7 +27,13 @@ export default async function SeoAreaPage() {
           "ogImageUrl",
           "allowIndexing",
           "gaMeasurementId",
-        ])}
+        ], ["metaTitle", "metaDescription", "metaKeywords", "description"])}
+        translatable={[
+          { name: "metaTitle", label: "Site Başlığı (Title)" },
+          { name: "metaKeywords", label: "Anahtar Kelimeler" },
+          { name: "metaDescription", label: "Site Açıklaması (Description)", multiline: true },
+          { name: "description", label: "Kısa Tanıtım", multiline: true },
+        ]}
         panels={[
           {
             title: "Genel SEO",

@@ -11,6 +11,7 @@ export type Page = {
   updatedAt: string;
   backgroundColor?: string | null;
   backgroundImage?: string | null;
+  translations?: unknown;
 };
 
 export async function getAdminPages(): Promise<Page[]> {
