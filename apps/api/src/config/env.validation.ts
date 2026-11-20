@@ -72,6 +72,17 @@ const envSchema = z
     }
   });
 
+/**
+ * .env'de değeri boş bırakılan satır (ör. "SMTP_HOST=") "tanımsız" sayılır.
+ * Böylece .env.example olduğu gibi kopyalanınca isteğe bağlı ayarlar
+ * (Cloudinary, SMTP) uygulamanın açılmasını engellemez.
+ */
+export function withoutEmptyValues(config: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(config).filter(([, value]) => !(typeof value === 'string' && value.trim() === '')),
+  );
+}
+
 export function validateEnv(config: Record<string, unknown>) {
-  return envSchema.parse(config);
+  return envSchema.parse(withoutEmptyValues(config));
 }
