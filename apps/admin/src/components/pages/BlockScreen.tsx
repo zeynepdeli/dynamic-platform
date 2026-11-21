@@ -54,9 +54,9 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
     getAdminSocialLinks(),
   ]);
 
-  // Silinmiş/başka sayfanın bölümü → Site Haritası'na dön
+  // Silinmiş/başka sayfanın bölümü → sayfa düzenine dön
   if (block.startsWith("s:") && !sections.some((s) => s.id === block.slice(2))) {
-    redirect("/dashboard");
+    redirect(`/pages/${isHome ? HOME_TEMPLATE_KEY : pageId}`);
   }
 
   const template = resolveTemplate(isHome ? HOME_TEMPLATE_KEY : (page as Page).slug, sections);
@@ -86,7 +86,9 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
           Dashboard
         </Link>
         <ChevronRight className="size-3.5 opacity-50" />
-        <span className="font-medium text-foreground">{pageTitle}</span>
+        <Link href={`/pages/${isHome ? HOME_TEMPLATE_KEY : pageId}`} className="font-medium text-foreground hover:text-(--brand-accent)">
+          {isHome ? "Ana Sayfa Düzeni" : pageTitle}
+        </Link>
         {!isHome && !(page as Page).published && (
           <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">Taslak</span>
         )}

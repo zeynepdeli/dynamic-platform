@@ -1,5 +1,5 @@
-import { PageDialog } from "@/components/pages/PageDialog";
+import { NewPageScreen } from "@/components/pages/NewPageScreen";
 
 export default function NewPage() {
-  return <PageDialog mode="create" />;
+  return <NewPageScreen />;
 }

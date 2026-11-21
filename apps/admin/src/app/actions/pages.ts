@@ -8,7 +8,7 @@ import { PAGE_TRANSLATABLE, pageSchema, type PageFormValues } from "@/lib/valida
 
 import { getAdminPageById } from "@/lib/pages";
 
-type PageActionResult = { success: true } | { success: false; error: string };
+type PageActionResult = { success: true; id?: string } | { success: false; error: string };
 
 type PageDetailsResult =
   | {
@@ -115,8 +115,12 @@ export async function createPageAction(
     }
 
     revalidatePath("/dashboard");
+    revalidatePath("/pages");
 
-    return { success: true };
+    // Oluşturulan sayfanın düzen ekranına geçmek için id (yalnızca UUID ise)
+    const created = (await response.json().catch(() => null)) as { id?: unknown } | null;
+    const id = typeof created?.id === "string" && UUID_RE.test(created.id) ? created.id : undefined;
+    return { success: true, id };
   } catch {
     return {
       success: false,
@@ -124,6 +128,8 @@ export async function createPageAction(
     };
   }
 }
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 // Sayfa güncelleme
 export async function updatePageAction(

@@ -70,6 +70,13 @@ export function PageDialog({
           setSubmitError(result.error);
           return;
         }
+
+        // Yeni sayfanın düzen ekranına geç (bölüm eklemek için)
+        // (onClose tetiklenmesin: kapatma yönlendirmesiyle yarışmasın)
+        if (result.id) {
+          router.push(`/pages/${result.id}`);
+          return;
+        }
       }
 
       handleOpenChange(false);

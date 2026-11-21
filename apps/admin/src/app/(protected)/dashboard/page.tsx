@@ -1,58 +1,65 @@
 import Link from "next/link";
 import {
-  EyeOff,
+  BarChart3,
+  Blocks,
+  FilePlus2,
   FileText,
-  Inbox,
-  LayoutDashboard,
-  SearchCode,
-  Wallpaper,
   Home,
-  Info,
-  LayoutGrid,
-  Newspaper,
+  Images,
+  Inbox,
   Languages,
-  PaintBucket,
+  LayoutDashboard,
+  Newspaper,
   Palette,
   PanelBottom,
   PanelTop,
-  PanelsTopLeft,
+  PenSquare,
   Plus,
-  Trash2,
+  Search,
+  SearchCode,
+  Shapes,
+  UserCog,
+  Users,
+  Wallpaper,
 } from "lucide-react";
 
-import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
-import { DeletePageDialog } from "@/components/pages/DeletePageDialog";
-import { AreaHeader } from "@/components/areas/AreaShell";
 import { MODULES, moduleBySlug } from "@/brand/modules";
+import { AreaHeader } from "@/components/areas/AreaShell";
+import { Badge, Section, SectionLink, Stat, Tile } from "@/components/dashboard/DashboardParts";
 import { MODULE_ICONS } from "@/components/modules/module-icons";
+import { getAdminUser } from "@/lib/auth";
 import { getUnreadCount } from "@/lib/contact-messages";
-import { getAdminPages, type Page } from "@/lib/pages";
-import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
-import { getAdminSections, type Section } from "@/lib/sections";
-import { SECTION_TYPE_LABELS } from "@/lib/validations/section.schema";
+import { getAdminPages } from "@/lib/pages";
+import { getAdminPosts, postStatus } from "@/lib/posts";
+import { getAdminSections } from "@/lib/sections";
 
-type Icon = React.ComponentType<{ className?: string }>;
-
-/** Site Haritası: sitenin her parçası ayrı bir kutucuk; her biri kendi ekranında düzenlenir */
+/**
+ * Dashboard: ekranlar amaca göre gruplanır (e-ticaret paneliyle aynı düzen).
+ * Sayfaların bölümleri burada değil, her sayfanın kendi "Sayfa Düzeni" ekranında
+ * sıralanabilir liste olarak yönetilir.
+ */
 export default async function DashboardPage() {
-  const [allPages, unread] = await Promise.all([
+  const [user, allPages, unread, homeSections, posts] = await Promise.all([
+    getAdminUser(),
     getAdminPages(),
     getUnreadCount(),
-  ]);
-  // Modül sayfaları (SSS, İletişim, Galeri) yalnızca Modüller grubunda görünür
-  const pages = allPages.filter((p) => !moduleBySlug(p.slug));
-  const [homeSections, ...pageSections] = await Promise.all([
     getAdminSections(null),
-    ...pages.map((p) => getAdminSections(p.id)),
+    getAdminPosts().catch(() => []),
   ]);
 
+  const pages = allPages.filter((p) => !moduleBySlug(p.slug));
+  const installed = MODULES.filter((m) => allPages.some((p) => p.slug === m.slug));
+  const notInstalled = MODULES.filter((m) => !installed.includes(m));
+  const livePosts = posts.filter((p) => postStatus(p) === "live").length;
+  const livePages = allPages.filter((p) => p.published).length + 1; // + ana sayfa
+
   return (
-    <div className="mx-auto w-full min-w-0 max-w-[1800px] space-y-7 pb-12">
+    <div className="mx-auto w-full min-w-0 max-w-[1800px] space-y-9 pb-12">
       <AreaHeader
         icon={LayoutDashboard}
         eyebrow="Yönetim Paneli"
         title="Dashboard"
-        description="Sitenin her parçası ayrı bir kutucuk. Düzenlemek istediğinize tıklayın; her biri kendi ekranında açılır."
+        description={`Hoş geldiniz${user ? `, ${user.email}` : ""}. Düzenlemek istediğiniz bölüme tıklayın; her biri kendi ekranında açılır.`}
         actions={
           <Link
             href="/pages/new"
@@ -64,310 +71,78 @@ export default async function DashboardPage() {
         }
       />
 
-      <Group eyebrow="Tüm sayfalarda ortak" title="Site Geneli">
-        <Tile
-          href="/areas/header"
-          icon={PanelTop}
-          title="Header Yönetimi"
-          description="Site adı, logo, arka plan, buton, menü linkleri"
-        />
-        <Tile
-          href="/areas/footer"
-          icon={PanelBottom}
-          title="Footer Yönetimi"
-          description="Marka, iletişim, linkler, sosyal medya, telif"
-        />
-        <Tile
-          href="/areas/background"
-          icon={Wallpaper}
-          title="Site Arka Planı"
-          description="Tüm sayfaların varsayılan rengi ve fotoğrafı"
-        />
-        <Tile
-          href="/areas/theme"
-          icon={Palette}
-          title="Tema Renkleri"
-          description="Ana renk ve ikincil renk"
-        />
-        <Tile
-          href="/areas/languages"
-          icon={Languages}
-          title="Diller"
-          description="TR / EN: sitede açık diller"
-        />
-        <Tile
-          href="/areas/seo"
-          icon={SearchCode}
-          title="SEO Yönetimi"
-          description="Başlık, açıklama, favicon, paylaşım görseli"
-        />
+      <Section icon={BarChart3} title="Özet">
+        <Stat href="/messages" label="Okunmamış mesaj" value={unread.toLocaleString("tr-TR")} hint="İletişim formundan" />
+        <Stat href="/pages" label="Yayındaki sayfa" value={livePages.toLocaleString("tr-TR")} hint="Ana sayfa dahil" />
+        <Stat href="/pages/home" label="Ana sayfa bölümü" value={homeSections.filter((s) => s.active).length.toLocaleString("tr-TR")} hint="Yayında olanlar" />
+        <Stat href="/blog" label="Blog yazısı" value={livePosts.toLocaleString("tr-TR")} hint={`${posts.length} yazının yayında olanları`} />
+      </Section>
+
+      <Section icon={FileText} title="Sayfalar" action={<SectionLink href="/pages">Tüm sayfalar</SectionLink>}>
+        <Tile href="/areas/header" icon={PanelTop} title="Header" description="Site adı, logo, menü linkleri, buton" />
+        <Tile href="/pages/home" icon={Home} title="Ana Sayfa Düzeni" description="Slider ve bölümler: sırala, gizle, yeni bölüm ekle" />
+        {pages.map((p) => (
+          <Tile
+            key={p.id}
+            href={`/pages/${p.id}`}
+            icon={FileText}
+            title={p.title}
+            description={`/${p.slug}`}
+            badge={!p.published && <Badge tone="warning">Taslak</Badge>}
+          />
+        ))}
+        {installed.map((m) => {
+          const ModuleIcon = MODULE_ICONS[m.icon];
+          return <Tile key={m.key} href={`/modules/${m.key}`} icon={ModuleIcon} title={m.pageTitle} description={`${m.description} · /${m.slug}`} />;
+        })}
+        <Tile href="/areas/footer" icon={PanelBottom} title="Footer" description="İletişim, linkler, sosyal medya" />
+        <Tile href="/pages/new" icon={FilePlus2} title="Yeni Sayfa" description="Hizmet, bilgi ya da kampanya sayfası ekle" />
+      </Section>
+
+      <Section icon={PenSquare} title="İçerik">
+        <Tile href="/blog" icon={Newspaper} title="Blog / Haberler" description="Yazılar, duyurular, zamanlanmış yayın" />
         <Tile
           href="/messages"
           icon={Inbox}
           title="Gelen Mesajlar"
           description="İletişim formundan gelenler"
-          badge={
-            unread > 0 && (
-              <span className="rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-bold text-white">
-                {unread} yeni
-              </span>
-            )
-          }
+          badge={unread > 0 && <Badge tone="danger">{unread > 99 ? "99+" : unread}</Badge>}
         />
-      </Group>
+        <Tile href="/media" icon={Images} title="Medya Kütüphanesi" description="Yüklenen tüm görseller ve açıklamaları" />
+      </Section>
 
-      <Group eyebrow="Kendi ekranı olan sayfalar" title="Modüller">
-        {MODULES.map((mod) => {
-          const page = allPages.find((p) => p.slug === mod.slug);
-          return (
-            <Tile
-              key={mod.key}
-              href={`/modules/${mod.key}`}
-              icon={MODULE_ICONS[mod.icon]}
-              title={mod.title}
-              description={
-                page ? `${mod.description} · /${mod.slug}` : mod.description
-              }
-              badge={
-                !page ? (
-                  <span className="rounded-full bg-neutral-500/10 px-2 py-0.5 text-[11px] font-semibold text-neutral-600">
-                    Kurulmadı
-                  </span>
-                ) : !page.published ? (
-                  <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
-                    Taslak
-                  </span>
-                ) : null
-              }
-            />
-          );
-        })}
-        <Tile
-          href="/blog"
-          icon={Newspaper}
-          title="Blog / Haberler"
-          description="Yazılar, duyurular, zamanlanmış yayın · /blog"
-        />
-      </Group>
+      {notInstalled.length > 0 && (
+        <Section icon={Blocks} title="Hazır Modüller" note="Kurulana kadar sitede hiçbir şey oluşturmaz">
+          {notInstalled.map((m) => {
+            const ModuleIcon = MODULE_ICONS[m.icon];
+            return (
+              <Tile
+                key={m.key}
+                href={`/modules/${m.key}`}
+                icon={ModuleIcon}
+                title={m.title}
+                description={m.description}
+                badge={<Badge tone="muted">Kurulmadı</Badge>}
+              />
+            );
+          })}
+        </Section>
+      )}
 
-      <PageGroup
-        title="Ana Sayfa"
-        icon={Home}
-        basePath={`/pages/${HOME_TEMPLATE_KEY}`}
-        sections={homeSections}
-        templateKey={HOME_TEMPLATE_KEY}
-        pageId={null}
-      />
+      <Section icon={Shapes} title="Görünüm">
+        <Tile href="/areas/theme" icon={Palette} title="Tema Renkleri" description="Ana renk ve ikincil renk" />
+        <Tile href="/areas/background" icon={Wallpaper} title="Site Arka Planı" description="Tüm sayfaların varsayılan rengi ve fotoğrafı" />
+        <Tile href="/areas/languages" icon={Languages} title="Diller" description="TR / EN: sitede açık diller" />
+      </Section>
 
-      {pages.map((page, i) => (
-        <PageGroup
-          key={page.id}
-          title={page.title}
-          icon={FileText}
-          basePath={`/pages/${page.id}`}
-          sections={pageSections[i]}
-          templateKey={page.slug}
-          pageId={page.id}
-          page={page}
-        />
-      ))}
+      <Section icon={Search} title="Google'da Görünürlük" note="Arama sonuçları ve sosyal medya paylaşımları">
+        <Tile href="/areas/seo" icon={SearchCode} title="SEO Ayarları" description="Başlık, açıklama, favicon, paylaşım görseli" />
+      </Section>
 
-      <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-6">
-        <Link
-          href="/pages/trash"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-(--brand-accent)"
-        >
-          <Trash2 className="size-4" />
-          Çöp kutusu
-        </Link>
-      </div>
+      <Section icon={Users} title="Hesaplar">
+        <Tile href="/users" icon={Users} title="Yöneticiler" description="Panel kullanıcıları" />
+        <Tile href="/account" icon={UserCog} title="Hesabım" description="Şifre ve oturumlar" />
+      </Section>
     </div>
-  );
-}
-
-function PageGroup({
-  title,
-  icon,
-  basePath,
-  sections,
-  templateKey,
-  pageId,
-  page,
-}: {
-  title: string;
-  icon: Icon;
-  basePath: string;
-  sections: Section[];
-  templateKey: string;
-  pageId: string | null;
-  page?: Page;
-}) {
-  const template = resolveTemplate(templateKey, sections);
-  const label = (s: Section) =>
-    (s.key && template.byKey[s.key]?.label) || s.title || "(Başlıksız bölüm)";
-
-  return (
-    <Group
-      eyebrow={page ? `Sayfa · /${page.slug}` : "Sayfa · /"}
-      title={`${title} Yönetimi`}
-      icon={icon}
-      badge={
-        page &&
-        !page.published && (
-          <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
-            Taslak
-          </span>
-        )
-      }
-      action={
-        page && <DeletePageDialog pageId={page.id} pageTitle={page.title} />
-      }
-    >
-      {page && (
-        <Tile
-          href={`${basePath}/bilgiler`}
-          icon={Info}
-          title="Sayfa Bilgileri"
-          description="Başlık, adres, yayın durumu, sayfa SEO'su"
-        />
-      )}
-      <Tile
-        href={`${basePath}/arka-plan`}
-        icon={PaintBucket}
-        title="Sayfa Arka Planı"
-        description="Yalnızca bu sayfanın rengi ve fotoğrafı"
-      />
-      {!page && (
-        <Tile
-          href={`${basePath}/slider`}
-          icon={PanelsTopLeft}
-          title="Hero Slider"
-          description="En üstteki kayan görseller (en fazla 5)"
-        />
-      )}
-
-      {sections.map((section, i) => (
-        <Tile
-          key={section.id}
-          href={`${basePath}/bolum/${section.id}`}
-          icon={LayoutGrid}
-          number={i + 1}
-          title={label(section)}
-          description={`${SECTION_TYPE_LABELS[section.type]} bölümü`}
-          badge={
-            !section.active && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-neutral-500/10 px-2 py-0.5 text-[11px] font-semibold text-neutral-600">
-                <EyeOff className="size-3" />
-                Gizli
-              </span>
-            )
-          }
-        />
-      ))}
-
-      {template.missing.map((entry) => (
-        <div
-          key={entry.key}
-          className="flex min-h-28 flex-col justify-between gap-3 rounded-2xl border border-dashed border-amber-400/60 bg-amber-50 p-4 text-sm text-amber-900"
-        >
-          <p>
-            <span className="font-semibold">{entry.label}</span> bölümü henüz
-            yok
-          </p>
-          <CreateTemplateSectionButton pageId={pageId} entry={entry} />
-        </div>
-      ))}
-
-      {template.allowExtraSections && (
-        <Link
-          href={`${basePath}/yeni-bolum`}
-          className="flex min-h-28 items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-4 text-sm font-semibold text-(--brand-accent) transition hover:border-(--brand-accent)/50 hover:bg-surface"
-        >
-          <Plus className="size-4" />
-          Yeni bölüm
-        </Link>
-      )}
-    </Group>
-  );
-}
-
-function Group({
-  eyebrow,
-  title,
-  icon: GroupIcon,
-  badge,
-  action,
-  children,
-}: {
-  eyebrow?: string;
-  title: string;
-  icon?: Icon;
-  badge?: React.ReactNode;
-  action?: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="space-y-4">
-      <header className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-3">
-        <div>
-          {eyebrow && (
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-(--brand-accent)">
-              {eyebrow}
-            </p>
-          )}
-          <h2 className="brand-heading mt-1 flex flex-wrap items-center gap-2 text-2xl font-bold tracking-tight text-(--brand-primary)">
-            {GroupIcon && <GroupIcon className="size-5" />}
-            {title}
-            {badge}
-          </h2>
-        </div>
-        {action}
-      </header>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function Tile({
-  href,
-  icon: TileIcon,
-  title,
-  description,
-  number,
-  badge,
-}: {
-  href: string;
-  icon: Icon;
-  title: string;
-  description?: string;
-  number?: number;
-  badge?: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex min-h-28 items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-(--brand-accent)/40 hover:shadow-md"
-    >
-      <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-(--brand-primary)/10 text-(--brand-primary) transition group-hover:bg-(--brand-primary) group-hover:text-white">
-        {number ? (
-          <span className="text-sm font-bold">{number}</span>
-        ) : (
-          <TileIcon className="size-5" />
-        )}
-      </span>
-      <span className="min-w-0">
-        <span className="flex flex-wrap items-center gap-1.5 text-base font-bold text-(--brand-primary)">
-          <span className="truncate">{title}</span>
-          {badge}
-        </span>
-        {description && (
-          <span className="mt-1 block text-sm leading-5 text-muted-foreground">
-            {description}
-          </span>
-        )}
-      </span>
-    </Link>
   );
 }
