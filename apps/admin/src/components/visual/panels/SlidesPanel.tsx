@@ -2,7 +2,10 @@
 
 import { useOptimistic, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ImageIcon, Plus } from "lucide-react";
+import { ArrowDown, ArrowUp, ImageIcon, Pencil, Plus } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { EditModal } from "@/components/common/EditModal";
 
 import { Switch } from "@/components/ui/switch";
 import { ConfirmDeleteDialog } from "@/components/common/ConfirmDeleteDialog";
@@ -34,17 +37,21 @@ function thumb(value: string | null, base: string) {
   return value.startsWith("/media/") ? `${base}${value}` : value;
 }
 
-/** Slider slaytları: numarayla sıralama, sayfa içinde düzenleme, en fazla 5 */
+/**
+ * Slider slaytları (e-ticaret panelindeki düzen): her slayt tek satır,
+ * ekleme ve düzenleme pencerede (modal). En fazla 5 slayt.
+ */
 export function SlidesPanel({ slides, mediaBaseUrl, activeIndex, onActiveChange, onDraftChange }: SlidesPanelProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [openId, setOpenId] = useState<string | null>(slides[activeIndex]?.id ?? null);
-  const [creating, setCreating] = useState(false);
+  /** null: pencere kapalı · "new": yeni slayt · id: düzenlenen */
+  const [editing, setEditing] = useState<"new" | string | null>(null);
   // Sıralama değişince liste anında güncellenir; kayıt arkada yapılır,
   // hata olursa React eski sıraya döner.
   const [orderedSlides, setOptimisticOrder] = useOptimistic(slides, (_current, next: typeof slides) => next);
   const full = slides.length >= MAX_HERO_SLIDES;
+  const current = editing && editing !== "new" ? slides.find((s) => s.id === editing) : undefined;
 
   function run(action: () => Promise<{ success: boolean; error?: string }>) {
     setError(null);
@@ -55,12 +62,12 @@ export function SlidesPanel({ slides, mediaBaseUrl, activeIndex, onActiveChange,
     });
   }
 
-  // Slaytı seçilen sıraya taşı; diğerleri kendiliğinden kayar
-  function moveTo(fromIndex: number, toPosition: number) {
+  function move(index: number, dir: -1 | 1) {
+    const target = index + dir;
+    if (target < 0 || target >= orderedSlides.length) return;
     const next = [...orderedSlides];
-    const [moved] = next.splice(fromIndex, 1);
-    next.splice(toPosition - 1, 0, moved);
-    onActiveChange(toPosition - 1);
+    [next[index], next[target]] = [next[target], next[index]];
+    onActiveChange(target);
     setError(null);
     startTransition(async () => {
       setOptimisticOrder(next);
@@ -70,82 +77,65 @@ export function SlidesPanel({ slides, mediaBaseUrl, activeIndex, onActiveChange,
     });
   }
 
-  function toggle(index: number, id: string) {
-    const next = openId === id ? null : id;
-    setOpenId(next);
-    setCreating(false);
+  function open(target: "new" | string, index?: number) {
+    setEditing(target);
     onDraftChange(null);
-    if (next) onActiveChange(index);
+    if (index !== undefined) onActiveChange(index);
+  }
+
+  function close() {
+    setEditing(null);
+    onDraftChange(null);
   }
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm font-semibold">
-          Slaytlar{" "}
-          <span className="font-normal text-muted-foreground">
-            ({slides.length}/{MAX_HERO_SLIDES})
-          </span>
+          Slaytlar <span className="font-normal text-muted-foreground">({slides.length}/{MAX_HERO_SLIDES})</span>
         </p>
+        <Button type="button" onClick={() => open("new")} disabled={full} className="gap-2">
+          <Plus className="size-4" /> Slayt Ekle
+        </Button>
       </div>
 
       {error && (
-        <p role="alert" className="text-sm text-destructive">
+        <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
           {error}
         </p>
       )}
 
-      <ol className="space-y-2" aria-busy={isPending}>
-        {orderedSlides.map((slide, index) => {
-          const open = openId === slide.id;
-          const src = thumb(slide.imageUrl, mediaBaseUrl);
-
-          return (
-            <li
-              key={slide.id}
-              className={`rounded-xl border bg-surface transition ${
-                activeIndex === index ? "border-[#2563eb]/50" : "border-border"
-              } ${slide.active ? "" : "opacity-60"}`}
-            >
-              <div className="flex flex-wrap items-center gap-3 p-2.5">
-                <label className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                  Sıra
-                  <select
-                    value={index + 1}
-                    disabled={isPending}
-                    onChange={(event) => moveTo(index, Number(event.target.value))}
-                    aria-label={`${slide.title} sırası`}
-                    className="h-8 rounded-lg border border-border bg-card px-2 text-sm font-semibold text-foreground"
-                  >
-                    {orderedSlides.map((_, i) => (
-                      <option key={i} value={i + 1}>
-                        {i + 1}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <button
-                  type="button"
-                  aria-expanded={open}
-                  onClick={() => toggle(index, slide.id)}
-                  className="flex min-w-0 flex-1 items-center gap-3 text-left"
-                >
-                  <span className="flex h-10 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-surface-muted">
-                    {src ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={src} alt="" referrerPolicy="no-referrer" className="size-full object-cover" />
-                    ) : (
-                      <ImageIcon className="size-4 text-muted-foreground" />
-                    )}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{slide.title}</span>
-                    {!slide.active && <span className="text-[11px] text-amber-700">Gizli</span>}
-                  </span>
-                  <ChevronDown className={`size-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      {orderedSlides.length === 0 ? (
+        <p className="rounded-2xl border-2 border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+          Henüz slayt yok. &ldquo;Slayt Ekle&rdquo; ile ilk slaytı ekleyin.
+        </p>
+      ) : (
+        <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card" aria-busy={isPending}>
+          {orderedSlides.map((slide, index) => {
+            const src = thumb(slide.imageUrl, mediaBaseUrl);
+            return (
+              <li
+                key={slide.id}
+                className={`flex items-center gap-3 px-3 py-2.5 ${activeIndex === index ? "bg-(--brand-accent)/5" : ""} ${slide.active ? "" : "opacity-60"}`}
+              >
+                <span className="w-5 shrink-0 text-center text-xs text-muted-foreground tabular-nums">{index + 1}</span>
+                <span className="flex h-12 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-muted">
+                  {src ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={src} alt="" referrerPolicy="no-referrer" className="size-full object-cover" />
+                  ) : (
+                    <ImageIcon className="size-5 text-muted-foreground" />
+                  )}
+                </span>
+                <button type="button" onClick={() => open(slide.id, index)} className="min-w-0 flex-1 text-left">
+                  <span className="block truncate font-semibold">{slide.title}</span>
+                  {slide.description && (
+                    <span className="block truncate text-xs text-muted-foreground">{slide.description}</span>
+                  )}
                 </button>
-
+                {!slide.active && (
+                  <span className="hidden shrink-0 rounded-full bg-neutral-500/10 px-2 py-0.5 text-[11px] font-semibold text-neutral-600 sm:inline">Gizli</span>
+                )}
                 <Switch
                   size="sm"
                   checked={slide.active}
@@ -153,71 +143,74 @@ export function SlidesPanel({ slides, mediaBaseUrl, activeIndex, onActiveChange,
                   onCheckedChange={(checked) => run(() => setHeroSlideActiveAction(slide.id, checked))}
                   aria-label={`${slide.title} yayında`}
                 />
-                <ConfirmDeleteDialog
-                  title="Slaytı sil"
-                  description={<><strong>{slide.title}</strong> kalıcı olarak silinecek.</>}
-                  onConfirm={() => deleteHeroSlideAction(slide.id)}
-                />
-              </div>
-
-              {open && (
-                <div className="border-t border-border p-4">
-                  <HeroSlideForm
-                    key={slide.id}
-                    mode="edit"
-                    initialValues={slide.formValues}
-                    mediaBaseUrl={mediaBaseUrl}
-                    onValuesChange={(values) => onDraftChange({ id: slide.id, values })}
-                    onSubmit={async (values) => {
-                      const result = await updateHeroSlideAction(slide.id, values);
-                      if (!result.success) return result.error;
-                      router.refresh();
-                      return null;
-                    }}
+                <span className="flex shrink-0">
+                  <Button type="button" variant="ghost" size="icon" disabled={isPending || index === 0} onClick={() => move(index, -1)} aria-label={`${slide.title} yukarı taşı`}>
+                    <ArrowUp className="size-4" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" disabled={isPending || index === orderedSlides.length - 1} onClick={() => move(index, 1)} aria-label={`${slide.title} aşağı taşı`}>
+                    <ArrowDown className="size-4" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" onClick={() => open(slide.id, index)} aria-label={`${slide.title} düzenle`}>
+                    <Pencil className="size-4" />
+                  </Button>
+                  <ConfirmDeleteDialog
+                    title="Slaytı sil"
+                    description={<><strong>{slide.title}</strong> kalıcı olarak silinecek.</>}
+                    onConfirm={() => deleteHeroSlideAction(slide.id)}
                   />
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ol>
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      )}
 
-      {creating ? (
-        <div className="rounded-xl border border-dashed border-(--brand-accent)/40 bg-surface p-4">
-          <p className="mb-4 text-sm font-semibold">Yeni Slayt</p>
+      {full && (
+        <p className="rounded-lg bg-surface-muted px-3 py-2 text-xs text-muted-foreground">
+          En fazla {MAX_HERO_SLIDES} slayt eklenebilir. Yeni slayt için birini silin.
+        </p>
+      )}
+
+      <EditModal
+        open={editing !== null}
+        wide
+        title={editing === "new" ? "Yeni Slayt" : "Slaytı Düzenle"}
+        description={editing === "new" ? "Kaydedince slider'a eklenir." : current?.title}
+        onClose={close}
+      >
+        {editing === "new" ? (
           <HeroSlideForm
             mode="create"
             mediaBaseUrl={mediaBaseUrl}
             submitLabel="Slayt Ekle"
-            onCancel={() => setCreating(false)}
+            onCancel={close}
             onSubmit={async (values) => {
               const result = await createHeroSlideAction(values);
               if (!result.success) return result.error;
-              setCreating(false);
+              close();
               onActiveChange(slides.length);
               router.refresh();
               return null;
             }}
           />
-        </div>
-      ) : full ? (
-        <p className="rounded-lg bg-surface-muted px-3 py-2 text-xs text-muted-foreground">
-          En fazla {MAX_HERO_SLIDES} slayt eklenebilir. Yeni slayt için birini silin.
-        </p>
-      ) : (
-        <button
-          type="button"
-          onClick={() => {
-            setCreating(true);
-            setOpenId(null);
-            onDraftChange(null);
-          }}
-          className="inline-flex items-center gap-2 rounded-lg border border-dashed border-border px-4 py-2.5 text-sm font-medium text-(--brand-accent) hover:bg-surface-muted"
-        >
-          <Plus className="size-4" />
-          Slayt Ekle
-        </button>
-      )}
+        ) : current ? (
+          <HeroSlideForm
+            key={current.id}
+            mode="edit"
+            initialValues={current.formValues}
+            mediaBaseUrl={mediaBaseUrl}
+            onValuesChange={(values) => onDraftChange({ id: current.id, values })}
+            onCancel={close}
+            onSubmit={async (values) => {
+              const result = await updateHeroSlideAction(current.id, values);
+              if (!result.success) return result.error;
+              close();
+              router.refresh();
+              return null;
+            }}
+          />
+        ) : null}
+      </EditModal>
     </div>
   );
 }
