@@ -249,9 +249,8 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
       return (
         <Panel
           title={sectionTitle(selectedSection)}
-          hint={[SECTION_TYPE_LABELS[selectedSection.type], template?.hint]
-            .filter(Boolean)
-            .join(" · ")}
+          // Şablon bölümünde teknik tip adı yerine açıklaması; serbest bölümde tipi
+          hint={template?.hint ?? SECTION_TYPE_LABELS[selectedSection.type]}
           locked={locked}
           actions={sectionActions(
             selectedSection,
@@ -297,7 +296,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                   items={selectedSection.items}
                   mediaBaseUrl={theme.mediaBaseUrl}
                   itemLabel={template?.itemLabel ?? ITEM_CONFIG[selectedSection.type]?.label ?? "Kart"}
-                  fields={template?.itemFields ?? ITEM_CONFIG[selectedSection.type]?.fields}
+                  fields={{ ...ITEM_CONFIG[selectedSection.type]?.fields, ...template?.itemFields }}
                 />
               </div>
             )}

@@ -45,7 +45,7 @@ export function ModuleSectionPanel({
         items={section.items}
         mediaBaseUrl={mediaBaseUrl}
         itemLabel={entry.itemLabel ?? ITEM_CONFIG[section.type]?.label ?? "Öğe"}
-        fields={entry.itemFields ?? ITEM_CONFIG[section.type]?.fields}
+        fields={{ ...ITEM_CONFIG[section.type]?.fields, ...entry.itemFields }}
       />
     );
   }
