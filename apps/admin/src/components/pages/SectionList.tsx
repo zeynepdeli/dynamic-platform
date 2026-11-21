@@ -14,7 +14,8 @@ import type { ActionResult } from "@/lib/admin/send";
 export type SectionRow = {
   id: string;
   label: string;
-  type: string;
+  /** Yalnızca serbest bölümlerde (şablon bölümlerinde adı yeterli) */
+  type?: string;
   summary: string;
   active: boolean;
   /** Şablonun zorunlu bölümü: silinemez (yalnızca gizlenebilir) */
@@ -75,7 +76,8 @@ export function SectionList({ pageId, rows, editBase }: { pageId: string | null;
             </span>
             <div className="min-w-0 flex-1">
               <p className="font-semibold">
-                {r.label} <span className="ml-1 rounded-full bg-surface-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">{r.type}</span>
+                {r.label}{" "}
+                {r.type && <span className="ml-1 rounded-full bg-surface-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">{r.type}</span>}
               </p>
               {r.summary && <p className="truncate text-sm text-muted-foreground">{r.summary}</p>}
             </div>

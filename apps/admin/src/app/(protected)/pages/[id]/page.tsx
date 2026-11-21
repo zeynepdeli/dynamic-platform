@@ -79,7 +79,7 @@ export default async function PageLayoutScreen({ params }: { params: Promise<{ i
             return {
               id: s.id,
               label: entry?.label || s.title || "(Başlıksız bölüm)",
-              type: SECTION_TYPE_LABELS[s.type],
+              type: entry ? undefined : SECTION_TYPE_LABELS[s.type],
               summary: summary(s),
               active: s.active,
               locked: entry ? entry.locked !== false : false,
