@@ -11,20 +11,9 @@ import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplat
 import { getAdminHeroSlides } from "@/lib/hero-slides";
 import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
 import { getAdminPageById, type Page } from "@/lib/pages";
-import { ITEM_CONFIG, hasItems } from "@/lib/section-types";
-import { getAdminSections, type Section } from "@/lib/sections";
+import { sectionSummary as summary } from "@/lib/section-summary";
+import { getAdminSections } from "@/lib/sections";
 import { SECTION_TYPE_LABELS } from "@/lib/validations/section.schema";
-
-/** Liste satırında bölümün kısa özeti */
-function summary(section: Section): string {
-  if (hasItems(section.type)) {
-    const label = (ITEM_CONFIG[section.type]?.label ?? "Öğe").toLocaleLowerCase("tr-TR");
-    const active = section.items.filter((i) => i.active).length;
-    const hidden = section.items.length - active;
-    return `${active} ${label}${hidden ? ` · ${hidden} gizli` : ""}`;
-  }
-  return (section.subtitle || section.body || "").replace(/\s+/g, " ").slice(0, 110);
-}
 
 /**
  * Sayfa Düzeni: sayfanın bölümleri sitede göründüğü sırayla bir liste olarak.

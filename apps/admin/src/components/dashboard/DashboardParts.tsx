@@ -13,7 +13,7 @@ export function Section({
 }: {
   icon: Icon;
   title: string;
-  note?: string;
+  note?: React.ReactNode;
   action?: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -56,18 +56,21 @@ export function Tile({
   title,
   description,
   badge,
+  number,
 }: {
   href: string;
   icon: Icon;
   title: string;
   description?: string;
   badge?: React.ReactNode;
+  /** Bölüm sırası: ikon yerine numara gösterilir */
+  number?: number;
 }) {
   return (
     <Link href={href} className={HIT_AREA}>
       <span className={`${LIFT} flex h-full min-h-28 items-start gap-4 p-5`}>
         <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-(--brand-primary)/10 text-(--brand-primary) transition group-hover:bg-(--brand-primary) group-hover:text-white">
-          <TileIcon className="size-5" />
+          {number ? <span className="text-sm font-bold tabular-nums">{number}</span> : <TileIcon className="size-5" />}
         </span>
         <span className="min-w-0">
           <span className="flex flex-wrap items-center gap-1.5 text-base font-bold text-(--brand-primary)">

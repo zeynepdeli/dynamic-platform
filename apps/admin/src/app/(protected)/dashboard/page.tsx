@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  ArrowUpDown,
   BarChart3,
   Blocks,
   FilePlus2,
@@ -10,6 +11,8 @@ import {
   Languages,
   LayoutDashboard,
   Newspaper,
+  PanelsTopLeft,
+  PaintBucket,
   Palette,
   PanelBottom,
   PanelTop,
@@ -31,7 +34,11 @@ import { getAdminUser } from "@/lib/auth";
 import { getUnreadCount } from "@/lib/contact-messages";
 import { getAdminPages } from "@/lib/pages";
 import { getAdminPosts, postStatus } from "@/lib/posts";
+import { getAdminHeroSlides } from "@/lib/hero-slides";
+import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
+import { sectionSummary } from "@/lib/section-summary";
 import { getAdminSections } from "@/lib/sections";
+import { SECTION_TYPE_LABELS } from "@/lib/validations/section.schema";
 
 /**
  * Dashboard: ekranlar amaca göre gruplanır (e-ticaret paneliyle aynı düzen).
@@ -39,13 +46,18 @@ import { getAdminSections } from "@/lib/sections";
  * sıralanabilir liste olarak yönetilir.
  */
 export default async function DashboardPage() {
-  const [user, allPages, unread, homeSections, posts] = await Promise.all([
+  const [user, allPages, unread, homeSections, posts, slides] = await Promise.all([
     getAdminUser(),
     getAdminPages(),
     getUnreadCount(),
     getAdminSections(null),
     getAdminPosts().catch(() => []),
+    getAdminHeroSlides().catch(() => []),
   ]);
+  const homeTemplate = resolveTemplate(HOME_TEMPLATE_KEY, homeSections);
+  const sectionLabel = (key: string | null, title: string | null) =>
+    (key && homeTemplate.byKey[key]?.label) || title || "(Başlıksız bölüm)";
+  const activeSlides = slides.filter((s) => s.active).length;
 
   const pages = allPages.filter((p) => !moduleBySlug(p.slug));
   const installed = MODULES.filter((m) => allPages.some((p) => p.slug === m.slug));
@@ -78,9 +90,48 @@ export default async function DashboardPage() {
         <Stat href="/blog" label="Blog yazısı" value={livePosts.toLocaleString("tr-TR")} hint={`${posts.length} yazının yayında olanları`} />
       </Section>
 
+      <Section
+        icon={Home}
+        title="Ana Sayfa"
+        note="Bölümler sitede bu sırayla görünür"
+        action={<SectionLink href="/pages/home">Sıralama ve düzen</SectionLink>}
+      >
+        <Tile
+          href="/pages/home/slider"
+          icon={PanelsTopLeft}
+          title="Hero Slider"
+          description={slides.length ? `En üstteki kayan görseller · ${activeSlides} slayt yayında` : "En üstteki kayan görseller · henüz slayt yok"}
+        />
+        {homeSections.map((section, i) => (
+          <Tile
+            key={section.id}
+            href={`/pages/home/bolum/${section.id}`}
+            icon={Home}
+            number={i + 1}
+            title={sectionLabel(section.key, section.title)}
+            description={[SECTION_TYPE_LABELS[section.type], sectionSummary(section)].filter(Boolean).join(" · ")}
+            badge={!section.active && <Badge tone="muted">Gizli</Badge>}
+          />
+        ))}
+        {homeTemplate.missing.map((entry) => (
+          <Tile
+            key={entry.key}
+            href="/pages/home"
+            icon={Plus}
+            title={entry.label}
+            description="Bu bölüm henüz oluşturulmadı · oluşturmak için tıklayın"
+            badge={<Badge tone="warning">Eksik</Badge>}
+          />
+        ))}
+        <Tile href="/pages/home" icon={ArrowUpDown} title="Sıralama ve Düzen" description="Bölümleri sırala, gizle ya da sil" />
+        <Tile href="/pages/home/arka-plan" icon={PaintBucket} title="Ana Sayfa Arka Planı" description="Yalnızca ana sayfanın rengi ve fotoğrafı" />
+        {homeTemplate.allowExtraSections && (
+          <Tile href="/pages/home/yeni-bolum" icon={Plus} title="Yeni Bölüm" description="Kart, metin, görsel+metin, video…" />
+        )}
+      </Section>
+
       <Section icon={FileText} title="Sayfalar" action={<SectionLink href="/pages">Tüm sayfalar</SectionLink>}>
         <Tile href="/areas/header" icon={PanelTop} title="Header" description="Site adı, logo, menü linkleri, buton" />
-        <Tile href="/pages/home" icon={Home} title="Ana Sayfa Düzeni" description="Slider ve bölümler: sırala, gizle, yeni bölüm ekle" />
         {pages.map((p) => (
           <Tile
             key={p.id}
