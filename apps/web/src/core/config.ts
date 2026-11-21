@@ -14,11 +14,15 @@ export function getApiUrl(): string {
  * (ör. https://api.siteadi.com). Yoksa API_URL kullanılır.
  */
 export function getMediaBaseUrl(): string {
-  return (process.env.API_PUBLIC_URL ?? process.env.API_URL ?? "").replace(/\/$/, "");
+  // Boş bırakılan satır (API_PUBLIC_URL=) "tanımsız" sayılır: || kullanılır, ?? değil
+  return (process.env.API_PUBLIC_URL?.trim() || process.env.API_URL?.trim() || "").replace(/\/$/, "");
 }
 
 /** Admin'deki değişikliklerin sitede görünme süresi (saniye) */
-export const REVALIDATE_SECONDS = Number(process.env.REVALIDATE_SECONDS ?? 30);
+export const REVALIDATE_SECONDS = (() => {
+  const value = Number(process.env.REVALIDATE_SECONDS?.trim() || 30);
+  return Number.isFinite(value) && value >= 0 ? value : 30;
+})();
 
 /** Sitenin herkese açık adresi (ör. https://siteadi.com) — sitemap ve paylaşım için */
 export function getSiteUrl(): string | undefined {
