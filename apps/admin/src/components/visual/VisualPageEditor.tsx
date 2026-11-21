@@ -224,11 +224,13 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
           <SectionForm
             mode="create"
             mediaBaseUrl={theme.mediaBaseUrl}
-            onCancel={() => router.push("/dashboard")}
+            onCancel={() => router.push(props.basePath)}
             onSubmit={async (values) => {
               const result = await createSectionAction(pageId, values);
               if (!result.success) return result.error;
-              router.push("/dashboard");
+              // Yeni bölüm sayfa düzeni listesinde görünür
+              router.push(props.basePath);
+              router.refresh();
               return null;
             }}
           />
