@@ -5,8 +5,6 @@ import "server-only";
  * erişebileceği API adresi. (API_URL sunucu içi bir adres olabilir.)
  */
 export function getMediaBaseUrl(): string {
-  return (process.env.API_PUBLIC_URL ?? process.env.API_URL ?? "").replace(
-    /\/$/,
-    "",
-  );
+  // Boş bırakılan satır (API_PUBLIC_URL=) "tanımsız" sayılır: || kullanılır, ?? değil
+  return (process.env.API_PUBLIC_URL?.trim() || process.env.API_URL?.trim() || "").replace(/\/$/, "");
 }
