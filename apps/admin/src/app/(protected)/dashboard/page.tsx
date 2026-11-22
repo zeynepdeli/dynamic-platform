@@ -20,6 +20,7 @@ import {
   Plus,
   Search,
   SearchCode,
+  Trash2,
   Shapes,
   UserCog,
   Users,
@@ -35,7 +36,7 @@ import { getUnreadCount } from "@/lib/contact-messages";
 import { getAdminPages } from "@/lib/pages";
 import { getAdminPosts, postStatus } from "@/lib/posts";
 import { getAdminHeroSlides } from "@/lib/hero-slides";
-import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
+import { HOME_TEMPLATE_KEY, isOffTemplate, resolveTemplate } from "@/lib/page-templates";
 import { sectionSummary } from "@/lib/section-summary";
 import { getAdminSections } from "@/lib/sections";
 import { SECTION_TYPE_LABELS } from "@/lib/validations/section.schema";
@@ -58,6 +59,9 @@ export default async function DashboardPage() {
   const sectionLabel = (key: string | null, title: string | null) =>
     (key && homeTemplate.byKey[key]?.label) || title || "(Başlıksız bölüm)";
   const activeSlides = slides.filter((s) => s.active).length;
+  // Tasarımda olmayan bölümler kutu olarak gösterilmez; yalnızca temizleme uyarısı
+  const designedHome = homeSections.filter((s) => !isOffTemplate(homeTemplate, s));
+  const offTemplateCount = homeSections.length - designedHome.length;
 
   const pages = allPages.filter((p) => !moduleBySlug(p.slug));
   const installed = MODULES.filter((m) => allPages.some((p) => p.slug === m.slug));
@@ -86,7 +90,7 @@ export default async function DashboardPage() {
       <Section icon={BarChart3} title="Özet">
         <Stat href="/messages" label="Okunmamış mesaj" value={unread.toLocaleString("tr-TR")} hint="İletişim formundan" />
         <Stat href="/pages" label="Yayındaki sayfa" value={livePages.toLocaleString("tr-TR")} hint="Ana sayfa dahil" />
-        <Stat href="/pages/home" label="Ana sayfa bölümü" value={homeSections.filter((s) => s.active).length.toLocaleString("tr-TR")} hint="Yayında olanlar" />
+        <Stat href="/pages/home" label="Ana sayfa bölümü" value={designedHome.filter((s) => s.active).length.toLocaleString("tr-TR")} hint="Yayında olanlar" />
         <Stat href="/blog" label="Blog yazısı" value={livePosts.toLocaleString("tr-TR")} hint={`${posts.length} yazının yayında olanları`} />
       </Section>
 
@@ -102,7 +106,7 @@ export default async function DashboardPage() {
           title="Hero Slider"
           description={slides.length ? `En üstteki kayan görseller · ${activeSlides} slayt yayında` : "En üstteki kayan görseller · henüz slayt yok"}
         />
-        {homeSections.map((section, i) => (
+        {designedHome.map((section, i) => (
           <Tile
             key={section.id}
             href={`/pages/home/bolum/${section.id}`}
@@ -119,6 +123,15 @@ export default async function DashboardPage() {
             badge={!section.active && <Badge tone="muted">Gizli</Badge>}
           />
         ))}
+        {offTemplateCount > 0 && (
+          <Tile
+            href="/pages/home"
+            icon={Trash2}
+            title="Eski örnek bölümler"
+            description={`Tasarımda olmayan ${offTemplateCount} bölüm sitede görünmez · temizlemek için tıklayın`}
+            badge={<Badge tone="warning">Temizle</Badge>}
+          />
+        )}
         {homeTemplate.missing.map((entry) => (
           <Tile
             key={entry.key}

@@ -14,6 +14,14 @@ export type ResolvedTemplate = {
   hasTemplate: boolean;
 };
 
+/**
+ * Tasarımda olmayan bölüm: şablon yalnızca kendi bölümlerine izin veriyorsa
+ * (allowExtraSections: false) anahtarı şablonda olmayanlar. Sitede gösterilmez.
+ */
+export function isOffTemplate(template: ResolvedTemplate, section: Pick<Section, "key">): boolean {
+  return template.hasTemplate && !template.allowExtraSections && !(section.key && template.byKey[section.key]);
+}
+
 // Geliştirme sırasında yazım hatalarını erken yakala
 function assertValidTemplate(name: string, sections: TemplateSection[]) {
   const seen = new Set<string>();
