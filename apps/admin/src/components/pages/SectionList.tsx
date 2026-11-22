@@ -26,7 +26,18 @@ export type SectionRow = {
  * Sayfanın bölümleri, sitede yukarıdan aşağı göründüğü sırayla:
  * yukarı/aşağı taşı, yayında aç/kapat, düzenle, sil.
  */
-export function SectionList({ pageId, rows, editBase }: { pageId: string | null; rows: SectionRow[]; editBase: string }) {
+export function SectionList({
+  pageId,
+  rows,
+  editBase,
+  hiddenIds = [],
+}: {
+  pageId: string | null;
+  rows: SectionRow[];
+  editBase: string;
+  /** Listede gösterilmeyen bölümler: sıralama isteğinde sona eklenir (API tüm bölümleri ister) */
+  hiddenIds?: string[];
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -42,7 +53,7 @@ export function SectionList({ pageId, rows, editBase }: { pageId: string | null;
   const move = (i: number, d: -1 | 1) => {
     const ids = rows.map((r) => r.id);
     [ids[i], ids[i + d]] = [ids[i + d], ids[i]];
-    run(() => reorderSectionsAction(pageId, ids));
+    run(() => reorderSectionsAction(pageId, [...ids, ...hiddenIds]));
   };
 
   if (rows.length === 0) {

@@ -12,12 +12,18 @@ import { sectionDefaultValues } from "@/lib/validations/section.schema";
 type CreateTemplateSectionButtonProps = {
   pageId: string | null;
   entry: TemplateSection;
+  /** Bu bölüme bağlı bölümler (ör. Hakkımızda → Yuvarlak Görseller): birlikte oluşturulur */
+  attached?: TemplateSection[];
+  /** Buton yazısı (varsayılan: Oluştur) */
+  label?: string;
 };
 
 // Şablonda tanımlı ama henüz oluşturulmamış bölümü tek tıkla oluşturur
 export function CreateTemplateSectionButton({
   pageId,
   entry,
+  attached = [],
+  label = "Oluştur",
 }: CreateTemplateSectionButtonProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -33,15 +39,17 @@ export function CreateTemplateSectionButton({
         onClick={() => {
           setError(null);
           startTransition(async () => {
-            const result = await createSectionAction(pageId, {
-              ...sectionDefaultValues,
-              key: entry.key,
-              type: entry.type,
-              title: entry.label,
-            });
-            if (!result.success) {
-              setError(result.error);
-              return;
+            for (const target of [entry, ...attached]) {
+              const result = await createSectionAction(pageId, {
+                ...sectionDefaultValues,
+                key: target.key,
+                type: target.type,
+                title: target.label,
+              });
+              if (!result.success) {
+                setError(result.error);
+                break;
+              }
             }
             router.refresh();
           });
@@ -52,7 +60,7 @@ export function CreateTemplateSectionButton({
         ) : (
           <Plus className="size-4" />
         )}
-        Oluştur
+        {label}
       </Button>
       {error && (
         <p role="alert" className="text-xs text-destructive">

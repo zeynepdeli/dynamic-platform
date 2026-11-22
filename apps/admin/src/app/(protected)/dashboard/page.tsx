@@ -36,7 +36,7 @@ import { getUnreadCount } from "@/lib/contact-messages";
 import { getAdminPages } from "@/lib/pages";
 import { getAdminPosts, postStatus } from "@/lib/posts";
 import { getAdminHeroSlides } from "@/lib/hero-slides";
-import { HOME_TEMPLATE_KEY, isOffTemplate, resolveTemplate } from "@/lib/page-templates";
+import { HOME_TEMPLATE_KEY, isAttached, isOffTemplate, resolveTemplate } from "@/lib/page-templates";
 import { sectionSummary } from "@/lib/section-summary";
 import { getAdminSections } from "@/lib/sections";
 import { SECTION_TYPE_LABELS } from "@/lib/validations/section.schema";
@@ -60,8 +60,8 @@ export default async function DashboardPage() {
     (key && homeTemplate.byKey[key]?.label) || title || "(Başlıksız bölüm)";
   const activeSlides = slides.filter((s) => s.active).length;
   // Tasarımda olmayan bölümler kutu olarak gösterilmez; yalnızca temizleme uyarısı
-  const designedHome = homeSections.filter((s) => !isOffTemplate(homeTemplate, s));
-  const offTemplateCount = homeSections.length - designedHome.length;
+  const designedHome = homeSections.filter((s) => !isOffTemplate(homeTemplate, s) && !isAttached(homeTemplate, s));
+  const offTemplateCount = homeSections.filter((s) => isOffTemplate(homeTemplate, s)).length;
 
   const pages = allPages.filter((p) => !moduleBySlug(p.slug));
   const installed = MODULES.filter((m) => allPages.some((p) => p.slug === m.slug));
@@ -116,7 +116,7 @@ export default async function DashboardPage() {
             description={[
               // Şablon bölümünde teknik tip adı gösterilmez
               section.key && homeTemplate.byKey[section.key] ? undefined : SECTION_TYPE_LABELS[section.type],
-              sectionSummary(section),
+              sectionSummary(section, section.key ? homeTemplate.byKey[section.key]?.itemLabel : undefined),
             ]
               .filter(Boolean)
               .join(" · ")}

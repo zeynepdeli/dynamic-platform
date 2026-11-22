@@ -72,6 +72,12 @@ export type TemplateSection = {
   itemFields?: FieldConfig<ItemField>;
   /** Kartlara verilecek ad (ör. "Değer", "Hizmet"). Varsayılan: "Kart" */
   itemLabel?: string;
+  /**
+   * Bağlı bölüm: bu anahtardaki bölümün ekranında ikinci liste olarak yönetilir
+   * (ör. Hakkımızda'nın yuvarlak görselleri). Dashboard'da ve sıralamada ayrı
+   * kutu olarak görünmez; ana bölümle birlikte oluşturulur.
+   */
+  attachTo?: string;
 };
 
 export type PageTemplate = {
