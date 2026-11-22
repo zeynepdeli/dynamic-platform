@@ -9,7 +9,8 @@ import { DeletePageDialog } from "@/components/pages/DeletePageDialog";
 import { SectionList } from "@/components/pages/SectionList";
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
 import { getAdminHeroSlides } from "@/lib/hero-slides";
-import { HOME_TEMPLATE_KEY, resolveTemplate } from "@/lib/page-templates";
+import { HOME_TEMPLATE_KEY, isOffTemplate, resolveTemplate } from "@/lib/page-templates";
+import { OffTemplateSections } from "@/components/pages/OffTemplateSections";
 import { getAdminPageById, type Page } from "@/lib/pages";
 import { sectionSummary as summary } from "@/lib/section-summary";
 import { getAdminSections } from "@/lib/sections";
@@ -39,6 +40,9 @@ export default async function PageLayoutScreen({ params }: { params: Promise<{ i
   ]);
   const template = resolveTemplate(isHome ? HOME_TEMPLATE_KEY : page!.slug, sections);
   const basePath = `/pages/${id}`;
+  // Tasarımda olmayanlar ayrı kutuda (sitede görünmezler)
+  const designed = sections.filter((s) => !isOffTemplate(template, s));
+  const offTemplate = sections.filter((s) => isOffTemplate(template, s));
   const activeSlides = slides.filter((s) => s.active).length;
 
   return (
@@ -70,11 +74,11 @@ export default async function PageLayoutScreen({ params }: { params: Promise<{ i
         </div>
       </AreaCard>
 
-      <AreaCard title={`Bölümler (${sections.length})`} hint="Okları kullanarak sırayı değiştirin; anahtar ile bölümü sitede gizleyin.">
+      <AreaCard title={`Bölümler (${designed.length})`} hint="Okları kullanarak sırayı değiştirin; anahtar ile bölümü sitede gizleyin.">
         <SectionList
           pageId={isHome ? null : id}
           editBase={`${basePath}/bolum`}
-          rows={sections.map((s) => {
+          rows={designed.map((s) => {
             const entry = s.key ? template.byKey[s.key] : undefined;
             return {
               id: s.id,
@@ -86,6 +90,14 @@ export default async function PageLayoutScreen({ params }: { params: Promise<{ i
             };
           })}
         />
+
+        {offTemplate.length > 0 && (
+          <div className="mt-4">
+            <OffTemplateSections
+              rows={offTemplate.map((s) => ({ id: s.id, title: s.title || "(Başlıksız bölüm)", summary: summary(s) }))}
+            />
+          </div>
+        )}
 
         {template.missing.length > 0 && (
           <div className="mt-4 grid gap-2">
