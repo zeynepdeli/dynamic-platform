@@ -298,6 +298,34 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                   itemLabel={template?.itemLabel ?? ITEM_CONFIG[selectedSection.type]?.label ?? "Kart"}
                   fields={{ ...ITEM_CONFIG[selectedSection.type]?.fields, ...template?.itemFields }}
                 />
+                {/* Bu bölüme bağlı listeler (ör. Hakkımızda → Yuvarlak Görseller): aynı ekranda */}
+                {Object.values(templateByKey)
+                  .filter((child) => selectedSection.key && child.attachTo === selectedSection.key)
+                  .map((child) => {
+                    const childSection = sections.find((x) => x.key === child.key);
+                    return (
+                      <div key={child.key} className="mt-8 border-t border-border pt-6">
+                        {childSection ? (
+                          <InlineItems
+                            sectionId={childSection.id}
+                            sectionType={childSection.type}
+                            items={childSection.items}
+                            mediaBaseUrl={theme.mediaBaseUrl}
+                            itemLabel={child.itemLabel ?? ITEM_CONFIG[childSection.type]?.label ?? "Öğe"}
+                            fields={{ ...ITEM_CONFIG[childSection.type]?.fields, ...child.itemFields }}
+                          />
+                        ) : (
+                          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed border-border p-4 text-sm">
+                            <p>
+                              <span className="font-semibold">{child.label}</span>
+                              {child.hint && <span className="block text-xs text-muted-foreground">{child.hint}</span>}
+                            </p>
+                            <CreateTemplateSectionButton pageId={pageId} entry={child} label={`${child.label} listesini ekle`} />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
               </div>
             )}
           </div>
@@ -510,6 +538,8 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                 )}
 
                 {sections.map((section, index) => {
+                  // Bağlı bölüm ana bölümün ekranında yönetilir; önizlemede ayrı blok olmaz
+                  if (section.key && templateByKey[section.key]?.attachTo) return null;
                   const template = section.key
                     ? templateByKey[section.key]
                     : undefined;
@@ -556,6 +586,7 @@ export function VisualPageEditor(props: VisualPageEditorProps) {
                     <CreateTemplateSectionButton
                       pageId={pageId}
                       entry={entry}
+                      attached={Object.values(templateByKey).filter((e) => e.attachTo === entry.key)}
                     />
                   </div>
                 ))}

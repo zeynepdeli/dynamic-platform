@@ -18,6 +18,17 @@ export type ResolvedTemplate = {
  * Tasarımda olmayan bölüm: şablon yalnızca kendi bölümlerine izin veriyorsa
  * (allowExtraSections: false) anahtarı şablonda olmayanlar. Sitede gösterilmez.
  */
+/** Bağlı bölüm (başka bölümün ekranında yönetilir; listelerde ayrı görünmez) */
+export function isAttached(template: ResolvedTemplate, section: Pick<Section, "key">): boolean {
+  return Boolean(section.key && template.byKey[section.key]?.attachTo);
+}
+
+/** Bir bölüme bağlı şablon bölümleri */
+export function attachedTo(template: ResolvedTemplate, key: string | null): TemplateSection[] {
+  if (!key) return [];
+  return Object.values(template.byKey).filter((entry) => entry.attachTo === key);
+}
+
 export function isOffTemplate(template: ResolvedTemplate, section: Pick<Section, "key">): boolean {
   return template.hasTemplate && !template.allowExtraSections && !(section.key && template.byKey[section.key]);
 }
@@ -70,7 +81,8 @@ export function resolveTemplate(
   }
 
   return {
-    missing: template.sections.filter((entry) => !existingKeys.has(entry.key)),
+    // Bağlı bölümler ana bölümün ekranından oluşturulur; burada ayrıca listelenmez
+    missing: template.sections.filter((entry) => !entry.attachTo && !existingKeys.has(entry.key)),
     byKey,
     allowExtraSections: template.allowExtraSections ?? true,
     hasTemplate: true,

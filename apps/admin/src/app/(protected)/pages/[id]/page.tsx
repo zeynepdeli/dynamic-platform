@@ -9,7 +9,7 @@ import { DeletePageDialog } from "@/components/pages/DeletePageDialog";
 import { SectionList } from "@/components/pages/SectionList";
 import { CreateTemplateSectionButton } from "@/components/sections/CreateTemplateSectionButton";
 import { getAdminHeroSlides } from "@/lib/hero-slides";
-import { HOME_TEMPLATE_KEY, isOffTemplate, resolveTemplate } from "@/lib/page-templates";
+import { HOME_TEMPLATE_KEY, attachedTo, isAttached, isOffTemplate, resolveTemplate } from "@/lib/page-templates";
 import { OffTemplateSections } from "@/components/pages/OffTemplateSections";
 import { getAdminPageById, type Page } from "@/lib/pages";
 import { sectionSummary as summary } from "@/lib/section-summary";
@@ -41,7 +41,9 @@ export default async function PageLayoutScreen({ params }: { params: Promise<{ i
   const template = resolveTemplate(isHome ? HOME_TEMPLATE_KEY : page!.slug, sections);
   const basePath = `/pages/${id}`;
   // Tasarımda olmayanlar ayrı kutuda (sitede görünmezler)
-  const designed = sections.filter((s) => !isOffTemplate(template, s));
+  const designed = sections.filter((s) => !isOffTemplate(template, s) && !isAttached(template, s));
+  // Listede görünmeyenler (bağlı / tasarım dışı) sıralamada sona eklenir: API tüm bölümleri ister
+  const hiddenIds = sections.filter((s) => !designed.includes(s)).map((s) => s.id);
   const offTemplate = sections.filter((s) => isOffTemplate(template, s));
   const activeSlides = slides.filter((s) => s.active).length;
 
@@ -78,13 +80,17 @@ export default async function PageLayoutScreen({ params }: { params: Promise<{ i
         <SectionList
           pageId={isHome ? null : id}
           editBase={`${basePath}/bolum`}
+          hiddenIds={hiddenIds}
           rows={designed.map((s) => {
             const entry = s.key ? template.byKey[s.key] : undefined;
             return {
               id: s.id,
               label: entry?.label || s.title || "(Başlıksız bölüm)",
               type: entry ? undefined : SECTION_TYPE_LABELS[s.type],
-              summary: summary(s),
+              summary: [summary(s, entry?.itemLabel), ...attachedTo(template, s.key).map((child) => {
+                const childSection = sections.find((x) => x.key === child.key);
+                return childSection ? `${childSection.items.length} ${(child.itemLabel ?? "öğe").toLocaleLowerCase("tr-TR")}` : "";
+              })].filter(Boolean).join(" · "),
               active: s.active,
               locked: entry ? entry.locked !== false : false,
             };
@@ -109,7 +115,7 @@ export default async function PageLayoutScreen({ params }: { params: Promise<{ i
                 <p>
                   <span className="font-semibold">{entry.label}</span> bölümü bu sayfanın şablonunda var ama henüz oluşturulmadı.
                 </p>
-                <CreateTemplateSectionButton pageId={isHome ? null : id} entry={entry} />
+                <CreateTemplateSectionButton pageId={isHome ? null : id} entry={entry} attached={attachedTo(template, entry.key)} />
               </div>
             ))}
           </div>
