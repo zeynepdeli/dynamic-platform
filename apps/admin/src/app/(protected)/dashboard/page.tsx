@@ -109,7 +109,13 @@ export default async function DashboardPage() {
             icon={Home}
             number={i + 1}
             title={sectionLabel(section.key, section.title)}
-            description={[SECTION_TYPE_LABELS[section.type], sectionSummary(section)].filter(Boolean).join(" · ")}
+            description={[
+              // Şablon bölümünde teknik tip adı gösterilmez
+              section.key && homeTemplate.byKey[section.key] ? undefined : SECTION_TYPE_LABELS[section.type],
+              sectionSummary(section),
+            ]
+              .filter(Boolean)
+              .join(" · ")}
             badge={!section.active && <Badge tone="muted">Gizli</Badge>}
           />
         ))}

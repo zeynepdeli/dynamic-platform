@@ -76,7 +76,14 @@ export async function BlockScreen({ id, block }: { id: string; block: Selection 
           ? { icon: Info, title: "Sayfa Bilgileri", description: "Sayfanın başlığı, adresi, yayın durumu ve arama motoru (SEO) bilgileri." }
           : block === "new"
             ? { icon: Plus, title: "Yeni Bölüm", description: `${pageTitle} sayfasına yeni bir bölüm ekleyin.` }
-            : { icon: LayoutGrid, title: `${sectionLabel} Bölümü`, description: `${section ? SECTION_TYPE_LABELS[section.type] : ""} · Bölümün metinleri, görselleri ve arka planı.` };
+            : {
+                icon: LayoutGrid,
+                title: `${sectionLabel} Bölümü`,
+                // Şablon bölümünde açıklaması; serbest bölümde teknik tipi
+                description:
+                  (section?.key && template.byKey[section.key]?.hint) ||
+                  `${section ? SECTION_TYPE_LABELS[section.type] : ""} · Bölümün metinleri, görselleri ve arka planı.`,
+              };
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-[1800px] space-y-5 pb-12">
