@@ -37,7 +37,20 @@ const securityHeaders = [
     : []),
 ];
 
+/**
+ * Yerel ağdan (ör. telefondan 192.168.1.47:3000) geliştirme sunucusuna erişim.
+ * .env.local → DEV_ALLOWED_ORIGINS=192.168.1.47 (virgülle birden fazla).
+ * Yalnızca geliştirmede; yalnızca IP/alan adı biçimindeki değerler kabul edilir.
+ */
+const devAllowedOrigins = isProduction
+  ? []
+  : (process.env.DEV_ALLOWED_ORIGINS ?? "")
+      .split(",")
+      .map((v) => v.trim())
+      .filter((v) => /^[a-z0-9.-]{1,253}$/i.test(v));
+
 const nextConfig: NextConfig = {
+  ...(devAllowedOrigins.length > 0 && { allowedDevOrigins: devAllowedOrigins }),
   // Docker için küçük, bağımsız çıktı (.next/standalone)
   output: "standalone",
   // Monorepo: bağımlılıklar kök node_modules'ta
